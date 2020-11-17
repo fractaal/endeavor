@@ -1,19 +1,26 @@
 <template>
-  <div id="app">
+  <div id="app" class="fullPage loginBackground">
+    <transition name="transition" mode="out-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import Vue from 'vue';
+import sharedStore from './store';
 import {ELearn} from './elearn';
 
 export default Vue.extend({
-  created() {
-    (async () => {
-      const client = new ELearn();
-      // Put login here...
-      console.log(await client.getSession());
-    })();
+  data() {
+    return {
+      sharedStore
+    };
+  },
+  created () {
+    // Creating new eLearn object in store...
+    this.sharedStore.eLearn = new ELearn();
+    this.$router.push('/login');
   }
 })
 
