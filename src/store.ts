@@ -1,9 +1,3 @@
-import { eLearnSession } from './interfaces';
+export default { 
 
-interface Store {
-  session: eLearnSession;
-}
-
-export default {
-  
 }
