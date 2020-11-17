@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope');
 
+.fullPage {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 :root {
   --foreground: white;
   --background: #071829;
@@ -20,9 +28,11 @@
 }
 
 .loginBackground {
+  background-color: var(--background);
+  /*
   background-image: url("gradient-01.png");
   background-attachment: fixed;
-  background-size: 1500px;
+  background-size: 1500px;*/
 }
 
 .background {
@@ -114,4 +124,24 @@ input {
 
 input:hover {
   border: 5px solid var(--highlight);
+}
+
+/* Fancy transitions! */
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.transition-enter-active {
+  transition: all .5s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.transition-leave-active {
+  transition: all .5s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.transition-enter, .transition-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: scale(0.75);
+  opacity: 0;
+}
+
+.transition-enter-to, .transition-leave {
+  transform: scale(1);
 }
