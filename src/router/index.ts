@@ -65,6 +65,7 @@ router.beforeEach(async (to, from, next) => {
     console.warn("Preventing unwanted navigation back to login screen");
     next('/home');
   } else {
+    sharedStore.search = "";
     next();
   }
 })
