@@ -16,7 +16,8 @@ module.exports = {
         },
         portable: {
             artifactName: "Endeavor.exe"
-        }
+        },
+        publish: ['github']
       }
     }
   }
