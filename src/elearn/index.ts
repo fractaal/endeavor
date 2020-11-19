@@ -1,19 +1,43 @@
 // Required libraries
 import got from 'got';
+import {Cookie, CookieJar} from 'tough-cookie';
+import {remote} from 'electron';
 
 // Interfaces
 import {Course, eLearnInterface, eLearnSession} from '../interfaces';
 
 // Runtime stuff
-const client = got.extend();
+const cookieJar = new CookieJar();
+const client = got.extend({cookieJar: cookieJar});
 const baseurl = "http://elearn.xu.edu.ph/"; // Base url for requests.
 let session: eLearnSession; // Ask for site info upon login
 
 // Utility functions
 function findInArray(array: Array<any>, id: number) {
   for (const element of array) {
-    if (element.id == id) return element;
+    if (element.id == id || element.cmid == id || element.instance == id || element.coursemodule == id) return element;
   }
+}
+
+// Format dates and time data in object
+function convertRawTimeValuesToDate(object: Record<string,any>): Record<string,any> {
+  for (const key in object) {
+    if (typeof object[key] == 'object') {
+      convertRawTimeValuesToDate(object[key]);
+    }
+
+    if ((key.match("date") || key.match("time")) && !key.match("timeduration")) {
+      // If the key matches the keys normally assigned to time values (excluding time duration)
+      // Transform the element into a date object.
+      try {
+        object[key] = new Date(object[key] * 1000)
+      } catch(e) {
+        // Invalid time value. Wipe the key.
+        object[key] = null;
+      }
+    }
+  }
+  return object;
 }
 
 export class ELearn implements eLearnInterface {
@@ -26,6 +50,12 @@ export class ELearn implements eLearnInterface {
    */
   async login(username: string, password: string): Promise<boolean> {
     try {
+      // To obtain a cookie
+      await client(`http://elearn.xu.edu.ph/lib/ajax/service.php?info=tool_mobile_get_public_config`);
+      const moodleSessionCookie = await cookieJar.getCookies(baseurl);
+
+      remote.session.defaultSession.cookies.set({url: baseurl, name: moodleSessionCookie[0].key, value: moodleSessionCookie[0].value})
+
       const loginRequest = await client(`${baseurl}/login/token.php`, {
         method: "POST",
         form: {
@@ -259,6 +289,25 @@ export class ELearn implements eLearnInterface {
     }
 
     return res;
+  }
+
+  async getTimeline(): Promise<Record<string,any>> {
+    const weekAgo = (Date.now()/1000) - (60*60*24*7)
+    const res = await this.wsFunctionRaw({
+      timesortfrom: weekAgo.toFixed(0), // Get all events from 1 week ago forward.
+      limitnum: '50',
+      moodlewssettingfilter: 'true',
+      moodlewssettingfileurl: 'true',
+      wsfunction: 'core_calendar_get_action_events_by_timesort',
+    }) as unknown as any;
+    console.log(res);
+    const events: Array<Record<string,any>> = res.events;
+
+    for (let event of events) {
+      event = convertRawTimeValuesToDate(event);
+    }
+
+    return events;
   }
 }
 

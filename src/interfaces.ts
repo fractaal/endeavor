@@ -80,6 +80,7 @@ export interface Course {
   displayname: string;
   progress: number;
   lastaccess: Date;
+  info?: Array<Record<string,any>>
 };
 
 
@@ -100,9 +101,10 @@ export interface eLearnSession {
 
 export interface eLearnInterface {
   login(username: string, password: string): Promise<boolean>;
-  wsFunction(name: string, args: {}, token: string): Promise<any>;
+  wsFunction(name: string, args: Record<string, any>, token?: string): Promise<any>;
   getSession(): Promise<eLearnSession>;
   getCourses(): Promise<Course[]>;
-  getCourseInfo(courseid: string): Promise<Object>;
+  getCourseInfo(courseid: string): Promise<Record<string,any>>;
+  getTimeline(): Promise<Record<string,any>>;
   //getEvents(): Promise<Entry[]>; 
 }

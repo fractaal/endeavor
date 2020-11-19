@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="fullPage loginBackground">
     <transition name="transition" mode="out-in">
-      <router-view/>
+      <keep-alive>
+        <router-view name="default"></router-view>
+      </keep-alive>
     </transition>
   </div>
 </template>
