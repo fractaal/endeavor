@@ -1,8 +1,11 @@
 'use strict'
+declare const __static: string;
 
 import { app, protocol, BrowserWindow, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import { autoUpdater } from 'electron-updater';
+import path from 'path';
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -21,7 +24,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
           .ELECTRON_NODE_INTEGRATION as unknown) as boolean
-    }
+    },
+    icon: path.join(__static, 'icon.png'),
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -32,6 +36,7 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+    autoUpdater.checkForUpdatesAndNotify()
   }
   // win.removeMenu();
 }
