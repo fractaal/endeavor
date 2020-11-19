@@ -10,7 +10,7 @@ module.exports = {
       builderOptions: {
         productName: "Endeavor",
         appId: "jude.endeavor",
-        asar: false,
+        asar: true,
         win: {
             target: ["portable"]
         },
