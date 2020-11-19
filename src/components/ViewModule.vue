@@ -1,10 +1,18 @@
 <template>
   <div>
-    <h1 style="margin-left: 50px;">{{module.name}}</h1>
+    <div style="margin-left: 50px; margin-top: 10px; margin-bottom: 10px;">
+      <h1 class="nospacing">{{module.name}}</h1>
+      <p class="nospacing">{{module.duedateFormatted}}</p>
+      <p class="nospacing">{{module.timeopenFormatted}}</p>
+      <p class="nospacing">{{module.timecloseFormatted}}</p>
+      <p class="nospacing">{{module.timelimitFormatted}}</p>
+      <p class="nospacing">{{module['modname']}}</p>
+    </div>
     <div style="overflow-y: auto; max-height: 80vh;">
       <transition name="transition">
         <div style="margin-left: 50px;">
           <p v-html="module.description"></p>
+          {{module}}  
         </div>
       </transition>
       <Loader v-if="isLoading"/>
@@ -70,7 +78,12 @@ export default {
     },
 
     format() {
-      console.log('format');
+       try {
+         module.duedateFormatted = formatDistance(module.duedate, new Date(), {addSuffix: true});
+       } catch(e) {
+         console.warn("Formatting data for this module failed: " + e);
+         console.log(module.duedate);
+       }
     }
   }
 }
