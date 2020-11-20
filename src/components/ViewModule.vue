@@ -1,18 +1,48 @@
 <template>
   <div>
-    <div style="margin-left: 50px; margin-top: 10px; margin-bottom: 10px;">
+    <div style="margin-left: 50px; margin-top: 25px; margin-bottom: 10px;">
       <h1 class="nospacing">{{module.name}}</h1>
-      <p class="nospacing">{{module.duedateFormatted}}</p>
-      <p class="nospacing">{{module.timeopenFormatted}}</p>
-      <p class="nospacing">{{module.timecloseFormatted}}</p>
-      <p class="nospacing">{{module.timelimitFormatted}}</p>
-      <p class="nospacing">{{module['modname']}}</p>
+      <div style="display: flex; justify-content: space-  between;">
+        <div>
+          <div :class="module.classOverride" class="badge" v-if="module.duedateFormatted">
+            <p class="nospacing">Due {{module.duedateFormatted}}</p>
+          </div>
+          <div class="badge" v-if="module.timeopenFormatted">
+            <p class="nospacing">{{module.timeopenFormatted}}</p>
+          </div>
+          <div class="badge" v-if="module.timecloseFormatted">
+            <p class="nospacing">{{module.timecloseFormatted}}</p>
+          </div>
+          <div class="badge" v-if="module.timelimitFormatted">
+            <p class="nospacing">Due {{module.timelimitFormatted}}</p>
+          </div>
+          <p class="nospacing">{{module['modname']}}</p>
+        </div>
+        <div style="margin-left: 50px; margin-right: 50px;">
+          <form :action="module.url" method="post">
+            <button type="submit" class="roundButton">🔍</button>
+          </form>
+        </div>
+      </div>
     </div>
-    <div style="overflow-y: auto; max-height: 80vh;">
+    <br>
+    <hr>
+    <div style="overflow-y: auto; max-height: 69vh;">
       <transition name="transition">
-        <div style="margin-left: 50px;">
+        <div style="margin-left: 50px; margin-right: 50px;">
           <p v-html="module.description"></p>
-          {{module}}  
+          <div v-if="module.contents || module.introattachments">
+            <div v-for="item in module.introattachments" :key="item.filename">
+              <Card :title="item.filename" :link="item.fileurl"/>
+            </div>
+            <div v-for="item in module.contents" :key="item.filename">
+              <Card :title="item.filename" :link="item.fileurl"/>
+            </div>
+          </div>
+          <pre v-if="sharedStore.settings.showDebugInfo" style="background-color: black; padding: 10px;">
+            <h2 class="nospacing">COMPLICATED DEBUG INFORMATION</h2>
+            {{JSON.stringify(module, 0, 2)}}  
+          </pre>
         </div>
       </transition>
       <Loader v-if="isLoading"/>
@@ -24,12 +54,14 @@
 import sharedStore, { addCourseToCache, getCourseFromCache } from '../store';
 import {formatDistance, format} from 'date-fns';
 
+import Card from './Card';
 import Loader from './Loader';
 
 export default {
   name: "ViewModule",
   components: {
-    Loader
+    Loader,
+    Card,
   },
   data() {
     return {
@@ -79,10 +111,11 @@ export default {
 
     format() {
        try {
-         module.duedateFormatted = formatDistance(module.duedate, new Date(), {addSuffix: true});
+         console.log(this.module)
+         this.module.duedateFormatted = formatDistance(this.module.duedate, new Date(), {addSuffix: true});
        } catch(e) {
          console.warn("Formatting data for this module failed: " + e);
-         console.log(module.duedate);
+         console.log(this.module.duedate);
        }
     }
   }
