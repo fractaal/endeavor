@@ -280,10 +280,10 @@ export class ELearn implements eLearnInterface {
               module[key] = data[key];
             }
           } else {
-            console.warn("[elearn-api] WARN: More information on " + module.name + " not found...");
+            // console.warn("[elearn-api] WARN: More information on " + module.name + " not found...");
           }
         } catch(err) {
-          console.warn(`[elearn-api] WARN: No info on ${module.name} of ID ${module.instance} of type {${module.modname}}`)
+          // console.warn(`[elearn-api] WARN: No info on ${module.name} of ID ${module.instance} of type {${module.modname}}`)
         }
       }
     }
