@@ -18,7 +18,7 @@
       </transition-group>
     </div>
     <div class="footer" style="display: flex; align-items: flex-end;">
-      <p style="font-size: 10px; margin-right: 10px; margin-left: auto;">Endeavor {{require('electron').remote.app.getVersion()}}</p>
+      <p style="font-size: 14px; margin-right: 10px; margin-left: auto;">Endeavor {{require('electron').remote.app.getVersion()}}</p>
     </div>
   </div>
 </template>
@@ -51,6 +51,8 @@ export default Vue.extend({
         const response = await this.sharedStore.eLearn.login(this.username, this.password);
         if (response) {
           this.$router.push('/home');
+          this.sharedStore.username = this.username;
+          this.sharedStore.password = this.password;
         } else {
           this.isLoading = false;
           this.message = "Login failed, try again.";
