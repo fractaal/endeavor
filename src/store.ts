@@ -6,6 +6,10 @@ interface Store {
     courses: Course[];
   };
   search: string;
+  settings: {
+    showDebugInfo: boolean;
+    saveLogin: boolean;
+  };
 }
 
 const store: Store = {
@@ -14,6 +18,10 @@ const store: Store = {
     courses: [],
   },
   search: '',
+  settings: {
+    showDebugInfo: false,
+    saveLogin: false,
+  }
 };
 
 export function addCourseToCache(newCourse: Course): boolean {
