@@ -42,6 +42,11 @@ const routes: Array<RouteConfig> = [
         path: '/modules/:course/:instance',
         name: "Module",
         component: () => import('../components/ViewModule.vue'),
+      },
+      {
+        path: '/settings',
+        name: "Settings",
+        component: () => import('../views/Settings.vue'),
       }
     ]
   },
