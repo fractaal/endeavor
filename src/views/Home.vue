@@ -6,7 +6,7 @@
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
-          <p style="margin: 0;">Endeavor {{require('electron').remote.app.getVersion()}}</p>
+          <p style="margin: 0;">Endeavor <b class="attention">ALPHA</b> {{require('electron').remote.app.getVersion()}}</p>
         </div>
         <!-- Buttons --> 
         <button class="roundButton transparent" @click="$router.go(-1)"><fai icon="backward"/></button>
@@ -14,18 +14,17 @@
         <!-- Search bar -->
         <input type="text" v-model="sharedStore.search" placeholder="Search..." class="transparent" style="width: 30vw;"/>
         <!-- -->
-        <p>{{$route.path}}, {{$route.params}}</p>
+        <p v-if="sharedStore.settings.showDebugInfo">{{$route.path}}, {{$route.params}}</p>
       </div>
     </div>
     <div style="display: grid; grid-template-columns: 2fr 8fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
       <div class="sidebar">
-        <h1>{{codeEmoji}} Menu </h1>
+        <h1>{{codeEmoji}} Legend </h1>
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
         <hr>
         <br>
-        <h3 @click="navTo('/help')">❓ Help</h3>
       </div>  
       <div style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
         <transition name="transition" mode="out-in">
