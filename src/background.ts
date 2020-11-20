@@ -35,11 +35,22 @@ async function createWindow() {
   } else {
     createProtocol('app')
     // Load the index.html when not in development
+    win.removeMenu();
     win.loadURL('app://./index.html')
     autoUpdater.checkForUpdatesAndNotify()
   }
-  // win.removeMenu();
+  // Handle redirect function
+  const handleRedirect = (e, url) => {
+    if (url != win.webContents.getURL()) {
+      e.preventDefault();
+      shell.openExternal(url);
+    }
+  }
+  win.webContents.on('will-navigate', handleRedirect);
+  win.webContents.on('new-window', handleRedirect);
 }
+
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
