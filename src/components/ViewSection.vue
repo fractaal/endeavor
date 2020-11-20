@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 style="margin-left: 50px;">{{section.name}}</h1>
-    <div style="overflow-y: auto; max-height: 80vh;">
+    <div style="overflow-y: auto; max-height: 80vh; margin-left: 25px; margin-right: 25px;">
       <transition-group name="transition">
         <div v-for="module in filteredModules" :key="module.id">
           <div class="card" style="border-radius: 10px 10px 0px 0px; margin-bottom: 0;">
@@ -113,6 +113,29 @@ export default {
           module.timelimitFormatted = `⌛ Good for ${formatDistanceStrict(Date.now(), (Date.now()-(module.timelimit*1000)))}`
         } catch(e) {
           console.warn("Failed formatting quiz time data. This module might not be a quiz." + e);
+        }
+
+        // Checking if overdue
+        try {
+          if ((new Date() - module.duedate) > 0) {
+            module.isOverdue = true;
+            module.classOverride = "cardReallyDanger";
+          } else {
+            module.isOverude = false;
+          }
+        } catch(err) {
+          console.warn("Failed to check if date was overdue");
+        }
+
+        try {
+          if ((new Date() - module.timeclose) > 0) {
+            module.isOverdue = true;
+            module.classOverride = "cardReallyDanger";
+          } else {
+            module.isOverude = false;
+          }
+        } catch(err) {
+          console.warn("Failed to check if date was overdue");
         }
       }
     }
