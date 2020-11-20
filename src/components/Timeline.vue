@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 style="margin-left: 50px; margin-bottom: 0;">Timeline</h1>
-    <p style="margin-left: 50px; margin-top: 0; font-weight: 200;">Today is {{dayOfTheWeek}}.</p>
+    <p :class="dayOfTheWeekStyling" style="margin-left: 50px; margin-top: 0; font-weight: 200;">Today is {{dayOfTheWeek}}.</p>
     <div style="overflow-y: auto; max-height: 80vh;">
       <transition-group name="transition" mode="out-in" style="min-height: 80vh;">
         <div v-for="event in filteredTimeline" :key="event.name" style="margin-left: 25px; margin-right: 25px;">
@@ -78,6 +78,9 @@ export default {
   methods: {
     async getDayOfTheWeek() {
       this.dayOfTheWeek = format(new Date(), 'EEEE');
+      if (this.dayOfTheWeek === "Saturday") {
+        this.dayOfTheWeekStyling = "attention";
+      }
     },
 
     async getTimeline() {
