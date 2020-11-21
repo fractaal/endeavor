@@ -6,6 +6,7 @@ module.exports = {
       //chainWebpackMainProcess(config) {
       //  config.entry('elearn').add(path.join(__dirname, 'src/elearn.js'))
       //},
+      externals: ['keytar'],
       nodeIntegration: true,
       builderOptions: {
         productName: "Endeavor",
