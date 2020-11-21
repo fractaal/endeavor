@@ -2,14 +2,18 @@
   <div style="width: 100%; height: 100%;">
     <div style="margin-top: 5%; margin-left: 50%; margin-right: 50%; display: flex; flex-direction: column; align-items: center;">
       <div class="lds-ripple"><div></div><div></div></div>
-      <h2 class="shimmer" style="width: 250px; text-align: center;">Give me a second...</h2>
+      <h2 class="shimmer" style="width: 250px; text-align: center;" v-if="text">{{text}}</h2>
+      <h2 class="shimmer" style="width: 250px; text-align: center;" v-if="!text">Give me a second...</h2>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Loader"
+  name: "Loader",
+  props: {
+    text: String,
+  }
 }
 </script>
 
