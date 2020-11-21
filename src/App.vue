@@ -73,6 +73,9 @@ export default Vue.extend({
         console.warn("An error occurred trying to initialize app preferences." + err);
         this.$router.push('/login');
       }
+    } else {
+      // If an existing preferences file doesn't exist, just push to login.
+      this.$router.push('/login');
     }
   }
 });
