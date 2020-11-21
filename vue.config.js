@@ -11,12 +11,13 @@ module.exports = {
         productName: "Endeavor",
         appId: "jude.endeavor",
         asar: true,
+        /*
         win: {
             target: ["portable"]
         },
         portable: {
             artifactName: "Endeavor.exe"
-        },
+        },*/
         publish: ['github']
       }
     }
