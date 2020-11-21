@@ -294,6 +294,20 @@ input.transparent:hover {
   transform: scale(1);
 }
 
+/* Fancy ticker animations! */
+.ticker-enter-active {
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.ticker-leave-active {
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+.ticker-enter, .ticker-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: scale(0.75);
+  opacity: 0;
+}
+
+
 /* Fancy scrollbar! */
 ::-webkit-scrollbar-track
 {
