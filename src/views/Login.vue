@@ -1,17 +1,23 @@
 <template>
   <div class="loginBackground">
-    <div class="center">
-      <img src="../assets/icon.png" style="display: block; width: 300px; margin-left: auto; margin-right: auto;">
-      <h1>Endeavor</h1>
-      <h3 style="margin-top: -25px;">Log in with your eLearn information</h3>
-      <form @submit.prevent="submit">
-        <input v-model="username" type="text" placeholder="Username"/>
-        <br>
-        <input v-model="password" type="password" placeholder="Password"/>
-        <div style="display: flex; align-items: flex-end;">
-          <button type="submit" style="margin-right: 0px; margin-left: auto;" class="roundButton">✔</button>
-        </div>
-      </form>
+    <div style="height: 100px;"></div> <!-- To knock the entire form downards. -->
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <div>
+        <img src="../assets/icon.png" style="display: block; width: 300px; margin-left: auto; margin-right: auto;">
+        <h1>Endeavor</h1>
+        <h3 style="margin-top: -25px;">Log in with your eLearn information</h3>
+        <form @submit.prevent="submit">
+          <input v-model="username" type="text" placeholder="Username"/>
+          <br>
+          <input v-model="password" type="password" placeholder="Password"/>
+          <div style="display: flex; align-items: flex-end;">
+            <button type="submit" style="margin-right: 0px; margin-left: auto;" class="roundButton">✔</button>
+          </div>
+        </form>
+      </div>
+      <ChangeLogTicker/>
+    </div>
+    <div style="display: flex; justify-content: center;">
       <transition-group name="transition" mode="out-in">
         <Loader v-if="isLoading" key="load"/>
         <p v-if="message" :class="messageClass" key="msg">{{message}}</p>
@@ -23,12 +29,14 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue';
+import keytar from 'keytar';
 import sharedStore from '../store';
 import Loader from '../components/Loader.vue';
+import ChangeLogTicker from '../components/ChangeLogTicker.vue';
 
-export default Vue.extend({
+export default {
   data() {
     return {
       sharedStore,
@@ -41,7 +49,8 @@ export default Vue.extend({
   },
   name: 'Login',
   components: {
-    Loader
+    Loader,
+    ChangeLogTicker,
   },
   methods: {
     async submit() {
@@ -51,8 +60,8 @@ export default Vue.extend({
         const response = await this.sharedStore.eLearn.login(this.username, this.password);
         if (response) {
           this.$router.push('/home');
-          this.sharedStore.username = this.username;
-          this.sharedStore.password = this.password;
+          await keytar.setPassword("endeavor", this.username, this.password);
+          console.log("✅ Saved credentials to native OS keychain.")
         } else {
           this.isLoading = false;
           this.message = "Login failed, try again.";
@@ -61,5 +70,5 @@ export default Vue.extend({
       }
     }
   }
-});
+}
 </script>
