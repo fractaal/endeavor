@@ -24,6 +24,14 @@
           <p class="nospacing">Saves your login details and automatically logs you in on any future Endeavor session.</p>
         </div>
       </div>
+      <hr>
+      <div class="settingsHighlight" style="display: flex; align-items: center;">
+        <button @click="purgeLoginData" class="roundButton">⭕</button>
+        <div style="margin-left: 25px;">
+          <h2 class="nospacing" style="font-weight: 400;">REMOVE LOGIN DATA</h2>
+          <p class="nospacing">Endeavor saves your login details for automatic login. To purge this data, click this button.</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +44,7 @@ import sharedStore, { addCourseToCache, getCourseFromCache } from '../store';
 import {formatDistance, format} from 'date-fns';
 
 import {remote} from 'electron';
+import keytar from 'keytar';
 
 const data = remote.app.getPath("userData");
 
@@ -61,6 +70,20 @@ export default {
       console.warn("❌ Error occured trying to write to the preferences file." + err);
     } finally {
       next();
+    }
+  },
+  methods: {
+    async purgeLoginData() {
+      try {
+        this.sharedStore.settings.saveLogin = false;
+        const credentials = await keytar.findCredentials("endeavor");
+        credentials.map(async credential => {
+          await keytar.deletePassword("endeavor", credential.account);
+        })
+        remote.dialog.showMessageBox({title: "Complete!", message: "Login data purge complete!"});
+      } catch(err) {
+        remote.dialog.showErrorBox("Error occured clearing login data.", err);
+      }
     }
   }
 }
