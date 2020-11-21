@@ -12,7 +12,7 @@ interface Store {
   };
 }
 
-const store: Store = {
+const store = {
   eLearn: null,
   cache: {
     courses: [],
@@ -21,7 +21,7 @@ const store: Store = {
   settings: {
     showDebugInfo: false,
     saveLogin: false,
-  }
+  },
 };
 
 export function addCourseToCache(newCourse: Course): boolean {
