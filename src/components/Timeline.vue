@@ -50,6 +50,7 @@ export default {
       timeline: [],
       isLoading: false,
       dayOfTheWeek: "",
+      dayOfTheWeekStyling: "",
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -78,7 +79,7 @@ export default {
   methods: {
     async getDayOfTheWeek() {
       this.dayOfTheWeek = format(new Date(), 'EEEE');
-      if (this.dayOfTheWeek === "Saturday") {
+      if (this.dayOfTheWeek === "Sunday") {
         this.dayOfTheWeekStyling = "attention";
       }
     },

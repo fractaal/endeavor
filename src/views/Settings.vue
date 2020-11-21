@@ -21,7 +21,7 @@
         </div>
         <div style="margin-left: 25px;">
           <h2 class="nospacing" style="font-weight: 400;">AUTOMATIC LOGIN</h2>
-          <p class="nospacing">⚠ This feature is very insecure. It saves your login info on your computer as <i>Plain Text.</i> Don't use this if you're paranoid.<br><br>Saves your login details and automatically logs you in on any future Endeavor session.</p>
+          <p class="nospacing">Saves your login details and automatically logs you in on any future Endeavor session.</p>
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@ import {formatDistance, format} from 'date-fns';
 
 import {remote} from 'electron';
 
-const data = remote.app.getPath("appData");
+const data = remote.app.getPath("userData");
 
 export default {
   name: "Settings",
@@ -54,9 +54,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     try {
       fs.writeFileSync(path.join(data, "endeavor.json"), JSON.stringify({
-        settings: this.sharedStore.settings,
-        username: this.sharedStore.username,
-        password: this.sharedStore.password,
+        settings: this.sharedStore.settings
       }))
       console.log("✅ Settings autosave success")
     } catch(err) {
