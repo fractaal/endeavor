@@ -33,10 +33,10 @@
           <p v-html="module.description"></p>
           <div v-if="module.contents || module.introattachments">
             <div v-for="item in module.introattachments" :key="item.filename">
-              <Card :title="item.filename" :link="item.fileurl"/>
+              <Card :title="item.filename"/>
             </div>
             <div v-for="item in module.contents" :key="item.filename">
-              <Card :title="item.filename" :link="item.fileurl"/>
+              <Card :title="item.filename"/>
             </div>
           </div>
           <pre v-if="sharedStore.settings.showDebugInfo" style="background-color: black; padding: 10px;">

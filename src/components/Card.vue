@@ -16,7 +16,8 @@
           <p style="margin: 0;" v-html="content"></p>
         </div>
         <div style="display: flex;">
-          <button @click="$router.push(link)" class="roundButton">🔍</button>
+          <!--
+          <button @click="$router.push(link)" class="roundButton">🔍</button>-->
         </div>
       </div>
     </div>
