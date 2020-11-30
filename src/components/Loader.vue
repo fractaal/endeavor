@@ -1,6 +1,9 @@
 <template>
-  <div style="width: 100%; height: 100%;">
-    <div style="margin-top: 5%; margin-left: 50%; margin-right: 50%; display: flex; flex-direction: column; align-items: center;">
+  <div style="width: 100%;">
+    <br>
+    <br>
+    <br>
+    <div style="margin-left: 50%; margin-right: 50%; display: flex; flex-direction: column; align-items: center;">
       <div class="lds-ripple"><div></div><div></div></div>
       <h2 class="shimmer" style="width: 250px; text-align: center;" v-if="text">{{text}}</h2>
       <h2 class="shimmer" style="width: 250px; text-align: center;" v-if="!text">Give me a second...</h2>
@@ -26,7 +29,7 @@ export default {
 }
 .lds-ripple div {
   position: absolute;
-  border: 8px solid #fff;
+  border: 8px solid var(--foreground);
   opacity: 1;
   border-radius: 50%;
   animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
