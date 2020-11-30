@@ -84,7 +84,7 @@ export class ELearn implements eLearnInterface {
    * @param username Username to pass to eLearn.
    * @param password Password to pass to eLearn.
    */
-  async login(username: string, password: string): Promise<boolean> {
+  async login(username: string, password: string, update: Function): Promise<boolean> {
     try {
       // To obtain a cookie
       await client(`http://elearn.xu.edu.ph/lib/ajax/service.php?info=tool_mobile_get_public_config`);
@@ -113,7 +113,8 @@ export class ELearn implements eLearnInterface {
 
       session = siteInfoRequest as any;
       session.token = token;
-      await this.buildCache();
+      update("Building search cache");
+      await this.buildCache(update);
       return true;
 
     } catch(err) {
@@ -295,12 +296,13 @@ export class ELearn implements eLearnInterface {
       section.courseid = courseid;
       for (const module of section.modules) {
         // Add additional data to the object
+        module.section = section.section;
         module.courseid = courseid;
         
         if (info[module.modname]) {
           const data: Quiz & Assignment & Forum = findInArray(info[module.modname], module.instance);
 
-          if (module.modname == "assign") {
+          if (module.modname.toLowerCase() == "assign") {
             module.modnameformatted = "Assignment";
           }
   
@@ -387,12 +389,23 @@ export class ELearn implements eLearnInterface {
     return events;
   }
 
-  async buildCache(): Promise<void> {
+  async buildCache(update: Function): Promise<void> {
     console.log("[elearn-api] 📃 Building search cache")
     console.time("search cache build time");
+    update("⌛ Getting course metadata...");
     let coursesMetadata = await this.getCourses();
-    const courses = await Promise.all(coursesMetadata.map(course => this.getCourseInfo(course.id)));
+    update("⌛ Getting course sections & modules...")
+    // const courses = await Promise.all(coursesMetadata.map(course => this.getCourseInfo(course.id)));
+    const courses: any = await Promise.all(coursesMetadata.map(course => {
+      return new Promise((resolve, reject) => {
+        this.getCourseInfo(course.id).then(courseinfo => {
+          update("📚 Loaded " + course.shortname);
+          resolve(courseinfo);
+        })
+      })
+    }));
 
+    update("⌛ Transforming data...");
     coursesMetadata = coursesMetadata.map((courseMetadata, index) => {
       return {
         ...courseMetadata,
@@ -404,6 +417,7 @@ export class ELearn implements eLearnInterface {
     this.cache.coursesMetadata = coursesMetadata;
     console.log("[elearn-api] 📃 Search cache build complete");
     console.timeEnd("search cache build time");
+    update("✔ Complete!");
   }
 
   findInCache(courseid: number): CourseMetadata {
