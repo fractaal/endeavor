@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="fullPage loginBackground">
+  <div id="app" :class="sharedStore.theme" class="fullPage loginBackground">
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view name="default"></router-view>
