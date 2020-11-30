@@ -4,29 +4,33 @@ import fuseSearch from './search';
 interface Store {
   eLearn: eLearnInterface|null;
   search: string;
-  theme: string;
   searchResults: [];
   settings: {
     showDebugInfo: boolean;
     saveLogin: boolean;
+    theme: string;
   };
   searchFunction: Function;
   searchTimer: any;
   userDoneTypingOnSearch: boolean;
+  fullPageLoadText: string;
+  fullPageLoadLog: string[];
 }
 
 const store: Store = {
   eLearn: null,
   search: '',
-  theme: "light-theme",
   searchResults: [],
   settings: {
     showDebugInfo: false,
     saveLogin: false,
+    theme: "light-theme",
   },
   searchFunction: fuseSearch,
   searchTimer: null,
   userDoneTypingOnSearch: true,
+  fullPageLoadLog: [],
+  fullPageLoadText: "",
 };
 
 export default store;
