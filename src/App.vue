@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import path from 'path';
 import fs from 'fs';
 
@@ -24,7 +24,7 @@ let endeavor;
 
 console.log("Data path: " + data);
 
-export default Vue.extend({
+export default {
   data() {
     return {
       sharedStore,
@@ -33,8 +33,6 @@ export default Vue.extend({
   async created () {
     // Creating new eLearn object in store...
     this.sharedStore.eLearn = new ELearn();
-    this.$router.push('/load');
-
     this.sharedStore.fullPageLoadText = "Checking for existing config file..."
     
     // Checking if endeavor.json file exists
@@ -61,28 +59,17 @@ export default Vue.extend({
         
         let credentials; let credential; let loginResult;
         if (this.sharedStore.settings.saveLogin) {
-          try {
-            this.sharedStore.fullPageLoadText = "Logging you in..."
-            credentials = await keytar.findCredentials("endeavor");
-            credential = credentials[0];
-            loginResult = await this.sharedStore.eLearn.login(credential.account, credential.password, log => {
-              this.sharedStore.fullPageLoadLog.push(log);
-            });
-          } catch(err) {
-            this.sharedStore.fullPageLoadText = "❌ Login failed!"
-            console.warn("An error occured trying to retrieve login credentials: " + err);
-            this.$router.push('/login');
-          }
-          
+          credentials = await keytar.findCredentials("endeavor");
+          credential = credentials[0];
+
+          loginResult = this.login(credential.account, credential.password);
+
           if (loginResult) {
-            this.sharedStore.fullPageLoadText = "Welcome!"
-            console.log("Autologin success");
-            this.$router.push("/home");
+            this.$router.push('/home');
           } else {
-            this.sharedStore.fullPageLoadText = "❌ Login failed!"
-            console.warn("Automatic login failed!");
             this.$router.push('/login');
           }
+
         } else {
           console.log("❕ Not automatically logging in. saveLogin flag is false in preferences.")
           this.$router.push('/login');
@@ -96,8 +83,46 @@ export default Vue.extend({
       // If an existing preferences file doesn't exist, just push to login.
       this.$router.push('/login');
     }
+
+    // If the login component wants to log in
+    this.$on("login", async (username, password) => {
+      if (await this.login(username, password)) {
+        this.$router.push('/home');
+      } else {
+        this.$router.push('/login');
+      }
+    })
+  },
+  methods: {
+    async login(username, password) {
+      this.$router.push('/load');
+      let loginResult;
+      try {
+        this.sharedStore.fullPageLoadText = "Logging you in..."
+
+        loginResult = await this.sharedStore.eLearn.login(username, password, log => {
+          this.sharedStore.fullPageLoadLog.push(log);
+        });
+      } catch(err) {
+        this.sharedStore.fullPageLoadText = "❌ Login failed!"
+        console.warn("An error occured trying to retrieve login credentials: " + err);
+        return false;
+      }
+      
+      if (loginResult) {
+        this.sharedStore.fullPageLoadText = "Welcome!"
+        await keytar.setPassword("endeavor", username, password);
+        console.log("Login success");
+        return true;
+      } else {
+        this.sharedStore.fullPageLoadText = "❌ Login failed!"
+        console.warn("Automatic login failed!");
+        return false;
+      }
+    }
   }
-});
+
+};
 
 </script>
 
