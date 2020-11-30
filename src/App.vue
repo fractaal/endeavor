@@ -62,7 +62,7 @@ export default {
           credentials = await keytar.findCredentials("endeavor");
           credential = credentials[0];
 
-          loginResult = this.login(credential.account, credential.password);
+          loginResult = await this.login(credential.account, credential.password);
 
           if (loginResult) {
             this.$router.push('/home');
@@ -96,6 +96,7 @@ export default {
   methods: {
     async login(username, password) {
       this.$router.push('/load');
+      this.sharedStore.fullPageLoadLog = [];
       let loginResult;
       try {
         this.sharedStore.fullPageLoadText = "Logging you in..."
