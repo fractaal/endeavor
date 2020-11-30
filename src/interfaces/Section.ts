@@ -34,6 +34,7 @@ export interface Module {
   contentsinfo?:       Contentsinfo;
   styling:             string;
   courseid:            number;
+  section:             number;
 }
 
 export interface Completiondata {
