@@ -54,20 +54,7 @@ export default {
   },
   methods: {
     async submit() {
-      if (this.sharedStore.eLearn) {
-        this.isLoading = true;
-        this.message = "";
-        const response = await this.sharedStore.eLearn.login(this.username, this.password);
-        if (response) {
-          this.$router.push('/home');
-          await keytar.setPassword("endeavor", this.username, this.password);
-          console.log("✅ Saved credentials to native OS keychain.")
-        } else {
-          this.isLoading = false;
-          this.message = "Login failed, try again.";
-          this.messageClass = "";
-        }
-      }
+      this.$parent.$emit("login", this.username, this.password);
     }
   }
 }
