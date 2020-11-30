@@ -13,21 +13,67 @@ hr {
   border: 1px solid rgba(255,255,255,0.05);
 }
 
-:root {
+.cardlist {
+  overflow-y: scroll;
+  max-height: 80vh; 
+  margin-left: 25px; 
+  margin-right: 25px;
+}
+
+.compactcardlist {
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-left: 25px; 
+  margin-right: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.warn {
+  --card: #df9463;
+  --cardDarker: #c98d3f;
+}
+
+.alert {
+  --card: #af3953;
+  --cardDarker: #6d1d45;
+}
+
+.danger {
+  --card: #b83860;
+  --cardDarker: #a82d54;
+}
+
+.light-theme {
+  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
+  --foreground: black;
+  --background: #cacaca;
+  --sidebar: #e9e9e9;
+  --card: #f0f0f0;
+  --cardDarker: #e0e0e0;
+  --gradient1: #680054;
+  --gradient2: #F05661;
+  --highlight: #e7e7e7;
+  --highlight-lighter: #d6d6d6;
+  --topbar-color: #eeeeee;
+}
+
+.light-theme img :logo {
+  filter: invert();
+}
+
+.dark-theme {
+  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
   --foreground: white;
   --background: #071829;
   --sidebar: #102132;
   --card: #04223C;
   --cardDarker: #001B35;
-  --cardAccent: #a11337;
-  --cardAccent2: #7A0026;
-  --cardAccent3: #55001B;
-  --cardWarn1: #c03737;
-  --cardWarn2: #ac1f1a;
   --gradient1: #680054;
   --gradient2: #F05661;
-  --highlight: #17334F;
-  --highlight-lighter: #11253a;
+  --highlight: #102336;
+  --highlight-lighter: #0e1d2e;
+  --topbar-color: #112b46;
 }
 
 .bar {
@@ -84,34 +130,19 @@ hr {
   cursor: pointer;
   padding: 25px 20px 35px 45px;
   font-weight: 500;
-  background-color: var(--highlight);
+  background-color: var(--highlight-lighter);
 }
 
-.card {
+.cardUpper {
   background-color: var(--card);
   padding: 15px 20px 15px 20px;
-  margin: 20px 20px 20px 20px;
+  margin: 20px 20px 20px 20px; 
 }
 
-.cardDarker {
+.cardLower {
   background-color: var(--cardDarker);
-}
-
-.cardReallyDanger {
-  background-color: var(--cardAccent) !important;
-  animation: attention 2.5s cubic-bezier(0.165, 0.84, 0.44, 1) both infinite;
-}
-
-.cardReallyDanger2 {
-  background-color: var(--cardAccent2) !important;
-}
-
-.cardWarn {
-  background-color: var(--cardWarn1) !important;
-}
-
-.cardWarn2 {
-  background-color: var(--cardWarn2) !important;
+  padding: 15px 20px 15px 20px;
+  margin: 20px 20px 20px 20px;
 }
 
 .badge {
@@ -129,20 +160,26 @@ hr {
 }
 
 .topbar {
-  /*
-  background: rgb(104,0,84);
-  background: linear-gradient(90deg, var(--gradient1) 0%, var(--gradient2) 100%);*/
-  background-color: var(--highlight-lighter);
+  background-color: var(--topbar-color);
 }
 
-.settingsHighlight {
+.settingsHighlight>div {
   transition: all 0.1s;
   border-radius: 10px;  
   padding: 50px;
+  margin: 10px 0px 10px 0px;
 }
 
-.settingsHighlight:hover {
-  background-color: rgba(255,255,255,0.05);
+.settingsHighlight>div:nth-of-type(odd) {
+  background-color: var(--highlight);
+}
+
+.settingsHighlight>div:nth-of-type(even) {
+  background-color: var(--highlight-lighter);
+}
+
+.settingsHighlight>div:hover {
+  filter: brightness(1.05);
 }
 
 
@@ -274,15 +311,20 @@ input.transparent:hover {
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .transition-enter-active {
-  transition: all .3s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .transition-leave-active {
-  transition: all .2s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: all .2s cubic-bezier(0.19, 1, 0.22, 1);
   position: absolute;
 }
-.transition-enter, .transition-leave-to
+.transition-enter {
+  transform: scale(0.9) translateY(-200px);
+  opacity: 0;
+}
+
+.transition-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: scale(0.75);
+  transform: scale(0.9) translateY(200px);
   opacity: 0;
 }
 
