@@ -17,15 +17,15 @@ export interface eLearnSession {
 }
 
 export interface eLearnInterface {
-  login(username: string, password: string): Promise<boolean>;
+  login(username: string, password: string, update: Function): Promise<boolean>;
   wsFunction(name: string, args: Record<string, any>, token?: string): Promise<any>;
   getSession(): Promise<eLearnSession>;
   getCourses(): Promise<CourseMetadata[]>;
-  getCourseInfo(courseid: number): Promise<Section[]>;
+  getCourseInfo(courseid: number, update: Function): Promise<Section[]>;
   getSection(courseid: number, sectionNumber: number): Promise<Section>;
   getModule(courseid: number, instance: number): Promise<Module>;
   getTimeline(): Promise<Event[]>;
-  buildCache(): Promise<void>; 
+  buildCache(update: Function): Promise<void>; 
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
