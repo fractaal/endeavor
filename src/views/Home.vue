@@ -6,7 +6,7 @@
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
-          <p style="margin: 0;">Endeavor <b class="attention">ALPHA</b> {{require('electron').remote.app.getVersion()}}</p>
+          <p style="margin: 0;">Endeavor <b class="attention">BETA</b> {{require('electron').remote.app.getVersion()}}</p>
         </div>
         <!-- Buttons --> 
         <button class="roundButton transparent" @click="$router.go(-1)"><fai icon="backward"/></button>
@@ -25,7 +25,6 @@
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
-        <h3 @click="navTo('/refresh')">🌀 Refresh</h3>
         <hr>
         <br>
       </div>  
