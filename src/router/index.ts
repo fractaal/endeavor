@@ -5,7 +5,7 @@ import sharedStore from '../store';
 // Views
 import Login from '../views/Login.vue'
 
-import Loader from '../components/Loader.vue';
+import FullPageLoad from '../views/FullPageLoad.vue';
 
 Vue.use(VueRouter)
 
@@ -13,10 +13,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/load',
     name: 'Loading',
-    component: Loader,
-    props: {
-      text: "Logging you in!"
-    }
+    component: FullPageLoad,
   },
   {
     path: '/login',
