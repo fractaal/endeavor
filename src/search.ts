@@ -11,6 +11,7 @@ const options = {
     "sections.summary",
     "sections.modules.name",
     "sections.modules.modnameformatted",
+    "sections.modules.intro",
     "sections.modules.description"
   ],
   includeScore: true,
@@ -41,7 +42,7 @@ export default function search(term) {
         for (const section of topLevelMatch.item.sections) {
           if (section.name == match.value || section.summary == match.value) sectionResults.push({...section});
         }
-      } else if (match.key == "sections.modules.name" || match.key == "sections.modules.description" || match.key == "sections.modules.modnameformatted") {
+      } else if (match.key == "sections.modules.name" || match.key == "sections.modules.intro" || match.key == "sections.modules.description" || match.key == "sections.modules.modnameformatted") {
         for (const section of topLevelMatch.item.sections) {
           for (const module of section.modules) {
             if (module.name == match.value || module.description == match.value) moduleResults.push({...module});
