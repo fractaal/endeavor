@@ -73,6 +73,12 @@ export default {
       themeToggle: true,
     }
   },
+  created() {
+    switch(this.sharedStore.settings.theme) {
+      case "light-theme": this.themeToggle = true; break;
+      case "dark-theme": this.themeToggle = false; break;
+    }
+  },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       // vm.getModuleData();
@@ -107,9 +113,9 @@ export default {
   watch: {
     themeToggle: function(value) {
       if (value) {
-        this.sharedStore.theme = "light-theme";
+        this.sharedStore.settings.theme = "light-theme";
       } else {
-        this.sharedStore.theme = "dark-theme";
+        this.sharedStore.settings.theme = "dark-theme";
       }
     }
   }
