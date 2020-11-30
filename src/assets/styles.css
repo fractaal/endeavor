@@ -44,6 +44,14 @@ hr {
   --cardDarker: #a82d54;
 }
 
+.light-theme .danger, .light-theme .alert {
+  --foreground: white !important;
+}
+
+.danger .cardUpper  {
+  animation: attention 2.5s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
+}
+
 .light-theme {
   transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
   --foreground: black;
@@ -58,7 +66,7 @@ hr {
   --topbar-color: #eeeeee;
 }
 
-.light-theme img :logo {
+.light-theme img#logo {
   filter: invert();
 }
 
@@ -95,6 +103,7 @@ hr {
 
 .loginBackground {
   background-color: var(--background);
+  height: 100vh;
   /*
   background-image: url("gradient-01.png");
   background-attachment: fixed;
@@ -145,8 +154,34 @@ hr {
   margin: 20px 20px 20px 20px;
 }
 
+.level {
+  border-radius: 10px;
+  padding: 10px 25px 10px 25px;
+  background-color: var(--highlight-lighter);
+  display: flex;
+}
+
+.level>.level-item {
+  display: flex; 
+  align-items: center;
+  margin: 0px 25px 0px 25px;
+}
+
+.level>.level-item>*{
+  margin: 5px;
+}
+
+.buttonwithlabel {
+  display: flex; 
+  align-items: center;
+}
+
+.buttonwithlabel>* {
+  margin: 0px 10px 0px 10px;
+}
+
 .badge {
-  background-color: var(--highlight);
+  background-color: var(--cardDarker);
   padding: 15px; 
   margin-top: 10px; 
   margin-bottom: 10px; 
@@ -281,7 +316,7 @@ input.transparent:hover {
   }
 
   50% {
-    box-shadow: 0px 0px 20px 0px rgba(255,255,255,1);
+    box-shadow: 0px 0px 10px 0px rgba(255,255,255,1);
   }
 
   100% {
