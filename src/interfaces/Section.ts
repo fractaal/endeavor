@@ -35,6 +35,7 @@ export interface Module {
   styling:             string;
   courseid:            number;
   section:             number;
+  hasextradata:        boolean;
 }
 
 export interface Completiondata {
