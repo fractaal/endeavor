@@ -17,12 +17,13 @@
         <button class="roundButton transparent" @click="$router.go(-1)"><fai icon="backward"/></button>
         <button style="margin-left: 10px; margin-right: 20px;" class="roundButton transparent" @click="$router.go(1)"><fai icon="forward"/></button>
         <!-- Search bar -->
-        <form @submit="startSearch">
-          <input type="text" v-model="search" placeholder="Universal Search" class="transparent" style="width: 30vw;"/>
+        <form @submit="startSearch" class="searchbar">
+          <input type="text" v-model="search" placeholder="Universal Search" style="width: 30vw;"/>
+          <fai class="searchicon" icon="search"/>
         </form>
       </div>
     </div>
-    <div style="display: grid; grid-template-columns: 2fr 8fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
+    <div style="display: grid; grid-template-columns: 2fr 10fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
       <div class="sidebar">
         <h1>{{codeEmoji}} {{codeName}} </h1>
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
