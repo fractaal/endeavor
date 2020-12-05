@@ -26,13 +26,13 @@
         <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
         <grade v-if="module.grade" :grade="module.grade"/>
       </div>
-
       <hr>
     </div>
     <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 70vh;">
       <div class="level" v-if="module.intro">
         <p v-html="module.intro"/>
       </div>
+      <br>
       <div v-if="module.contents && module.contents.length > 0">
         <h3>Contents</h3>
         <card v-for="content in module.contents" :key="content.filename" 
@@ -40,6 +40,7 @@
         :subtitle="content.type"
         />
       </div>
+      <br>
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
         <card v-for="content in module.introattachments" :key="content.filename" 
@@ -47,6 +48,7 @@
         :subtitle="content.type"
         />
       </div>
+      <br>
       <div class="level" v-if="sharedStore.settings.showDebugInfo">
         <div>
           <h3>Debug Data</h3>
