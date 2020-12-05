@@ -10,13 +10,10 @@ const options = {
     "sections.name",
     "sections.summary",
     "sections.modules.name",
-    "sections.modules.modnameformatted",
-    "sections.modules.intro",
-    "sections.modules.description"
   ],
   includeScore: true,
   includeMatches: true,
-  threshold: 0.4
+  threshold: 0.4,
 }
 
 
@@ -25,27 +22,32 @@ export default function search(term) {
     fuse = new Fuse(sharedStore.eLearn.cache.coursesMetadata, options); 
   }
   const rawResult = fuse.search(term);
-  console.log(rawResult); 
 
   const courseResults = [];
   const sectionResults = [];
   const moduleResults = [];
-  
-  // Result processing
-  for (let a = 0; a < rawResult.length; a++) {
-    const topLevelMatch = rawResult[a];
-    courseResults.push(topLevelMatch.item);
 
-    for (let b = 0; b < topLevelMatch.matches.length; b++) {
-      const match = topLevelMatch.matches[b];
+  for (const i in rawResult) {
+    const topLevelMatch = rawResult[i];
+    courseResults.push(topLevelMatch);
+
+    for (const j in topLevelMatch.matches) {
+      const match = topLevelMatch.matches[j];
+
+      let counter = 0;
+
       if (match.key == "sections.name" || match.key == "sections.summary") {
-        for (const section of topLevelMatch.item.sections) {
-          if (section.name == match.value || section.summary == match.value) sectionResults.push({...section});
+        for (const idx in topLevelMatch.item.sections) {
+          if (idx as any == match.refIndex) sectionResults.push({...topLevelMatch.item.sections[idx]});
         }
-      } else if (match.key == "sections.modules.name" || match.key == "sections.modules.intro" || match.key == "sections.modules.description" || match.key == "sections.modules.modnameformatted") {
+      } else {
         for (const section of topLevelMatch.item.sections) {
           for (const module of section.modules) {
-            if (module.name == match.value || module.description == match.value) moduleResults.push({...module});
+            if (counter == match.refIndex) { 
+              console.log(counter, match.refIndex, counter == match.refIndex); 
+              moduleResults.push({...module})
+            }
+            counter++;
           }
         }
       }
@@ -58,6 +60,5 @@ export default function search(term) {
     moduleResults,
   }
 
-  console.log(result);
   return result;
 }
