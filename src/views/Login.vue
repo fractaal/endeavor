@@ -1,6 +1,11 @@
 <template>
   <div class="loginBackground">
-    <div style="height: 100px;"></div> <!-- To knock the entire form downards. -->
+    <div class="windowbuttons">
+      <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
+      <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
+      <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+    </div>
+    <div style="height: 10vh;"></div> <!-- To knock the entire form downards. -->
     <div style="display: flex; justify-content: center; align-items: center;">
       <div>
         <img src="../assets/icon.png" style="display: block; width: 300px; margin-left: auto; margin-right: auto;">
@@ -31,10 +36,13 @@
 
 <script>
 import Vue from 'vue';
+import {remote} from 'electron';
 import keytar from 'keytar';
 import sharedStore from '../store';
 import Loader from '../components/Loader.vue';
 import ChangeLogTicker from '../components/ChangeLogTicker.vue';
+
+const {BrowserWindow} = remote;
 
 export default {
   data() {
@@ -55,6 +63,15 @@ export default {
   methods: {
     async submit() {
       this.$parent.$emit("login", this.username, this.password);
+    },
+    minimizeWindow() {
+      BrowserWindow.getFocusedWindow().minimize();
+    },
+    maximizeWindow() {
+      BrowserWindow.getFocusedWindow().maximize();
+    },
+    closeWindow() {
+      BrowserWindow.getFocusedWindow().close();
     }
   }
 }
