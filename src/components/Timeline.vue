@@ -3,6 +3,15 @@
     <h1 style="margin-left: 50px; margin-bottom: 0;">Timeline</h1>
     <p :class="dayOfTheWeekStyling" style="margin-left: 50px; margin-top: 0; font-weight: 200;">Today is {{dayOfTheWeek}}.</p>
     <div class="cardlist">
+
+      <transition name="transition">
+        <div class="nospacing emptylistplaceholder" v-if="timeline.length == 0 && !isLoading">
+          <fai size="10x" icon="check-circle" />
+          <h1 style="font-weight: 400;">You're all good!</h1>
+          <p>Time to sit back and relax.</p>
+        </div>
+      </transition>
+
       <transition-group name="transition" mode="out-in" style="min-height: 80vh;">
         <card v-for="event in timeline" :key="event.instance"
         :title="event.name" 
