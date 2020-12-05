@@ -3,13 +3,13 @@
     <loader v-if="!module" :text="`Loading module`"/>
     <div v-else style="margin-left: 50px; margin-top: 25px; margin-bottom: 10px; margin-right: 50px;">
       <div style="display: flex; justify-content: space-between;">
-        <div>
+        <div style="max-width: 50%;">
           <h1 class="nospacing">{{module.name}}</h1> 
           <p class="nospacing">{{module['modnameformatted']}}</p>
         </div>
         <div style="display: flex;">
           <div class="buttonwithlabel">
-            <button class="roundButton">🔍</button>
+            <button @click="openExternalLink" class="roundButton">🔍</button>
             <p class="nospacing">Open in eLearn...</p>
           </div>
           <div class="buttonwithlabel">
@@ -22,46 +22,52 @@
           </div>
         </div>
       </div>
-      <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
-      <hr>
-      <div class="level" style="">
+      <div style="display: flex; justify-content: space-between">
+        <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
         <grade v-if="module.grade" :grade="module.grade"/>
       </div>
+
+      <hr>
     </div>
     <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 70vh;">
-      <div class="level" v-if="module.intro || module.description">
-        <p v-if="module.intro" v-html="module.intro"/>
-        <p v-else v-html="module.description"></p>
+      <div class="level" v-if="module.intro">
+        <p v-html="module.intro"/>
       </div>
-
-      <div v-if="module.contents">
+      <div v-if="module.contents && module.contents.length > 0">
         <h3>Contents</h3>
         <card v-for="content in module.contents" :key="content.filename" 
         :title="content.filename"
         :subtitle="content.type"
         />
       </div>
-      <div v-if="module.introattachments">
+      <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
         <card v-for="content in module.introattachments" :key="content.filename" 
         :title="content.filename"
         :subtitle="content.type"
         />
       </div>
-      <pre v-if="sharedStore.settings.showDebugInfo">
-        {{JSON.stringify(module, null, 2)}}
-      </pre>
+      <div class="level" v-if="sharedStore.settings.showDebugInfo">
+        <div>
+          <h3>Debug Data</h3>
+          <pre>
+            {{JSON.stringify(module, null, 2)}}
+          </pre>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import sharedStore, { addCourseToCache, getCourseFromCache } from '../store';
+import sharedStore from '../store';
 import {formatDistance, format} from 'date-fns';
 
 import Card from './Card.vue';
 import Loader from './Loader.vue';
 import Grade from './Grade.vue'; 
+import { shell } from 'electron';
 
 export default {
   name: "ViewModule",
@@ -86,6 +92,9 @@ export default {
     async getModule() {
       this.module = await this.sharedStore.eLearn.getModule(this.$route.params.course, this.$route.params.instance);
       console.log(this.module);
+    },
+    openExternalLink() {
+      shell.openExternal(this.module.url);
     }
   }
 }

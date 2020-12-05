@@ -10,7 +10,7 @@
             :subtitle="module.modname"
             :rightTitle="module.duedateformatted"
             :rightSubtitle="module.duedatedistanceformatted"
-            :content="module.description"
+            :content="module.intro"
             :internalLink="`/modules/${$route.params.id}/${module.instance}`"
             :externalLink="module.url"
             :styling="module.styling"
