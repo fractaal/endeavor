@@ -16,6 +16,7 @@ export interface eLearnSession {
   version: string;
 }
 
+
 export interface eLearnInterface {
   login(username: string, password: string, update: Function): Promise<boolean>;
   wsFunction(name: string, args: Record<string, any>, token?: string): Promise<any>;
@@ -26,6 +27,7 @@ export interface eLearnInterface {
   getModule(courseid: number, instance: number): Promise<Module>;
   getTimeline(): Promise<Event[]>;
   buildCache(update: Function): Promise<void>; 
+  debugData(): Record<string,any>;
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
