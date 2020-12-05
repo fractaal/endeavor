@@ -300,17 +300,27 @@ export class ELearn implements eLearnInterface {
         module.section = section.section;
         module.courseid = courseid;
         
-        if (info[module.modname]) {
-          const data: Quiz & Assignment & Forum = findInArray(info[module.modname], module.instance);
+        if (info[module.modname]) {          
+          // Capitalize the module type for display. 
+          module.modnameformatted = capitalize(module.modname);
 
-          if (module.modname.toLowerCase() == "assign") {
+          /**
+           * I need to do this stupid thing because for some reason
+           * moodle reports assignments as "assign" instead of just
+           * assignment. 🤷‍♂️🤷‍♂️
+           */
+          if (module.modnameformatted.toLowerCase() == "assign") {
             module.modnameformatted = "Assignment";
           }
-  
-          module.modnameformatted = capitalize(module.modname);
-  
+
+          // Get additional data for this module (if available). 
+          const data: Quiz & Assignment & Forum = findInArray(info[module.modname], module.instance);
+          
+          // If additional data exists...
           if (data) {
+            // Mark this module as having additional data (for debug purposes)
             module.hasextradata = true;
+
             for (const key in data) {
               // Time formatting
               if (key.match("date") || key.match("time")) {
@@ -321,19 +331,27 @@ export class ELearn implements eLearnInterface {
                 data[key] = new Date(data[key] * 1000)
               }
   
-              // Time human formatting
+              // Format time limit in a human way (as words)
               if (key.match("timelimit")) {
-                module['timelimitformatted'] = formatDistanceStrict(Date.now(), Date.now() - (data[key] * 1000))
+                module['timelimitformatted'] = `⌛ Good for ${formatDistanceStrict(Date.now(), Date.now() - (data[key]))}`;
+              } else if (key.match("timeopen")) {
+                module.timeopenformatted = `✔ Opens ${format(data[key], "hh:mma")}`;
+              } else if (key.match("timeclose")) {
+                module.timecloseformatted = `❌ Closes ${format(data[key], "hh:mma")}`;
               }
+
+              // Add the additional data into the module object.
               module[key] = data[key];
             }
             
+            // Styling function definition
             const style = (key) => {
               const styling = urgency(module[key] as Date);
               module.styling = styling;
-              module.duedateformatted = format(module[key], "MMMM dd, yyyy");
+              module.duedateformatted = format(module[key], "hh:mma, MMMM dd, yyyy");
               module.duedatedistanceformatted = formatDistanceStrict(module[key], Date.now(), {addSuffix: true});
             }
+
             // Styling & formatting pass
             if (module.duedate) {
               style("duedate");
@@ -344,11 +362,9 @@ export class ELearn implements eLearnInterface {
             } else if (module.timeclose) {
               style("timeclose");
             }
-          } else {
-            // console.warn("[elearn-api] WARN: More information on " + module.name + " not found...");
+
           }
         }
-
       }
     }
     return entries;
