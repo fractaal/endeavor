@@ -6,17 +6,17 @@
           <p style="font-weight: 800; margin: 0;">{{title}}</p>
           <p style="margin:0; font-weight: 400;">{{subtitle}}</p>
         </div>
-        <div>
+        <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div style="display: flex; flex-direction: column;">
             <p style="font-weight: 800; margin: 0;">{{rightTitle}}</p>
             <p style="margin:0; font-weight: 400;">{{rightSubtitle}}</p>
           </div>
           <div style="display: flex;">
-            <div v-if="externalLink" style="margin-right: 20px; display: flex; flex-direction: column; align-items: center;">
+            <div v-if="externalLink" class="buttonwithlabel">
               <button @click="openExternalLink" class="roundButton">🔬</button>
               <p class="nospacing">Open in eLearn...</p>
             </div>
-            <div v-if="internalLink" style="display: flex; flex-direction: column; align-items: center;">
+            <div v-if="internalLink" class="buttonwithlabel">
               <button @click="$router.push(internalLink)" class="roundButton">🔍</button>
               <p class="nospacing">Open...</p>
             </div>
