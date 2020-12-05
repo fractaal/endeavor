@@ -374,8 +374,8 @@ export class ELearn implements eLearnInterface {
   async getTimeline(): Promise<Event[]> {
     const weekAgo = (Date.now()/1000) - (60*60*24*7)
     const res = await this.wsFunctionRaw({
-      timesortfrom: weekAgo.toFixed(0), // Get all events from 1 week ago forward.
-      limitnum: '50',
+      timesortfrom: weekAgo.toFixed(0),
+      limitnum: 50,
       moodlewssettingfilter: 'true',
       moodlewssettingfileurl: 'true',
       wsfunction: 'core_calendar_get_action_events_by_timesort',
@@ -386,7 +386,7 @@ export class ELearn implements eLearnInterface {
       event = convertRawTimeValuesToDate(event);
       event.styling = urgency(event.timesort as Date)
       event.formatteddistance = formatDistanceStrict(event.timesort, Date.now(), {addSuffix: true});
-      event.formattedtime = format(event.timesort, "MMMM dd, yyyy");
+      event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");
     }
 
     return events;
