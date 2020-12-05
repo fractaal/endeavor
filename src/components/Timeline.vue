@@ -4,7 +4,7 @@
     <p :class="dayOfTheWeekStyling" style="margin-left: 50px; margin-top: 0; font-weight: 200;">Today is {{dayOfTheWeek}}.</p>
     <div class="cardlist">
       <transition-group name="transition" mode="out-in" style="min-height: 80vh;">
-        <card v-for="event in timeline" :key="event.name"
+        <card v-for="event in timeline" :key="event.instance"
         :title="event.name" 
         :subtitle="event.course.fullnamedisplay" 
         :rightTitle="event.formatteddistance" 
