@@ -23,7 +23,12 @@
         </div>
       </div>
       <div style="display: flex; justify-content: space-between">
-        <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
+        <div>
+          <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
+          <div class="badge" v-if="module.timelimitformatted">{{module.timelimitformatted}}</div>
+          <div class="badge" v-if="module.timeopenformatted">{{module.timeopenformatted}}</div>
+          <div class="badge" v-if="module.timecloseformatted">{{module.timecloseformatted}}</div>
+        </div>
         <grade v-if="module.grade" :grade="module.grade"/>
       </div>
       <hr>
