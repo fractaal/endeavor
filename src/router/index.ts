@@ -5,7 +5,7 @@ import sharedStore from '../store';
 // Views
 import Login from '../views/Login.vue'
 
-import Loader from '../components/Loader.vue';
+import FullPageLoad from '../views/FullPageLoad.vue';
 
 Vue.use(VueRouter)
 
@@ -13,10 +13,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/load',
     name: 'Loading',
-    component: Loader,
-    props: {
-      text: "Logging you in!"
-    }
+    component: FullPageLoad,
   },
   {
     path: '/login',
@@ -36,7 +33,7 @@ const routes: Array<RouteConfig> = [
         // Courses will be rendered inside home router view if /courses is matched
         path: 'courses',
         name: 'Courses',
-        component: () => import('../components/Courses.vue'),
+        component: () => import('../components/ViewCourses.vue'),
       },
       {
         path: 'courses/:id',
@@ -57,6 +54,11 @@ const routes: Array<RouteConfig> = [
         path: '/settings',
         name: "Settings",
         component: () => import('../views/Settings.vue'),
+      },
+      {
+        path: "/search",
+        name: "Search",
+        component: () => import('../views/Search.vue'),
       }
     ]
   },
@@ -75,6 +77,7 @@ const router = new VueRouter({
   routes
 })
 
+/*
 router.beforeEach(async (to, from, next) => {
   if (to.name == "Login" && await sharedStore.eLearn.getSession()) {
     console.warn("Preventing unwanted navigation back to login screen");
@@ -84,5 +87,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 })
+*/
 
 export default router

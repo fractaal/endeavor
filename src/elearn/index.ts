@@ -1,10 +1,28 @@
+/* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
+
 // Required libraries
 import got from 'got';
-import {Cookie, CookieJar} from 'tough-cookie';
+import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
+import {format, formatDistanceStrict} from 'date-fns'
+import capitalize from '../util/capitalize';
 
 // Interfaces
-import {Course, eLearnInterface, eLearnSession} from '../interfaces';
+import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
+import { Module, Section } from '@/interfaces/Section';
+import { Event } from '@/interfaces/Timeline';
+import { CourseMetadata } from '@/interfaces/CourseMetadata';
+import { Assignment } from '@/interfaces/Assignment';
+import { Forum } from '@/interfaces/Forum';
+import { Quiz } from '@/interfaces/Quiz';
+
+// Enums
+enum Urgency {
+  SAFE = "safe",
+  WARN = "warn",
+  ALERT = "alert",
+  DANGER = "danger"
+}
 
 // Runtime stuff
 const cookieJar = new CookieJar();
@@ -20,7 +38,7 @@ function findInArray(array: Array<any>, id: number) {
 }
 
 // Format dates and time data in object
-function convertRawTimeValuesToDate(object: Record<string,any>): Record<string,any> {
+function convertRawTimeValuesToDate(object: any): any {
   for (const key in object) {
     if (typeof object[key] == 'object') {
       convertRawTimeValuesToDate(object[key]);
@@ -37,10 +55,29 @@ function convertRawTimeValuesToDate(object: Record<string,any>): Record<string,a
       }
     }
   }
-  return object;
+  return object; 
+}
+
+function urgency(date: Date): Urgency {
+  const diff = (Date.now() - date.getTime())/1000
+  if (diff > 0) {
+    return Urgency.DANGER;
+  } else if (diff < 0 && diff > (-3600*24)) {
+    return Urgency.ALERT;
+  } else if (diff < 0 && diff > (-3600*48)) {
+    return Urgency.WARN;
+  } else {
+    return Urgency.SAFE; 
+  }
 }
 
 export class ELearn implements eLearnInterface {
+  public cache = {
+    courses: [],
+    coursesMetadata: [],
+    buildTime: 0,
+  };
+  
   /**
    * Logs in a user to the eLearn website. eLearn also
    * has some logintoken functionality that this function
@@ -48,7 +85,7 @@ export class ELearn implements eLearnInterface {
    * @param username Username to pass to eLearn.
    * @param password Password to pass to eLearn.
    */
-  async login(username: string, password: string): Promise<boolean> {
+  async login(username: string, password: string, update: Function): Promise<boolean> {
     try {
       // To obtain a cookie
       await client(`http://elearn.xu.edu.ph/lib/ajax/service.php?info=tool_mobile_get_public_config`);
@@ -77,6 +114,8 @@ export class ELearn implements eLearnInterface {
 
       session = siteInfoRequest as any;
       session.token = token;
+      update("Building search cache");
+      await this.buildCache(update);
       return true;
 
     } catch(err) {
@@ -168,17 +207,13 @@ export class ELearn implements eLearnInterface {
     }
   }
 
-  async getCourses(): Promise<Course[]> {
+  async getCourses(): Promise<CourseMetadata[]> {
     // You should get an array containing all course information.
     const res = await this.wsFunction("core_enrol_get_users_courses", {userid: session.userid, returnusercount: 1});
     try {
       const courses = res.map(value => {
-        const course: Course = {
-          displayname: value.displayname,
-          fullname: value.fullname,
-          shortname: value.shortname,
-          id: value.id,
-          progress: value.progress,
+        const course: CourseMetadata = {
+          ...value,
           // We multiply the lastaccess value by 1000 because
           // The Date object takes takes Unix time in ms
           lastaccess: new Date(value.lastaccess*1000),
@@ -192,9 +227,25 @@ export class ELearn implements eLearnInterface {
     }
   }
 
-  async getCourseInfo(courseid: string): Promise<Record<string,any>> {
+  async getCourse(id): Promise<CourseMetadata> {
+    return findInArray(await this.getCourses(), id);
+  }
+
+  async getCourseInfo(courseid: number): Promise<Section[]> {
+    const alreadyExisting: CourseMetadata = this.findInCache(courseid);
+
+    if (alreadyExisting) {
+      return alreadyExisting.sections;
+    }
+
+    const info = {
+      forum: [] as Forum[],
+      quiz: [] as Quiz[],
+      assign: [] as Assignment[],
+    }
+
     // You should get an array containing all entries inside the course.
-    const res = await this.wsFunctionRaw({
+    const a = this.wsFunctionRaw({
       'courseid': courseid,
       'options[0][name]': 'excludemodules',
       'options[0][value]': '0',
@@ -202,112 +253,204 @@ export class ELearn implements eLearnInterface {
       'options[1][value]': '0',
       'options[2][name]': 'includestealthmodules',
       'options[2][value]': '1',
-      'wsfunction': 'core_course_get_contents',
-    });
-
-    const info = {
-      forum: [],
-      quiz: [],
-      assignment: []
-    }
+      'wsfunction': 'core_course_get_contents',}) as any;
 
     // You should get an array containing forum information. 
-    try {
-      const res = await this.wsFunctionRaw({
-        'requests[0][function]': 'mod_forum_get_forums_by_courses',
-        'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
-        'requests[0][settingfilter]': '1',
-        'requests[0][settingfileurl]': '1',
-        'requests[1][function]': 'core_user_get_user_preferences',
-        'requests[1][arguments]': '{"name":"forum_discussionlistsortorder"}',
-        'requests[1][settingfilter]': '1',
-        'requests[1][settingfileurl]': '1',
-        'wsfunction': 'tool_mobile_call_external_functions',
-      })
-
-      info.forum = JSON.parse(res.responses[0].data);
-    } catch(err) {
-      console.warn("[elearn-api] Failed attempting to get detailed forum information");
-    }
+    const b = this.wsFunctionRaw({
+      'requests[0][function]': 'mod_forum_get_forums_by_courses',
+      'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
+      'requests[0][settingfilter]': '1',
+      'requests[0][settingfileurl]': '1',
+      'requests[1][function]': 'core_user_get_user_preferences',
+      'requests[1][arguments]': '{"name":"forum_discussionlistsortorder"}',
+      'requests[1][settingfilter]': '1',
+      'requests[1][settingfileurl]': '1',
+      'wsfunction': 'tool_mobile_call_external_functions',}) as any;
 
     // You should get an array containing quiz information.
-    try {
-      const res = await this.wsFunctionRaw({
-        'requests[0][function]': 'mod_quiz_get_quizzes_by_courses',
-        'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
-        'requests[0][settingfilter]': '1',
-        'requests[0][settingfileurl]': '1',
-        'wsfunction': 'tool_mobile_call_external_functions',
-      })
-      info.quiz = JSON.parse(res.responses[0].data).quizzes;
-    } catch(err) {
-      console.warn("[elearn-api] Failed attempting to get detailed quiz information " + err);
-    }
+    const c = this.wsFunctionRaw({
+      'requests[0][function]': 'mod_quiz_get_quizzes_by_courses',
+      'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
+      'requests[0][settingfilter]': '1',
+      'requests[0][settingfileurl]': '1',
+      'wsfunction': 'tool_mobile_call_external_functions',}) as any;
+
 
     // You should get an array containing asssignment information.
-    try {
-      const res = await this.wsFunctionRaw({
-        'requests[0][function]': 'mod_assign_get_assignments',
-        'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
-        'requests[0][settingfilter]': '1',
-        'requests[0][settingfileurl]': '1',
-        'wsfunction': 'tool_mobile_call_external_functions',
-      })
-      info.assignment = JSON.parse(res.responses[0].data).courses[0].assignments;
-    } catch(err) {
-      console.warn("[elearn-api] Failed attempting to get detailed assignment information");
-    }
-    
+    const d = this.wsFunctionRaw({
+      'requests[0][function]': 'mod_assign_get_assignments',
+      'requests[0][arguments]': `{"courseids":["${courseid}"]}`,
+      'requests[0][settingfilter]': '1',
+      'requests[0][settingfileurl]': '1',
+      'wsfunction': 'tool_mobile_call_external_functions'}) as any;
+
+    const [entries, forums, quizzes, assignments] = await Promise.all([a,b,c,d])
+
+    info.assign = JSON.parse(assignments.responses[0].data).courses[0].assignments;
+    info.quiz = JSON.parse(quizzes.responses[0].data).quizzes;
+    info.forum = JSON.parse(forums.responses[0].data);
+
     // Section-level parsing. (Top-level objects are sections!)
-    for (const section of res) {
+    for (const section of entries) {
+
       // Module-level parsing. (Middle-level objects are modules!)
+      section.courseid = courseid;
       for (const module of section.modules) {
-        // Transform them based on what type they are
-        // Fix later, stupid code (DONT REPEAT YOURSELF!)
-        if (module.modname == "assign") module.modname = "assignment" // Because endeavor uses assignment instead of assign
-        try {
-          const data = findInArray(info[module.modname], parseInt(module.instance));
+        // Add additional data to the object
+        module.section = section.section;
+        module.courseid = courseid;
+        
+        if (info[module.modname]) {
+          const data: Quiz & Assignment & Forum = findInArray(info[module.modname], module.instance);
+
+          if (module.modname.toLowerCase() == "assign") {
+            module.modnameformatted = "Assignment";
+          }
+  
+          module.modnameformatted = capitalize(module.modname);
+  
           if (data) {
-            // Transform time data...
+            module.hasextradata = true;
             for (const key in data) {
-              if (key.match("date") || key == "timeopen" || key == "timeclose") {
+              // Time formatting
+              if (key.match("date") || key.match("time")) {
                 /**
                  * eLearn stores time data in unix epoch format in seconds.
                  * We multiply by 1000 so that Javascript accepts it.
                  */
                 data[key] = new Date(data[key] * 1000)
               }
+  
+              // Time human formatting
+              if (key.match("timelimit")) {
+                module['timelimitformatted'] = formatDistanceStrict(Date.now(), Date.now() - (data[key] * 1000))
+              }
               module[key] = data[key];
+            }
+            
+            const style = (key) => {
+              const styling = urgency(module[key] as Date);
+              module.styling = styling;
+              module.duedateformatted = format(module[key], "MMMM dd, yyyy");
+              module.duedatedistanceformatted = formatDistanceStrict(module[key], Date.now(), {addSuffix: true});
+            }
+            // Styling & formatting pass
+            if (module.duedate) {
+              style("duedate");
+            } else if (module.cutoffdate) {
+              style("cutoffdate");
+            } else if (module.gradingduedate) {
+              style("gradingduedate");
+            } else if (module.timeclose) {
+              style("timeclose");
             }
           } else {
             // console.warn("[elearn-api] WARN: More information on " + module.name + " not found...");
           }
-        } catch(err) {
-          // console.warn(`[elearn-api] WARN: No info on ${module.name} of ID ${module.instance} of type {${module.modname}}`)
+        }
+
+      }
+    }
+    return entries;
+  }
+
+  async getSection(courseid: number, sectionNumber: number): Promise<Section> {
+    const course: CourseMetadata = findInArray(this.cache.coursesMetadata, courseid);
+    for (const section of course.sections) {
+      if (section.section == sectionNumber) return section;
+    }
+  }
+
+  async getModule(courseid: number, instance: number): Promise<Module> {
+    const course: CourseMetadata = findInArray(this.cache.coursesMetadata, courseid);
+    let found;
+    for (const section of course.sections) {
+      found = findInArray(section.modules, instance);
+      if (found) break;
+    }
+    return found; 
+  }
+
+  async getTimeline(): Promise<Event[]> {
+    const weekAgo = (Date.now()/1000) - (60*60*24*7)
+    const res = await this.wsFunctionRaw({
+      timesortfrom: weekAgo.toFixed(0),
+      limitnum: 50,
+      moodlewssettingfilter: 'true',
+      moodlewssettingfileurl: 'true',
+      wsfunction: 'core_calendar_get_action_events_by_timesort',
+    });
+    const events: Event[] = res.events;
+
+    for (let event of events) {
+      event = convertRawTimeValuesToDate(event);
+      event.styling = urgency(event.timesort as Date)
+      event.formatteddistance = formatDistanceStrict(event.timesort, Date.now(), {addSuffix: true});
+      event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");
+    }
+
+    return events;
+  }
+
+  async buildCache(update: Function): Promise<void> {
+    const startTime = Date.now();
+    console.log("[elearn-api] 📃 Building search cache")
+    console.time("search cache build time");
+    update("⌛ Getting course metadata...");
+    let coursesMetadata = await this.getCourses();
+    update("⌛ Getting course sections & modules...")
+    // const courses = await Promise.all(coursesMetadata.map(course => this.getCourseInfo(course.id)));
+    const courses: any = await Promise.all(coursesMetadata.map(course => {
+      return new Promise((resolve, reject) => {
+        this.getCourseInfo(course.id).then(courseinfo => {
+          update("📚 Loaded " + course.shortname);
+          resolve(courseinfo);
+        })
+      })
+    }));
+
+    update("⌛ Transforming data...");
+    coursesMetadata = coursesMetadata.map((courseMetadata, index) => {
+      return {
+        ...courseMetadata,
+        sections: courses[index],
+      }
+    })
+
+    this.cache.courses = courses;
+    this.cache.coursesMetadata = coursesMetadata;
+    console.log("[elearn-api] 📃 Search cache build complete");
+    console.timeEnd("search cache build time");
+    update("✔ Complete!");
+    this.cache.buildTime = Date.now() - startTime;
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  findInCache(courseid: number): CourseMetadata {
+    return findInArray(this.cache.coursesMetadata, courseid);
+  }
+
+  debugData() {
+    const returnData = {
+      buildtime: this.cache.buildTime,
+      loadedcourses: 0,
+      loadedsections: 0,
+      loadedmodules: 0,
+      loadedmoduleswithdata: 0,
+    };
+
+    for (const course of this.cache.coursesMetadata as CourseMetadata[]) {
+      returnData.loadedcourses++;
+      for (const section of course.sections) {
+        returnData.loadedsections++;
+        for (const module of section.modules) {
+          returnData.loadedmodules++;
+          if (module.hasextradata) returnData.loadedmoduleswithdata++;
         }
       }
     }
 
-    return res;
-  }
-
-  async getTimeline(): Promise<Record<string,any>> {
-    const weekAgo = (Date.now()/1000) - (60*60*24*7)
-    const res = await this.wsFunctionRaw({
-      timesortfrom: weekAgo.toFixed(0), // Get all events from 1 week ago forward.
-      limitnum: '50',
-      moodlewssettingfilter: 'true',
-      moodlewssettingfileurl: 'true',
-      wsfunction: 'core_calendar_get_action_events_by_timesort',
-    }) as unknown as any;
-    console.log(res);
-    const events: Array<Record<string,any>> = res.events;
-
-    for (let event of events) {
-      event = convertRawTimeValuesToDate(event);
-    }
-
-    return events;
+    return returnData;
   }
 }
 

@@ -1,22 +1,18 @@
 export default [
   {
-    title: "🐜 Bug fix!",
-    text: "Fixed a ridiculuous bug that made the app hang on startup. Sorry. 😬"
+    title: "⚡ Performant",
+    text: "Major code refactoring and improvements means Endeavor is faster than ever!"
   },
   {
-    title: "✨ Secure automatic login!",
-    text: "The automatic login feature now uses your secure & native OS credential manager."
+    title: "🧭 Universal Search",
+    text: "Endeavor lets you search through all your courses at once! Never miss a deadline!"
   },
   {
-    title: "✨ Purging login data!",
-    text: "Along with secure automatic login, Endeavor lets you purge the login data if you want to now!"
+    title: "🖼 Theming!",
+    text: "Light and dark themes!"
   },
   {
-    title: "❌ Removed broken buttons",
-    text: "In modules with file attachments, the 🔍 button would lead you to a blank screen. This has been removed for now!"
-  },
-  {
-    title: "🖼 Layout changes",
-    text: "Layout changes to the login screen and the automatic login screen (new) were made!"
+    title: "📐 Layout changes",
+    text: "Layout changes to almost every UI element means cleaner design!"
   },
 ]

@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
 
+.windowbuttons {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0px 0px -40px 0px;
+}
+
+.windowbutton {
+  -webkit-app-region: no-drag;
+  padding: 7px 17px 7px 17px;
+}
+
+.windowbutton:hover {
+  background-color: var(--background);
+}
+
 .nospacing {
+  margin: 0;
+  padding: 0;
+}
+
+.nospacing>* {
   margin: 0;
   padding: 0;
 }
@@ -9,25 +31,83 @@ body {
   overflow: hidden;
 }
 
-hr {
+.dark-theme hr {
   border: 1px solid rgba(255,255,255,0.05);
 }
 
-:root {
+.light-theme hr {
+  border: 1px solid rgba(2,2,2,0.1);
+}
+
+.cardlist {
+  overflow-y: scroll;
+  max-height: 75vh; 
+  margin-left: 25px; 
+  margin-right: 25px;
+}
+
+.compactcardlist {
+  max-height: 75vh;
+  overflow-y: auto;
+  margin-left: 25px; 
+  margin-right: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.warn {
+  --card: #c48256;
+  --cardDarker: #b37d37;
+}
+
+.alert {
+  --card: #9c263f;
+  --cardDarker: #6d1d35;
+}
+
+.danger {
+  --card: #181818;
+  --cardDarker: #222222;
+}
+
+.light-theme .danger, .light-theme .alert, .light-theme .warn {
+  --foreground: white !important;
+}
+
+.danger .cardUpper  {
+  animation: attention 2.5s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
+}
+
+.light-theme {
+  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
+  --foreground: black;
+  --background: #cacaca;
+  --sidebar: #e9e9e9;
+  --card: #f0f0f0;
+  --cardDarker: #e0e0e0;
+  --gradient1: #680054;
+  --gradient2: #F05661;
+  --highlight: #e7e7e7;
+  --highlight-lighter: #d6d6d6;
+  --topbar-color: #eeeeee;
+}
+
+.light-theme img#logo {
+  filter: invert();
+}
+
+.dark-theme {
+  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
   --foreground: white;
   --background: #071829;
   --sidebar: #102132;
   --card: #04223C;
   --cardDarker: #001B35;
-  --cardAccent: #a11337;
-  --cardAccent2: #7A0026;
-  --cardAccent3: #55001B;
-  --cardWarn1: #c03737;
-  --cardWarn2: #ac1f1a;
   --gradient1: #680054;
   --gradient2: #F05661;
-  --highlight: #17334F;
-  --highlight-lighter: #11253a;
+  --highlight: #102336;
+  --highlight-lighter: #0e1d2e;
+  --topbar-color: #112b46;
 }
 
 .bar {
@@ -49,6 +129,7 @@ hr {
 
 .loginBackground {
   background-color: var(--background);
+  height: 100vh;
   /*
   background-image: url("gradient-01.png");
   background-attachment: fixed;
@@ -64,58 +145,79 @@ hr {
 }
 
 .sidebar > h3 {
+  margin: 0;
   transition: all 0.15s;
-  margin: 10px 0px 10px 0px; 
-  padding-left: 40px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  font-weight: 300;
-}
-
-.sidebar > h1 {
-  transition: all 0.25s;
-  margin: 50px 0px 0px 20px; 
-  padding-left: 20px; 
-  padding-bottom: 10px; 
+  padding: 20px 20px 20px 30px;
   font-weight: 300;
 }
 
 .sidebar > h3:hover {
   cursor: pointer;
-  padding: 25px 20px 35px 45px;
+  padding: 20px 20px 20px 40px;
   font-weight: 500;
-  background-color: var(--highlight);
+  background-color: var(--highlight-lighter);
 }
 
-.card {
+.sidebar > h1 {
+  transition: all 0.25s;
+  padding: 30px 20px 10px 20px;
+  text-align: center;
+  font-weight: 300;
+}
+
+.searchbar {
+  display: flex;
+  align-items: center;
+}
+
+.searchbar>input {
+  background-color: var(--background);
+}
+
+.searchbar>.searchicon {
+  margin-left: -40px;
+}
+
+.cardUpper {
   background-color: var(--card);
+  padding: 15px 20px 15px 20px;
+  margin: 20px 20px 20px 20px; 
+}
+
+.cardLower {
+  background-color: var(--cardDarker);
   padding: 15px 20px 15px 20px;
   margin: 20px 20px 20px 20px;
 }
 
-.cardDarker {
-  background-color: var(--cardDarker);
+.level {
+  border-radius: 10px;
+  padding: 10px 25px 10px 25px;
+  background-color: var(--highlight-lighter);
+  display: flex;
 }
 
-.cardReallyDanger {
-  background-color: var(--cardAccent) !important;
-  animation: attention 2.5s cubic-bezier(0.165, 0.84, 0.44, 1) both infinite;
+.level>.level-item {
+  display: flex; 
+  align-items: center;
+  margin: 0px 25px 0px 25px;
 }
 
-.cardReallyDanger2 {
-  background-color: var(--cardAccent2) !important;
+.level>.level-item>*{
+  margin: 5px;
 }
 
-.cardWarn {
-  background-color: var(--cardWarn1) !important;
+.buttonwithlabel {
+  display: flex; 
+  align-items: center;
 }
 
-.cardWarn2 {
-  background-color: var(--cardWarn2) !important;
+.buttonwithlabel>* {
+  margin: -10px 10px -10px 10px;
 }
 
 .badge {
-  background-color: var(--highlight);
+  background-color: var(--cardDarker);
   padding: 15px; 
   margin-top: 10px; 
   margin-bottom: 10px; 
@@ -129,20 +231,33 @@ hr {
 }
 
 .topbar {
-  /*
-  background: rgb(104,0,84);
-  background: linear-gradient(90deg, var(--gradient1) 0%, var(--gradient2) 100%);*/
-  background-color: var(--highlight-lighter);
+  background-color: var(--topbar-color);
+  padding: 0;
 }
 
-.settingsHighlight {
+.topbarelements {
+  display: flex; 
+  align-items: center;
+  padding: 20px;
+}
+
+.settingsHighlight>div {
   transition: all 0.1s;
   border-radius: 10px;  
   padding: 50px;
+  margin: 10px 0px 10px 0px;
 }
 
-.settingsHighlight:hover {
-  background-color: rgba(255,255,255,0.05);
+.settingsHighlight>div:nth-of-type(odd) {
+  background-color: var(--highlight);
+}
+
+.settingsHighlight>div:nth-of-type(even) {
+  background-color: var(--highlight-lighter);
+}
+
+.settingsHighlight>div:hover {
+  filter: brightness(1.05);
 }
 
 
@@ -240,15 +355,15 @@ input.transparent:hover {
 
 @keyframes attention {
   0% {
-    box-shadow: 0;
+    box-shadow: none;
   }
 
   50% {
-    box-shadow: 0px 0px 20px 0px rgba(255,255,255,1);
+    box-shadow: inset 0 0 0px 5px var(--foreground);
   }
 
   100% {
-    box-shadow: 0;
+    box-shadow: none;
   }
 }
 
@@ -274,15 +389,20 @@ input.transparent:hover {
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .transition-enter-active {
-  transition: all .3s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .transition-leave-active {
-  transition: all .2s cubic-bezier(0.23, 1, 0.320, 1);
+  transition: all .2s cubic-bezier(0.19, 1, 0.22, 1);
   position: absolute;
 }
-.transition-enter, .transition-leave-to
+.transition-enter {
+  transform: scale(0.9) translateY(-200px);
+  opacity: 0;
+}
+
+.transition-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: scale(0.75);
+  transform: scale(0.9) translateY(200px);
   opacity: 0;
 }
 
@@ -311,7 +431,7 @@ input.transparent:hover {
 /* Fancy scrollbar! */
 ::-webkit-scrollbar-track
 {
-	background-color: var(--cardDarker);
+	background-color: var(--background);
 }
 
 ::-webkit-scrollbar
@@ -322,7 +442,8 @@ input.transparent:hover {
 
 ::-webkit-scrollbar-thumb
 {
-	background-color: var(--highlight);	
+  background-color: var(--highlight);	
+  border-radius: 5px;
 }
 
 /* Toggle switches! */

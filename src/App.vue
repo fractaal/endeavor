@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="fullPage loginBackground">
+  <div id="app" :class="sharedStore.settings.theme" class="fullPage loginBackground">
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view name="default"></router-view>
@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import path from 'path';
 import fs from 'fs';
 
@@ -24,20 +24,30 @@ let endeavor;
 
 console.log("Data path: " + data);
 
-export default Vue.extend({
+export default {
   data() {
     return {
-      sharedStore
+      sharedStore,
     };
   },
   async created () {
     // Creating new eLearn object in store...
     this.sharedStore.eLearn = new ELearn();
-    this.$router.push('/load');
+    this.sharedStore.fullPageLoadText = "Checking for existing config file..."
     
     // Checking if endeavor.json file exists
     if (fs.existsSync(path.join(data, "endeavor.json"))) {
       endeavor = JSON.parse(fs.readFileSync(path.join(data, "endeavor.json"), {encoding: "utf8"}));
+
+      // Filling any missing data on endeavor 
+      for (const key in this.sharedStore.settings) {
+        if (!endeavor[key]) {
+          console.log(`${key} does not exist in pre-existing configuration file, falling back to default`);
+          endeavor[key] = this.sharedStore.settings[key];
+        }
+      }
+
+      this.sharedStore.settings = endeavor.settings;
 
       // Remove any insecure plaintext login information.
       if (endeavor.username) delete endeavor.username;
@@ -46,30 +56,26 @@ export default Vue.extend({
 
       // Attempting an automatic login
       try {
-        this.sharedStore.settings = endeavor.settings;
+        
         let credentials; let credential; let loginResult;
         if (this.sharedStore.settings.saveLogin) {
-          try {
-            credentials = await keytar.findCredentials("endeavor");
-            credential = credentials[0];
-            loginResult = await this.sharedStore.eLearn.login(credential.account, credential.password);
-          } catch(err) {
-            console.warn("An error occured trying to retrieve login credentials: " + err);
-            this.$router.push('/login');
-          }
-          
+          credentials = await keytar.findCredentials("endeavor");
+          credential = credentials[0];
+
+          loginResult = await this.login(credential.account, credential.password);
+
           if (loginResult) {
-            console.log("Autologin success");
-            this.$router.push("/home");
+            this.$router.push('/home');
           } else {
-            console.warn("Automatic login failed!");
             this.$router.push('/login');
           }
+
         } else {
           console.log("❕ Not automatically logging in. saveLogin flag is false in preferences.")
           this.$router.push('/login');
         }
       } catch(err) {
+        this.sharedStore.fullPageLoadText = "❌ App preference load error!"
         console.warn("An error occurred trying to initialize app preferences." + err);
         this.$router.push('/login');
       }
@@ -77,8 +83,47 @@ export default Vue.extend({
       // If an existing preferences file doesn't exist, just push to login.
       this.$router.push('/login');
     }
+
+    // If the login component wants to log in
+    this.$on("login", async (username, password) => {
+      if (await this.login(username, password)) {
+        this.$router.push('/home');
+      } else {
+        this.$router.push('/login');
+      }
+    })
+  },
+  methods: {
+    async login(username, password) {
+      this.$router.push('/load');
+      this.sharedStore.fullPageLoadLog = [];
+      let loginResult;
+      try {
+        this.sharedStore.fullPageLoadText = "Logging you in..."
+
+        loginResult = await this.sharedStore.eLearn.login(username, password, log => {
+          this.sharedStore.fullPageLoadLog.push(log);
+        });
+      } catch(err) {
+        this.sharedStore.fullPageLoadText = "❌ Login failed!"
+        console.warn("An error occured trying to retrieve login credentials: " + err);
+        return false;
+      }
+      
+      if (loginResult) {
+        this.sharedStore.fullPageLoadText = "Welcome!"
+        await keytar.setPassword("endeavor", username, password);
+        console.log("Login success");
+        return true;
+      } else {
+        this.sharedStore.fullPageLoadText = "❌ Login failed!"
+        console.warn("Automatic login failed!");
+        return false;
+      }
+    }
   }
-});
+
+};
 
 </script>
 

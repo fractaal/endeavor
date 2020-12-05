@@ -1,66 +1,81 @@
 <template>
   <div>
-    <div style="margin-left: 50px; margin-top: 25px; margin-bottom: 10px;">
-      <h1 class="nospacing">{{module.name}}</h1>
-      <div style="display: flex; justify-content: space-  between;">
-        <div>
-          <div :class="module.classOverride" class="badge" v-if="module.duedateFormatted">
-            <p class="nospacing">Due {{module.duedateFormatted}}</p>
-          </div>
-          <div class="badge" v-if="module.timeopenFormatted">
-            <p class="nospacing">{{module.timeopenFormatted}}</p>
-          </div>
-          <div class="badge" v-if="module.timecloseFormatted">
-            <p class="nospacing">{{module.timecloseFormatted}}</p>
-          </div>
-          <div class="badge" v-if="module.timelimitFormatted">
-            <p class="nospacing">Due {{module.timelimitFormatted}}</p>
-          </div>
-          <p class="nospacing">{{module['modname']}}</p>
+    <loader v-if="!module" :text="`Loading module`"/>
+    <div v-else style="margin-left: 50px; margin-top: 25px; margin-bottom: 10px; margin-right: 50px;">
+      <div style="display: flex; justify-content: space-between;">
+        <div style="max-width: 50%;">
+          <h1 class="nospacing">{{module.name}}</h1> 
+          <p class="nospacing">{{module['modnameformatted']}}</p>
         </div>
-        <div style="margin-left: 50px; margin-right: 50px;">
-          <form :action="module.url" method="post">
-            <button type="submit" class="roundButton">🔍</button>
-          </form>
+        <div style="display: flex;">
+          <div class="buttonwithlabel">
+            <button @click="openExternalLink" class="roundButton">🔍</button>
+            <p class="nospacing">Open in eLearn...</p>
+          </div>
+          <div class="buttonwithlabel">
+            <button @click="$router.push('/home/courses/'+module.courseid)" class="roundButton">📚</button>
+            <p class="nospacing">See course...</p>
+          </div>
+          <div class="buttonwithlabel">
+            <button @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)" class="roundButton">🔼</button>
+            <p class="nospacing">See section...</p>
+          </div>
         </div>
       </div>
+      <div style="display: flex; justify-content: space-between">
+        <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
+        <grade v-if="module.grade" :grade="module.grade"/>
+      </div>
+      <hr>
     </div>
-    <br>
-    <hr>
-    <div style="overflow-y: auto; max-height: 69vh;">
-      <transition name="transition">
-        <div style="margin-left: 50px; margin-right: 50px;">
-          <p v-html="module.description"></p>
-          <div v-if="module.contents || module.introattachments">
-            <div v-for="item in module.introattachments" :key="item.filename">
-              <Card :title="item.filename"/>
-            </div>
-            <div v-for="item in module.contents" :key="item.filename">
-              <Card :title="item.filename"/>
-            </div>
-          </div>
-          <pre v-if="sharedStore.settings.showDebugInfo" style="background-color: black; padding: 10px;">
-            <h2 class="nospacing">COMPLICATED DEBUG INFORMATION</h2>
-            {{JSON.stringify(module, 0, 2)}}  
+    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 70vh;">
+      <div class="level" v-if="module.intro">
+        <p v-html="module.intro"/>
+      </div>
+      <br>
+      <div v-if="module.contents && module.contents.length > 0">
+        <h3>Contents</h3>
+        <card v-for="content in module.contents" :key="content.filename" 
+        :title="content.filename"
+        :subtitle="content.type"
+        />
+      </div>
+      <br>
+      <div v-if="module.introattachments && module.introattachments.length > 0">
+        <h3>Attachments</h3>
+        <card v-for="content in module.introattachments" :key="content.filename" 
+        :title="content.filename"
+        :subtitle="content.type"
+        />
+      </div>
+      <br>
+      <div class="level" v-if="sharedStore.settings.showDebugInfo">
+        <div>
+          <h3>Debug Data</h3>
+          <pre>
+            {{JSON.stringify(module, null, 2)}}
           </pre>
         </div>
-      </transition>
-      <Loader v-if="isLoading"/>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import sharedStore, { addCourseToCache, getCourseFromCache } from '../store';
+import sharedStore from '../store';
 import {formatDistance, format} from 'date-fns';
 
-import Card from './Card';
-import Loader from './Loader';
+import Card from './Card.vue';
+import Loader from './Loader.vue';
+import Grade from './Grade.vue'; 
+import { shell } from 'electron';
 
 export default {
   name: "ViewModule",
   components: {
     Loader,
+    Grade,
     Card,
   },
   data() {
@@ -72,51 +87,16 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.getModuleData();
+      vm.getModule()
     })
   },
   methods: {
-    async getModuleData() {
-      this.isLoading = true;
-      this.module = {};
-      /**
-       * Add the course to the cache.
-       */
-      let course = getCourseFromCache(this.$route.params.course);
-      let courseMeta;
-      if (!course) {
-        const courseMetas = await sharedStore.eLearn.getCourses();
-        for (const course of courseMetas) {
-          if (course.id == this.$route.params.course) {
-            courseMeta = course;
-            courseMeta.info = await sharedStore.eLearn.getCourseInfo(this.$route.params.course);
-            break;
-          }
-        }
-        course = courseMeta;
-        addCourseToCache(courseMeta);
-      }
-
-      for (const section of course.info) {
-        for (const module of section.modules) {
-          if (module.instance == this.$route.params.instance || module.cmid == this.$route.params.instance || module.id == this.$route.params.instance || module.coursemodule == this.$route.params.instance) {
-            this.module = module;
-          }
-        }
-      }
-
-      this.format();
-      this.isLoading = false;
+    async getModule() {
+      this.module = await this.sharedStore.eLearn.getModule(this.$route.params.course, this.$route.params.instance);
+      console.log(this.module);
     },
-
-    format() {
-       try {
-         console.log(this.module)
-         this.module.duedateFormatted = formatDistance(this.module.duedate, new Date(), {addSuffix: true});
-       } catch(e) {
-         console.warn("Formatting data for this module failed: " + e);
-         console.log(this.module.duedate);
-       }
+    openExternalLink() {
+      shell.openExternal(this.module.url);
     }
   }
 }
