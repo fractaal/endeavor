@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
 
+.windowbuttons {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  margin: 0px 0px -40px 0px;
+}
+
+.windowbutton {
+  -webkit-app-region: no-drag;
+  padding: 7px 17px 7px 17px;
+}
+
+.windowbutton:hover {
+  background-color: var(--background);
+}
+
 .nospacing {
+  margin: 0;
+  padding: 0;
+}
+
+.nospacing>* {
   margin: 0;
   padding: 0;
 }
@@ -9,19 +31,23 @@ body {
   overflow: hidden;
 }
 
-hr {
+.dark-theme hr {
   border: 1px solid rgba(255,255,255,0.05);
+}
+
+.light-theme hr {
+  border: 1px solid rgba(2,2,2,0.1);
 }
 
 .cardlist {
   overflow-y: scroll;
-  max-height: 80vh; 
+  max-height: 75vh; 
   margin-left: 25px; 
   margin-right: 25px;
 }
 
 .compactcardlist {
-  max-height: 80vh;
+  max-height: 75vh;
   overflow-y: auto;
   margin-left: 25px; 
   margin-right: 25px;
@@ -35,13 +61,13 @@ hr {
 }
 
 .alert {
-  --card: #af3953;
-  --cardDarker: #6d1d45;
+  --card: #9c263f;
+  --cardDarker: #6d1d35;
 }
 
 .danger {
-  --card: #b83860;
-  --cardDarker: #a82d54;
+  --card: #181818;
+  --cardDarker: #222222;
 }
 
 .light-theme .danger, .light-theme .alert {
@@ -121,7 +147,7 @@ hr {
 .sidebar > h3 {
   transition: all 0.15s;
   margin: 10px 0px 10px 0px; 
-  padding-left: 40px;
+  padding-left: 30px;
   padding-top: 15px;
   padding-bottom: 15px;
   font-weight: 300;
@@ -130,7 +156,7 @@ hr {
 .sidebar > h1 {
   transition: all 0.25s;
   margin: 50px 0px 0px 20px; 
-  padding-left: 20px; 
+  padding-left: 10px; 
   padding-bottom: 10px; 
   font-weight: 300;
 }
@@ -177,7 +203,7 @@ hr {
 }
 
 .buttonwithlabel>* {
-  margin: 0px 10px 0px 10px;
+  margin: -10px 10px -10px 10px;
 }
 
 .badge {
@@ -196,6 +222,13 @@ hr {
 
 .topbar {
   background-color: var(--topbar-color);
+  padding: 0;
+}
+
+.topbarelements {
+  display: flex; 
+  align-items: center;
+  padding: 20px;
 }
 
 .settingsHighlight>div {
@@ -316,7 +349,7 @@ input.transparent:hover {
   }
 
   50% {
-    box-shadow: 0px 0px 10px 0px rgba(255,255,255,1);
+    box-shadow: inset 0px 0px 4px 2px var(--foreground);
   }
 
   100% {
@@ -388,7 +421,7 @@ input.transparent:hover {
 /* Fancy scrollbar! */
 ::-webkit-scrollbar-track
 {
-	background-color: var(--cardDarker);
+	background-color: var(--background);
 }
 
 ::-webkit-scrollbar
@@ -399,7 +432,8 @@ input.transparent:hover {
 
 ::-webkit-scrollbar-thumb
 {
-	background-color: var(--highlight);	
+  background-color: var(--highlight);	
+  border-radius: 5px;
 }
 
 /* Toggle switches! */
