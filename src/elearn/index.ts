@@ -75,6 +75,7 @@ export class ELearn implements eLearnInterface {
   public cache = {
     courses: [],
     coursesMetadata: [],
+    buildTime: 0,
   };
   
   /**
@@ -309,6 +310,7 @@ export class ELearn implements eLearnInterface {
           module.modnameformatted = capitalize(module.modname);
   
           if (data) {
+            module.hasextradata = true;
             for (const key in data) {
               // Time formatting
               if (key.match("date") || key.match("time")) {
@@ -346,6 +348,7 @@ export class ELearn implements eLearnInterface {
             // console.warn("[elearn-api] WARN: More information on " + module.name + " not found...");
           }
         }
+
       }
     }
     return entries;
@@ -390,6 +393,7 @@ export class ELearn implements eLearnInterface {
   }
 
   async buildCache(update: Function): Promise<void> {
+    const startTime = Date.now();
     console.log("[elearn-api] 📃 Building search cache")
     console.time("search cache build time");
     update("⌛ Getting course metadata...");
@@ -418,10 +422,35 @@ export class ELearn implements eLearnInterface {
     console.log("[elearn-api] 📃 Search cache build complete");
     console.timeEnd("search cache build time");
     update("✔ Complete!");
+    this.cache.buildTime = Date.now() - startTime;
+    await new Promise(r => setTimeout(r, 1000));
   }
 
   findInCache(courseid: number): CourseMetadata {
     return findInArray(this.cache.coursesMetadata, courseid);
+  }
+
+  debugData() {
+    const returnData = {
+      buildtime: this.cache.buildTime,
+      loadedcourses: 0,
+      loadedsections: 0,
+      loadedmodules: 0,
+      loadedmoduleswithdata: 0,
+    };
+
+    for (const course of this.cache.coursesMetadata as CourseMetadata[]) {
+      returnData.loadedcourses++;
+      for (const section of course.sections) {
+        returnData.loadedsections++;
+        for (const module of section.modules) {
+          returnData.loadedmodules++;
+          if (module.hasextradata) returnData.loadedmoduleswithdata++;
+        }
+      }
+    }
+
+    return returnData;
   }
 }
 
