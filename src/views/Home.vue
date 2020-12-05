@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div class="topbar" style="padding: 20px; 10px; 10px; 10px;">
-      <div style="display: flex; align-items: center;">
+    <div class="topbar">
+      <div class="windowbuttons">
+        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
+        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
+        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+      </div>
+      <div class="topbarelements">
         <img id="logo" :class="sharedStore.theme" src="../assets/icon_bw.png" style="width: 60px; margin-right: 10px;"/>
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
@@ -13,10 +18,8 @@
         <button style="margin-left: 10px; margin-right: 20px;" class="roundButton transparent" @click="$router.go(1)"><fai icon="forward"/></button>
         <!-- Search bar -->
         <form @submit="startSearch">
-          <input type="text" v-model="search" placeholder="Search..." class="transparent" style="width: 30vw;"/>
+          <input type="text" v-model="search" placeholder="Universal Search" class="transparent" style="width: 30vw;"/>
         </form>
-        <!-- -->
-        <p v-if="sharedStore.settings.showDebugInfo">{{$route.path}}, {{$route.params}}</p>
       </div>
     </div>
     <div style="display: grid; grid-template-columns: 2fr 8fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
@@ -27,6 +30,23 @@
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
         <hr>
         <br>
+        <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
+          <p style="font-weight: 200;">ROUTE PATH</p>
+          <h4>{{$route.path}}</h4>
+          <br>
+          <p style="font-weight: 200;">ROUTE PARAMETERS</p>
+          <h4>{{$route.params}}</h4>
+          <br>
+          <p style="font-weight: 200;">UNIVERSAL SEARCH CACHE</p>
+          <hr>
+          <p style="font-weight: 200;">BUILD TIME <b>{{debugData.buildtime}}ms</b></p>
+          <p style="font-weight: 200;"><b>{{debugData.loadedcourses}} </b>COURSES</p>
+          <p style="font-weight: 200;"><b>{{debugData.loadedsections}} </b>SECTIONS</p>
+          <p style="font-weight: 200;"><b>{{debugData.loadedmodules}} </b>MODULES</p>
+          <hr>
+          <p style="font-weight: 200;"><b>{{debugData.loadedmoduleswithdata}} </b>MODULES W/ DATA</p>
+          <p style="font-weight: 200;"><b>{{debugData.loadedmodules - debugData.loadedmoduleswithdata}} </b>MODULES W/O DATA</p>
+        </div>
       </div>  
       <div style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
         <transition name="transition" mode="out-in">
@@ -46,6 +66,8 @@ import sharedStore from '../store';
 import { remote } from 'electron';
 import capitalize from '../util/capitalize';
 
+const {BrowserWindow} = remote;
+
 export default {
   name: 'Home',
   data() {
@@ -55,11 +77,13 @@ export default {
       codeEmoji: "⚡",
       codeName: "Performant",
       search: "",
+      debugData: {},
     };
   },
   async created() {
     this.sharedStore.session = await sharedStore.eLearn.getSession();
     this.fullNamePascalCased = capitalize(this.sharedStore.session.fullname);
+    this.debugData = sharedStore.eLearn.debugData();
   },
   watch: {
     search: function(value) {
@@ -92,6 +116,15 @@ export default {
       this.sharedStore.searchResults = [];
       this.sharedStore.searchResults = this.sharedStore.searchFunction(this.sharedStore.search);
       this.navTo("/search");
+    },
+    minimizeWindow() {
+      BrowserWindow.getFocusedWindow().minimize();
+    },
+    maximizeWindow() {
+      BrowserWindow.getFocusedWindow().maximize();
+    },
+    closeWindow() {
+      BrowserWindow.getFocusedWindow().close();
     }
   }
 };
