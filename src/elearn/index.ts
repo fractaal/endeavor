@@ -217,6 +217,10 @@ export class ELearn implements eLearnInterface {
           // We multiply the lastaccess value by 1000 because
           // The Date object takes takes Unix time in ms
           lastaccess: new Date(value.lastaccess*1000),
+          /**
+           * Moodle does not add the url to it's API response, so we build it here for convenience.
+           */
+          url: `${baseurl}course/view.php?id=${value.id}`
         }
         return course;
       });
@@ -295,6 +299,7 @@ export class ELearn implements eLearnInterface {
 
       // Module-level parsing. (Middle-level objects are modules!)
       section.courseid = courseid;
+      section.url = `${baseurl}course/view.php?id=${courseid}&section=${section.section}`;
       for (const module of section.modules) {
         // Add additional data to the object
         module.section = section.section;
@@ -325,19 +330,24 @@ export class ELearn implements eLearnInterface {
               // Time formatting
               if (key.match("date") || key.match("time")) {
                 /**
-                 * eLearn stores time data in unix epoch format in seconds.
-                 * We multiply by 1000 so that Javascript accepts it.
+                 * If the time value is 0, assume it's invalid and delete the key.
                  */
-                data[key] = new Date(data[key] * 1000)
-              }
-  
-              // Format time limit in a human way (as words)
-              if (key.match("timelimit")) {
-                module['timelimitformatted'] = `⌛ Good for ${formatDistanceStrict(Date.now(), Date.now() - (data[key]))}`;
-              } else if (key.match("timeopen")) {
-                module.timeopenformatted = `✔ Opens ${format(data[key], "hh:mma")}`;
-              } else if (key.match("timeclose")) {
-                module.timecloseformatted = `❌ Closes ${format(data[key], "hh:mma")}`;
+                if (data[key] == 0) { delete data[key]; } else {
+                  /**
+                   * eLearn stores time data in unix epoch format in seconds.
+                   * We multiply by 1000 so that Javascript accepts it.
+                   */
+                  data[key] = new Date(data[key] * 1000)
+                  
+                  // Format time limit in a human way (as words)
+                  if (key.match("timelimit")) {
+                    module['timelimitformatted'] = `⌛ Good for ${formatDistanceStrict(Date.now(), Date.now() - (data[key]))}`;
+                  } else if (key.match("timeopen")) {
+                    module.timeopenformatted = `✔ Opens ${format(data[key], "hh:mma, MMMM dd")}`;
+                  } else if (key.match("timeclose")) {
+                    module.timecloseformatted = `❌ Closes ${format(data[key], "hh:mma, MMMM dd")}`;
+                  }
+                }
               }
 
               // Add the additional data into the module object.
