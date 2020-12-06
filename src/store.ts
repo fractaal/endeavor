@@ -4,7 +4,7 @@ import fuseSearch from './search';
 interface Store {
   eLearn: eLearnInterface|null;
   search: string;
-  searchResults: [];
+  searchResults: Record<string,any>;
   settings: {
     showDebugInfo: boolean;
     saveLogin: boolean;
@@ -20,7 +20,7 @@ interface Store {
 const store: Store = {
   eLearn: null,
   search: '',
-  searchResults: [],
+  searchResults: {},
   settings: {
     showDebugInfo: false,
     saveLogin: false,
