@@ -36,6 +36,13 @@
           <p class="nospacing">Endeavor saves your login details for automatic login. To purge this data, click this button.</p>
         </div>
       </div>
+      <div style="display: flex; align-items: center;">
+        <button @click="resetEndeavor" class="roundButton">⭕</button>
+        <div style="margin-left: 25px;">
+          <h2 class="nospacing" style="font-weight: 400;">RESET ENDEAVOR</h2>
+          <p class="nospacing">Endeavor, due to its nature of being a Beta program <i>(and also because it's developed by a dumbass)</i> can break.<br>A quick and easy fix for most issues is a configuration reset.</p>
+        </div>
+      </div>
       <h3 class="nospacing" style="margin-left: 10px; font-weight: 200;">DEVELOPER</h3>
       <hr>
       <div style="display: flex; align-items: center;">
@@ -92,15 +99,43 @@ export default {
   },
   methods: {
     async purgeLoginData() {
-      try {
-        this.sharedStore.settings.saveLogin = false;
-        const credentials = await keytar.findCredentials("endeavor");
-        credentials.map(async credential => {
-          await keytar.deletePassword("endeavor", credential.account);
-        })
-        remote.dialog.showMessageBox({title: "Complete!", message: "Login data purge complete!"});
-      } catch(err) {
-        remote.dialog.showErrorBox("Error occured clearing login data.", err);
+      const response = remote.dialog.showMessageBoxSync({
+        message: "Do you really want to clear login data? Endeavor will forget your username and password.", 
+        buttons: ["Yes", "No"]
+        });
+      if (response == 0) {
+        try {
+          this.sharedStore.settings.saveLogin = false;
+          const credentials = await keytar.findCredentials("endeavor");
+          credentials.map(async credential => {
+            await keytar.deletePassword("endeavor", credential.account);
+          })
+          remote.dialog.showMessageBox({title: "Complete!", message: "Login data purge complete!"});
+        } catch(err) {
+          remote.dialog.showErrorBox("Error occured clearing login data.", err);
+        }
+      } else {
+        remote.dialog.showMessageBox({title: "Cancelled", message: "Login data purge cancelled."});
+      }
+    },
+    resetEndeavor() {
+      const response = remote.dialog.showMessageBoxSync({
+        message: "Do you really want to reset Endeavor? You won't lose any important data, just how Endeavor is set up.", 
+        buttons: ["Yes", "No"]
+        });
+      if (response == 0) {
+        if (fs.existsSync(path.join(data, 'endeavor.json'))) {
+          try {
+            fs.unlinkSync(path.join(data, 'endeavor.json'));
+            remote.dialog.showMessageBox({title: "Complete!", message: "Endeavor configuration reset complete!"});
+          } catch(error) {
+            remote.dialog.showErrorBox("Error occured resetting Endeavor!", error);
+          }
+        } else {
+          remote.dialog.showErrorBox("Error occured resetting Endeavor! The configuration file does not exist.");
+        }
+      } else {
+        remote.dialog.showMessageBox({title: "Cancelled", message: "Endeavor reset cancelled."});
       }
     }
   },
