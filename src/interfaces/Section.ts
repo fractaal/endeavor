@@ -9,6 +9,7 @@ export interface Section {
   uservisible:         boolean;
   modules:             Module[];
   courseid:            number;
+  url:                 string;
 }
 
 export interface Module {
