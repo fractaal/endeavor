@@ -1,18 +1,14 @@
 export default [
   {
-    title: "⚡ Performant",
-    text: "Major code refactoring and improvements means Endeavor is faster than ever!"
+    title: "✨ Quality of Life Update #2",
+    text: "Small (but hopefully helpful) tweaks to Endeavor."
   },
   {
-    title: "🧭 Universal Search",
-    text: "Endeavor lets you search through all your courses at once! Never miss a deadline!"
+    title: "🏥 Safety",
+    text: "Dangerous operations like reset config and purge login data are now guarded with a confirmation dialog."
   },
   {
-    title: "🖼 Theming!",
-    text: "Light and dark themes!"
-  },
-  {
-    title: "📐 Layout changes",
-    text: "Layout changes to almost every UI element means cleaner design!"
+    title: "🧭 Navigation buttons",
+    text: "Additional navigation buttons make it easier to navigate around Endeavor."
   },
 ]
