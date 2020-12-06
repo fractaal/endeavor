@@ -56,21 +56,6 @@ export default {
       this.courses = courses;
     }
   },
-  computed: {
-    filteredCourses: function() {
-      const term = this.sharedStore.search.toLowerCase();
-      return this.courses.filter(element => {
-        try {
-          if (
-            // Rules to change
-            element.displayname.toLowerCase().includes(term)
-          ) return element;
-        } catch(err) {
-          console.warn("!!!");
-        }
-      })
-    }
-  },
 }
 </script>
 
