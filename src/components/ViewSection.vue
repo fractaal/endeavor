@@ -2,7 +2,21 @@
   <div>
     <Loader v-if="!section"/>
     <div v-else>
-      <h1 style="margin-left: 50px;">{{section.name}}</h1>
+      <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
+        <div style="max-width: 50%;">
+          <h1 class="nospacing">{{section.name}}</h1> 
+        </div>
+        <div style="display: flex;">
+          <div class="buttonwithlabel">
+            <button @click="openExternalLink" class="roundButton">🔍</button>
+            <p class="nospacing">Open in eLearn...</p>
+          </div>
+          <div class="buttonwithlabel">
+            <button @click="$router.push('/home/courses/'+section.courseid)" class="roundButton">📚</button>
+            <p class="nospacing">See course...</p>
+          </div>
+        </div>
+      </div>
       <div class="cardlist">
         <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
           <card v-for="module in section.modules" :key="module.id"
@@ -22,6 +36,7 @@
 </template>
 
 <script>
+import { shell } from 'electron';
 import sharedStore from '../store';
 
 import Card from './Card.vue';
@@ -48,6 +63,9 @@ export default {
   methods: {
     async getSection() {
       this.section = await this.sharedStore.eLearn.getSection(this.$route.params.id, this.$route.params.section);
+    },
+    async openExternalLink() {
+      shell.openExternal(this.section.url);
     }
   }
 }
