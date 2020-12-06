@@ -69,7 +69,6 @@
 
 <script>
 import sharedStore from '../store';
-import {formatDistance, format} from 'date-fns';
 
 import Card from './Card.vue';
 import Loader from './Loader.vue';
