@@ -12,7 +12,6 @@
 import path from 'path';
 import fs from 'fs';
 
-import Vue from 'vue';
 import sharedStore from './store';
 
 import {ELearn} from './elearn';
