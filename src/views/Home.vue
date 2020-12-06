@@ -7,7 +7,7 @@
         <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
       </div>
       <div class="topbarelements">
-        <img id="logo" :class="sharedStore.theme" src="../assets/icon_bw.png" style="width: 60px; margin-right: 10px;"/>
+        <img id="logo" :class="sharedStore.settings.theme" src="../assets/icon_bw.png" style="width: 60px; margin-right: 10px;"/>
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
@@ -61,7 +61,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import sharedStore from '../store';
 
 import { remote } from 'electron';
@@ -114,7 +113,7 @@ export default {
     },
     startSearch(e) {
       e.preventDefault();
-      this.sharedStore.searchResults = [];
+      this.sharedStore.searchResults = {};
       this.sharedStore.searchResults = this.sharedStore.searchFunction(this.sharedStore.search);
       this.navTo("/search");
     },
