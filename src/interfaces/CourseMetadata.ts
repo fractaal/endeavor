@@ -28,6 +28,7 @@ export interface CourseMetadata {
   overviewfiles:         Overviewfile[];
   sections:              Section[];
   styling:               string;
+  url:                   string;
 }
 
 export interface Overviewfile {
