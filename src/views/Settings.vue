@@ -57,8 +57,7 @@
 import path from 'path';
 import fs from 'fs';
 
-import sharedStore, { addCourseToCache, getCourseFromCache } from '../store';
-import {formatDistance, format} from 'date-fns';
+import sharedStore from '../store';
 
 import {remote} from 'electron';
 import keytar from 'keytar';
@@ -78,11 +77,6 @@ export default {
       case "light-theme": this.themeToggle = true; break;
       case "dark-theme": this.themeToggle = false; break;
     }
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      // vm.getModuleData();
-    })
   },
   beforeRouteLeave(to, from, next) {
     try {
