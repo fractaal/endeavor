@@ -1,6 +1,16 @@
 <template>
   <div>
-    <h1 style="margin-left: 50px;">{{course.displayname}}</h1>
+    <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
+      <div style="max-width: 50%;">
+        <h1 class="nospacing">{{course.displayname}}</h1> 
+      </div>
+      <div style="display: flex;">
+        <div class="buttonwithlabel">
+          <button @click="openExternalLink" class="roundButton">🔍</button>
+          <p class="nospacing">Open in eLearn...</p>
+        </div>
+      </div>
+    </div>
     <div class="cardlist">
       <transition-group name="transition">
         <card v-for="section in sections" :key="section.section"
@@ -15,11 +25,11 @@
 </template>
 
 <script>
-import sharedStore, { getCourseFromCache } from '../store';
-import {addCourseToCache} from '../store';
+import sharedStore from '../store';
 
 import Loader from './Loader.vue';
 import Card from './Card.vue';
+import { shell } from 'electron';
 
 export default {
   name: "ViewCourse",
@@ -48,7 +58,10 @@ export default {
       ])
       this.course = course;
       this.sections = sections;
-    }
+    },
+    openExternalLink() {
+      shell.openExternal(this.course.url);
+    },
   }
 }
 </script>
