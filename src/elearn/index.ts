@@ -6,6 +6,7 @@ import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
 import capitalize from '../util/capitalize';
+import findInArray from '../util/find-in-array';
 
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
@@ -29,13 +30,6 @@ const cookieJar = new CookieJar();
 const client = got.extend({cookieJar: cookieJar});
 const baseurl = "http://elearn.xu.edu.ph/"; // Base url for requests.
 let session: eLearnSession; // Ask for site info upon login
-
-// Utility functions
-function findInArray(array: Array<any>, id: number) {
-  for (const element of array) {
-    if (element.id == id || element.cmid == id || element.instance == id || element.coursemodule == id) return element;
-  }
-}
 
 // Format dates and time data in object
 function convertRawTimeValuesToDate(object: any): any {
