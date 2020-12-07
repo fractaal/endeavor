@@ -5,10 +5,7 @@
         <h1 class="nospacing">{{hiddenCoursesView ? 'Your Hidden Courses': 'Your Courses'}}</h1> 
       </div>
       <div style="display: flex;">
-        <div class="buttonwithlabel">
-          <button @click="toggleHiddenCoursesView" class="roundButton">{{hiddenCoursesView ? '💡' : '🔍'}}</button>
-          <p class="nospacing">{{hiddenCoursesView ? 'Back to normal...' : 'Show hidden...'}}</p>
-        </div>
+        <EndeavorButton @click="toggleHiddenCoursesView">{{hiddenCoursesView ? '👓 Back to normal' : '🕶 Show hidden'}}</EndeavorButton>
       </div>
     </div>
     <div>
@@ -37,8 +34,9 @@ import {formatDistance} from 'date-fns';
 
 import {toggleCourseVisibility, getCourseVisibility} from '../course-presentation';
 
-import Loader from './Loader';
+import Loader from './Loader.vue';
 import Card from './Card.vue';
+import EndeavorButton from './EndeavorButton.vue';
 
 export default {
   name: "ViewCourses",
@@ -52,7 +50,7 @@ export default {
   },
   computed: {
     hideButtonLabel: function() {
-      return this.hiddenCoursesView ? "Unhide..." : "Hide..."
+      return this.hiddenCoursesView ? "Unhide" : "Hide"
     },
     hideButtonEmoji: function() {
       return this.hiddenCoursesView ? "✨" : "❌"; 
@@ -60,7 +58,8 @@ export default {
   },
   components: {
     Loader,
-    Card
+    Card,
+    EndeavorButton,
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

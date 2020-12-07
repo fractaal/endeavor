@@ -5,10 +5,7 @@
         <h1 class="nospacing">{{course.displayname}}</h1> 
       </div>
       <div style="display: flex;">
-        <div class="buttonwithlabel">
-          <button @click="openExternalLink" class="roundButton">🔍</button>
-          <p class="nospacing">Open in eLearn...</p>
-        </div>
+        <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
       </div>
     </div>
     <div class="cardlist">
@@ -29,6 +26,8 @@ import sharedStore from '../store';
 
 import Loader from './Loader.vue';
 import Card from './Card.vue';
+import EndeavorButton from './EndeavorButton.vue';
+
 import { shell } from 'electron';
 
 export default {
@@ -36,6 +35,7 @@ export default {
   components: {
     Loader,
     Card,
+    EndeavorButton,
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {

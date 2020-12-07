@@ -8,18 +8,9 @@
           <p class="nospacing">{{module['modnameformatted']}}</p>
         </div>
         <div style="display: flex;">
-          <div class="buttonwithlabel">
-            <button @click="openExternalLink" class="roundButton">🔍</button>
-            <p class="nospacing">Open in eLearn...</p>
-          </div>
-          <div class="buttonwithlabel">
-            <button @click="$router.push('/home/courses/'+module.courseid)" class="roundButton">📚</button>
-            <p class="nospacing">See course...</p>
-          </div>
-          <div class="buttonwithlabel">
-            <button @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)" class="roundButton">🔼</button>
-            <p class="nospacing">See section...</p>
-          </div>
+          <EndeavorButton @click="openExternalLink">🔎 Open in eLearn</EndeavorButton>
+          <EndeavorButton @click="$router.push('/home/courses/'+module.courseid)">📚 See course</EndeavorButton>
+          <EndeavorButton @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
         </div>
       </div>
       <div style="display: flex; justify-content: space-between">
@@ -72,6 +63,8 @@ import sharedStore from '../store';
 
 import Card from './Card.vue';
 import Loader from './Loader.vue';
+import EndeavorButton from './EndeavorButton.vue';
+
 import Grade from './Grade.vue'; 
 import { shell } from 'electron';
 
@@ -81,6 +74,7 @@ export default {
     Loader,
     Grade,
     Card,
+    EndeavorButton,
   },
   data() {
     return {

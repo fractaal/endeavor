@@ -15,17 +15,14 @@
       </div>
       <div style="display: flex; justify-content: flex-end;">
         <div style="display: flex;">
-          <div v-for="button in buttons" :key="button.name" class="buttonwithlabel">
-            <button @click="Bus.$emit(button.event, id)" class="roundButton">{{button.icon}}</button>
-            <p class="nospacing">{{button.name}}</p>
+          <div v-for="button in buttons" :key="button.name">
+            <EndeavorButton @click="Bus.$emit(button.event, id)">{{button.icon + ' ' + button.name}}</EndeavorButton>
           </div>
-          <div v-if="externalLink" class="buttonwithlabel">
-            <button @click="openExternalLink" class="roundButton">🔬</button>
-            <p class="nospacing">Open in eLearn...</p>
+          <div v-if="externalLink" class="">
+            <EndeavorButton @click="openExternalLink">🔬 Open in eLearn</EndeavorButton>
           </div>
-          <div v-if="internalLink" class="buttonwithlabel">
-            <button @click="$router.push(internalLink)" class="roundButton">🔍</button>
-            <p class="nospacing">Open...</p>
+          <div v-if="internalLink">
+            <EndeavorButton @click="$router.push(internalLink)">🔍 Open</EndeavorButton>
           </div>
         </div>
       </div>
@@ -48,12 +45,17 @@
 import { Bus } from '../main';
 import { shell } from 'electron';
 
+import EndeavorButton from './EndeavorButton.vue';
+
 export default {
   name: "Card",
   data() {
     return {
       Bus,
     }
+  },
+  components: {
+    EndeavorButton
   },
   props: {
     title: String,

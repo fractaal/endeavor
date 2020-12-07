@@ -7,14 +7,8 @@
           <h1 class="nospacing">{{section.name}}</h1> 
         </div>
         <div style="display: flex;">
-          <div class="buttonwithlabel">
-            <button @click="openExternalLink" class="roundButton">🔍</button>
-            <p class="nospacing">Open in eLearn...</p>
-          </div>
-          <div class="buttonwithlabel">
-            <button @click="$router.push('/home/courses/'+section.courseid)" class="roundButton">📚</button>
-            <p class="nospacing">See course...</p>
-          </div>
+          <EndeavorButton @click="openExternalLink">🔍 Open in eLearn</EndeavorButton>
+          <EndeavorButton @click="$router.push('/home/courses/'+section.courseid)">📚 See course</EndeavorButton>
         </div>
       </div>
       <div class="cardlist">
@@ -41,6 +35,7 @@ import sharedStore from '../store';
 
 import Card from './Card.vue';
 import Loader from './Loader.vue';
+import EndeavorButton from './EndeavorButton.vue';
 
 export default {
   name: "ViewSection",
@@ -54,6 +49,7 @@ export default {
   components: {
     Loader,
     Card,
+    EndeavorButton,
   },
   beforeRouteEnter(to, from, next) {
     next(vm => {
