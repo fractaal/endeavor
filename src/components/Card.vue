@@ -11,19 +11,21 @@
             <p style="font-weight: 800; margin: 0;">{{rightTitle}}</p>
             <p style="margin:0; font-weight: 400;">{{rightSubtitle}}</p>
           </div>
-          <div style="display: flex;">
-            <div v-if="externalLink" class="buttonwithlabel">
-              <button @click="openExternalLink" class="roundButton">🔬</button>
-              <p class="nospacing">Open in eLearn...</p>
-            </div>
-            <div v-if="internalLink" class="buttonwithlabel">
-              <button @click="$router.push(internalLink)" class="roundButton">🔍</button>
-              <p class="nospacing">Open...</p>
-            </div>
-            <div v-for="button in buttons" :key="button.name" class="buttonwithlabel">
-              <button @click="Bus.$emit(button.event, id)" class="roundButton">{{button.icon}}</button>
-              <p class="nospacing">{{button.name}}</p>
-            </div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end;">
+        <div style="display: flex;">
+          <div v-for="button in buttons" :key="button.name" class="buttonwithlabel">
+            <button @click="Bus.$emit(button.event, id)" class="roundButton">{{button.icon}}</button>
+            <p class="nospacing">{{button.name}}</p>
+          </div>
+          <div v-if="externalLink" class="buttonwithlabel">
+            <button @click="openExternalLink" class="roundButton">🔬</button>
+            <p class="nospacing">Open in eLearn...</p>
+          </div>
+          <div v-if="internalLink" class="buttonwithlabel">
+            <button @click="$router.push(internalLink)" class="roundButton">🔍</button>
+            <p class="nospacing">Open...</p>
           </div>
         </div>
       </div>
@@ -48,6 +50,11 @@ import { shell } from 'electron';
 
 export default {
   name: "Card",
+  data() {
+    return {
+      Bus,
+    }
+  },
   props: {
     title: String,
     subtitle: String,
