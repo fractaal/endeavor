@@ -2,16 +2,26 @@ import Store from 'electron-store';
 
 const store = new Store({name: "course-presentation"});
 
-export function toggleCourseVisibility(id) {
-  if (store.get(id)) {
-    store.set(id, false);
-    return false;
+export function reset() {
+  store.reset();
+}
+
+export function toggleCourseVisibility(id: number) {
+  const _id = id.toString();
+  console.log(store.get(_id));
+  if (store.get(_id) === undefined) {
+    store.set(_id, false);
+  } else if (store.get(_id)) {
+    store.set(_id, false);
   } else {
-    store.set(id, true);
-    return true;
+    store.set(_id, true);
   }
 }
 
-export function getCourseVisibility(id): boolean {
-  return store.get(id) as boolean;
+export function getCourseVisibility(id: number): boolean {
+  if (store.get(id.toString()) === undefined) {
+    return true;
+  } else {
+    return store.get(id.toString()) as boolean;
+  }
 }
