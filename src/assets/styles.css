@@ -48,6 +48,10 @@ body {
   align-items: center;
 }
 
+.userpicture {
+  border-radius: 50%;
+}
+
 .cardlist {
   overflow-y: scroll;
   max-height: 75vh; 
@@ -99,10 +103,6 @@ body {
   --highlight: #e7e7e7;
   --highlight-lighter: #d6d6d6;
   --topbar-color: #eeeeee;
-}
-
-.light-theme img#logo {
-  filter: invert();
 }
 
 .dark-theme {
@@ -402,10 +402,10 @@ input.transparent:hover {
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .transition-enter-active {
-  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all .15s cubic-bezier(0.19, 1, 0.22, 1);
 }
 .transition-leave-active {
-  transition: all .2s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all .15s cubic-bezier(0.19, 1, 0.22, 1);
   position: absolute;
 }
 .transition-enter {
