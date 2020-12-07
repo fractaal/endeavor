@@ -11,6 +11,8 @@ Vue.component('fai', FontAwesomeIcon);
 
 Vue.config.productionTip = false
 
+export const Bus = new Vue();
+
 new Vue({
   router,
   render: h => h(App)
