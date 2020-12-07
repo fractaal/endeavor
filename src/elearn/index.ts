@@ -5,8 +5,10 @@ import got from 'got';
 import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
+import {transformForPresentation} from './content-presentation';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
+import updateQueryString from './update-query-string';
 
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
@@ -107,6 +109,14 @@ export class ELearn implements eLearnInterface {
       const siteInfoRequest: Record<string, any> = await this.wsFunction("core_webservice_get_site_info", {}, token);
 
       session = siteInfoRequest as any;
+
+      // Transform the userpictureurl present in the API response to an address that actually works 😬
+      // Change the URL. webservice/pluginfile API endpoint accepts token as a parameter.
+      session.userpictureurl = session.userpictureurl.replace("pluginfile", "webservice/pluginfile");
+
+      // Add the token to the query string.
+      session.userpictureurl = updateQueryString('token', token, session.userpictureurl);
+      
       session.token = token;
       update("Building search cache");
       await this.buildCache(update);
@@ -291,6 +301,10 @@ export class ELearn implements eLearnInterface {
     // Section-level parsing. (Top-level objects are sections!)
     for (const section of entries) {
 
+      if (section.summary) {
+        section.summary = transformForPresentation(section.summary, (await this.getSession()).token);
+      }
+
       // Module-level parsing. (Middle-level objects are modules!)
       section.courseid = courseid;
       section.url = `${baseurl}course/view.php?id=${courseid}&section=${section.section}`;
@@ -298,6 +312,10 @@ export class ELearn implements eLearnInterface {
         // Add additional data to the object
         module.section = section.section;
         module.courseid = courseid;
+
+        if (module.description) {
+          module.description = transformForPresentation(module.description, (await this.getSession()).token);
+        }
         
         if (info[module.modname]) {          
           // Capitalize the module type for display. 
@@ -320,8 +338,12 @@ export class ELearn implements eLearnInterface {
             // Mark this module as having additional data (for debug purposes)
             module.hasextradata = true;
 
+            if (data.intro) {
+              data.intro = transformForPresentation(data.intro, (await this.getSession()).token);
+            }
+            
+            // Time formatting
             for (const key in data) {
-              // Time formatting
               if (key.match("date") || key.match("time")) {
                 /**
                  * If the time value is 0, assume it's invalid and delete the key.

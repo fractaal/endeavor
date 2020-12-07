@@ -7,15 +7,17 @@
         <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
       </div>
       <div class="topbarelements">
-        <img id="logo" :class="sharedStore.settings.theme" src="../assets/icon_bw.png" style="width: 60px; margin-right: 10px;"/>
+        <div v-if="sharedStore.session">
+          <img class="userpicture" :src="sharedStore.session.userpictureurl" style="width: 60px; margin-right: 20px;"/>
+        </div>
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
           <p style="margin: 0;">Endeavor <b class="attention">BETA</b> {{require('electron').remote.app.getVersion()}}</p>
         </div>
         <!-- Buttons --> 
-        <button class="roundButton transparent" @click="$router.go(-1)"><fai icon="backward"/></button>
-        <button style="margin-left: 10px; margin-right: 20px;" class="roundButton transparent" @click="$router.go(1)"><fai icon="forward"/></button>
+        <button class="roundButton" @click="$router.go(-1)"><fai icon="backward"/></button>
+        <button style="margin-left: 10px; margin-right: 20px;" class="roundButton" @click="$router.go(1)"><fai icon="forward"/></button>
         <!-- Search bar -->
         <form @submit="startSearch" class="searchbar">
           <input type="text" v-model="search" placeholder="Universal Search" style="width: 30vw;"/>

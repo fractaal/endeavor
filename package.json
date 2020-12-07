@@ -1,6 +1,6 @@
 {
   "name": "endeavor",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -17,6 +17,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/vue-fontawesome": "2",
+    "cheerio": "^1.0.0-rc.3",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "electron-store": "^6.0.1",
@@ -29,6 +30,7 @@
     "vue-router": "^3.2.0"
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.22",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/got": "^9.6.11",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
