@@ -7,7 +7,9 @@
         <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
       </div>
       <div class="topbarelements">
-        <img id="logo" :class="sharedStore.settings.theme" src="../assets/icon_bw.png" style="width: 60px; margin-right: 10px;"/>
+        <div v-if="sharedStore.session">
+          <img class="userpicture" :src="sharedStore.session.userpictureurl" style="width: 60px; margin-right: 20px;"/>
+        </div>
         <!-- Name -->
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
