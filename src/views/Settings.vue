@@ -64,6 +64,7 @@
 import path from 'path';
 import fs from 'fs';
 
+import {reset as resetHiddenCourses} from '../course-presentation';
 import sharedStore from '../store';
 
 import {remote} from 'electron';
@@ -104,6 +105,7 @@ export default {
         buttons: ["Yes", "No"]
         });
       if (response == 0) {
+        resetHiddenCourses();
         try {
           this.sharedStore.settings.saveLogin = false;
           const credentials = await keytar.findCredentials("endeavor");
@@ -120,10 +122,11 @@ export default {
     },
     resetEndeavor() {
       const response = remote.dialog.showMessageBoxSync({
-        message: "Do you really want to reset Endeavor? You won't lose any important data, just how Endeavor is set up.", 
+        message: "Do you really want to reset Endeavor? You won't lose any important data, just how Endeavor is set up, such as theming and hidden courses.", 
         buttons: ["Yes", "No"]
         });
       if (response == 0) {
+
         if (fs.existsSync(path.join(data, 'endeavor.json'))) {
           try {
             fs.unlinkSync(path.join(data, 'endeavor.json'));
