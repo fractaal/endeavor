@@ -1,14 +1,14 @@
 export default [
   {
-    title: "✨ Quality of Life Update #2",
+    title: "✨ Quality of Life Update #3",
     text: "Small (but hopefully helpful) tweaks to Endeavor."
   },
   {
-    title: "🏥 Safety",
-    text: "Dangerous operations like reset config and purge login data are now guarded with a confirmation dialog."
+    title: "✨ Hidden courses!",
+    text: "Hide courses that you're not actively working on!"
   },
   {
-    title: "🧭 Navigation buttons",
-    text: "Additional navigation buttons make it easier to navigate around Endeavor."
+    title: "📐 Card layout changes",
+    text: "Very miniscule, but I hope it helps a tiny bit."
   },
 ]
