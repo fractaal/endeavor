@@ -20,6 +20,10 @@
               <button @click="$router.push(internalLink)" class="roundButton">🔍</button>
               <p class="nospacing">Open...</p>
             </div>
+            <div v-for="button in buttons" :key="button.name" class="buttonwithlabel">
+              <button @click="Bus.$emit(button.event, id)" class="roundButton">{{button.icon}}</button>
+              <p class="nospacing">{{button.name}}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -39,6 +43,7 @@
 </template>
 
 <script>
+import { Bus } from '../main';
 import { shell } from 'electron';
 
 export default {
@@ -48,6 +53,8 @@ export default {
     subtitle: String,
     rightTitle: String,
     rightSubtitle: String,
+    buttons: Array,
+    id: [String, Number],
     content: String,
     externalLink: String,
     internalLink: String,
