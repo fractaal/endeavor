@@ -44,7 +44,6 @@ export default function search(term) {
         for (const section of topLevelMatch.item.sections) {
           for (const module of section.modules) {
             if (counter == match.refIndex) { 
-              console.log(counter, match.refIndex, counter == match.refIndex); 
               moduleResults.push({...module})
             }
             counter++;
