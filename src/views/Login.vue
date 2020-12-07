@@ -20,13 +20,10 @@
           </div>
         </form>
       </div>
-      <ChangeLogTicker/>
-    </div>
-    <div style="display: flex; justify-content: center;">
-      <transition-group name="transition" mode="out-in">
-        <Loader v-if="isLoading" key="load"/>
-        <p v-if="message" :class="messageClass" key="msg">{{message}}</p>
-      </transition-group>
+      <div style="display: flex; flex-direction: column;">
+        <ChangeLogTicker/>
+        <h3 style="margin: 20px;" v-if="sharedStore.fullPageLoadText" :class="messageClass" key="msg">{{sharedStore.fullPageLoadText}}</h3>
+      </div>
     </div>
     <div class="footer" style="display: flex; align-items: flex-end;">
       <p style="font-size: 14px; margin-right: 10px; margin-left: auto;">Endeavor {{require('electron').remote.app.getVersion()}}</p>
@@ -35,11 +32,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import {remote} from 'electron';
-import keytar from 'keytar';
 import sharedStore from '../store';
-import Loader from '../components/Loader.vue';
 import ChangeLogTicker from '../components/ChangeLogTicker.vue';
 
 const {BrowserWindow} = remote;
@@ -57,7 +51,6 @@ export default {
   },
   name: 'Login',
   components: {
-    Loader,
     ChangeLogTicker,
   },
   methods: {

@@ -1,6 +1,16 @@
 <template>
   <div>
-    <h1 style="margin-left: 50px;">Your courses</h1>
+    <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
+      <div style="max-width: 50%;">
+        <h1 class="nospacing">{{hiddenCoursesView ? 'Your Hidden Courses': 'Your Courses'}}</h1> 
+      </div>
+      <div style="display: flex;">
+        <div class="buttonwithlabel">
+          <button @click="toggleHiddenCoursesView" class="roundButton">{{hiddenCoursesView ? '💡' : '🔍'}}</button>
+          <p class="nospacing">{{hiddenCoursesView ? 'Back to normal...' : 'Show hidden...'}}</p>
+        </div>
+      </div>
+    </div>
     <div>
       <transition-group name="transition" class="compactcardlist">
         <card v-for="course in courses" :key="course.id"
@@ -8,6 +18,8 @@
             :subtitle="`Last accessed ${course.lastaccessFormatted}`"
             :rightSubtitle="`${course.progress}% complete`"
             :progress="course.progress"
+            :id="course.id"
+            :buttons="[{name: hideButtonLabel, icon: hideButtonEmoji, event: 'hideToggle'}]"
             :internalLink="'/home/courses/'+course.id"
             :styling="course.styling"
             />
@@ -19,8 +31,11 @@
 </template>
 
 <script>
+import { Bus } from '../main';
 import sharedStore from '../store';
 import {formatDistance} from 'date-fns';
+
+import {toggleCourseVisibility, getCourseVisibility} from '../course-presentation';
 
 import Loader from './Loader';
 import Card from './Card.vue';
@@ -31,8 +46,17 @@ export default {
     return {
       sharedStore,
       courses: [],
+      hiddenCoursesView: false,
       coursesLoading: false,
     }
+  },
+  computed: {
+    hideButtonLabel: function() {
+      return this.hiddenCoursesView ? "Unhide..." : "Hide..."
+    },
+    hideButtonEmoji: function() {
+      return this.hiddenCoursesView ? "✨" : "❌"; 
+    },
   },
   components: {
     Loader,
@@ -44,16 +68,40 @@ export default {
       next();
     })
   },
+  created() {
+    Bus.$on("hideToggle", id => {
+      toggleCourseVisibility(id); 
+      this.listCourses(true);
+    })
+  },
   methods: {
-    async listCourses() {
+    async listCourses(usingCache) {
       this.coursesLoading = true;
-      const courses = await this.sharedStore.eLearn.getCourses();
-      for (const course of courses) {
-        course.lastaccessFormatted = formatDistance(course.lastaccess, new Date(), {addSuffix: true});
-        course.progress = course.progress.toFixed(0);
+      let data;
+      if (usingCache) {
+        data = this.sharedStore.eLearn.cache.coursesMetadata;
+      } else {
+        data = await this.sharedStore.eLearn.getCourses();
+      }
+      const courses = [];
+      for (const course of data) {
+        if ((!this.hiddenCoursesView && getCourseVisibility(course.id)) || (this.hiddenCoursesView && !getCourseVisibility(course.id))) {
+          course.lastaccessFormatted = formatDistance(course.lastaccess, new Date(), {addSuffix: true});
+
+          // In the cache, for some reason, the progress property is transformed into a string. Let's fix that!
+          if (typeof course.progress == "string") {
+            course.progress = Number(course.progress)
+          }
+          course.progress = course.progress.toFixed(0);
+          courses.push(course);
+        }
       }
       this.coursesLoading = false;
       this.courses = courses;
+    },
+    toggleHiddenCoursesView() {
+      this.hiddenCoursesView = !this.hiddenCoursesView;
+      this.listCourses(true);
     }
   },
 }
