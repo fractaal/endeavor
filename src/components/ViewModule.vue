@@ -20,7 +20,7 @@
           <div class="badge" v-if="module.timeopenformatted">{{module.timeopenformatted}}</div>
           <div class="badge" v-if="module.timecloseformatted">{{module.timecloseformatted}}</div>
         </div>
-        <grade v-if="module.grade" :grade="module.grade"/>
+        <grade v-if="module.grade" :grade="actualGrade" :maxGrade="module.grade" :id="module.instance" :modname="module.modname"/>
       </div>
       <hr>
     </div>
@@ -81,6 +81,7 @@ export default {
       sharedStore,
       module: {},
       isLoading: false,
+      actualGrade: 0,
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -90,8 +91,10 @@ export default {
   },
   methods: {
     async getModule() {
+      this.module = {};
       this.module = await this.sharedStore.eLearn.getModule(this.$route.params.course, this.$route.params.instance);
-      console.log(this.module);
+
+      this.actualGrade = Number((await this.sharedStore.eLearn.getActualGrade(this.module.modname, this.module.id)));
     },
     openExternalLink() {
       shell.openExternal(this.module.url);
