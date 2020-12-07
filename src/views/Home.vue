@@ -16,8 +16,8 @@
           <p style="margin: 0;">Endeavor <b class="attention">BETA</b> {{require('electron').remote.app.getVersion()}}</p>
         </div>
         <!-- Buttons --> 
-        <button class="roundButton transparent" @click="$router.go(-1)"><fai icon="backward"/></button>
-        <button style="margin-left: 10px; margin-right: 20px;" class="roundButton transparent" @click="$router.go(1)"><fai icon="forward"/></button>
+        <button class="roundButton" @click="$router.go(-1)"><fai icon="backward"/></button>
+        <button style="margin-left: 10px; margin-right: 20px;" class="roundButton" @click="$router.go(1)"><fai icon="forward"/></button>
         <!-- Search bar -->
         <form @submit="startSearch" class="searchbar">
           <input type="text" v-model="search" placeholder="Universal Search" style="width: 30vw;"/>
