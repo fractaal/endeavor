@@ -31,5 +31,6 @@ export interface eLearnInterface {
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
-  }
+  };
+  getActualGrade(type: string, id: number): Promise<number>;
 }
