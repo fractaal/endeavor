@@ -8,6 +8,8 @@
             :subtitle="`Last accessed ${course.lastaccessFormatted}`"
             :rightSubtitle="`${course.progress}% complete`"
             :progress="course.progress"
+            :id="course.id"
+            :buttons="[{name: 'Hide', icon: '❌', event: 'hideToggle'}]"
             :internalLink="'/home/courses/'+course.id"
             :styling="course.styling"
             />
@@ -19,8 +21,11 @@
 </template>
 
 <script>
+import { Bus } from '../main';
 import sharedStore from '../store';
 import {formatDistance} from 'date-fns';
+
+import {toggleCourseVisibility, getCourseVisibility} from '../course-presentation';
 
 import Loader from './Loader';
 import Card from './Card.vue';
@@ -31,6 +36,7 @@ export default {
     return {
       sharedStore,
       courses: [],
+      hiddenCoursesView: false,
       coursesLoading: false,
     }
   },
@@ -44,13 +50,21 @@ export default {
       next();
     })
   },
+  created() {
+    Bus.$on("hideToggle", id => {
+      toggleCourseVisibility(id); 
+    })
+  },
   methods: {
     async listCourses() {
       this.coursesLoading = true;
-      const courses = await this.sharedStore.eLearn.getCourses();
-      for (const course of courses) {
-        course.lastaccessFormatted = formatDistance(course.lastaccess, new Date(), {addSuffix: true});
-        course.progress = course.progress.toFixed(0);
+      const courses = [];
+      for (const course of await this.sharedStore.eLearn.getCourses()) {
+        if ((!this.hiddenCoursesView && getCourseVisibility(course.id)) || (this.hiddenCoursesView && !getCourseVisibility(course.id))) {
+          course.lastaccessFormatted = formatDistance(course.lastaccess, new Date(), {addSuffix: true});
+          course.progress = course.progress.toFixed(0);
+          courses.push(course);
+        }
       }
       this.coursesLoading = false;
       this.courses = courses;
