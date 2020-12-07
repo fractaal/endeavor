@@ -472,6 +472,27 @@ export class ELearn implements eLearnInterface {
     return findInArray(this.cache.coursesMetadata, courseid);
   }
 
+  async getActualGrade(type: string, id: number) {
+    let grade: number;
+    if (type == "quiz") {
+      grade = (await this.wsFunction("mod_quiz_get_user_best_grade", {quizid: id})).grade;
+    } else if (type == "assign") {
+      const response = await this.wsFunction("mod_assign_get_submission_status", {assignid: id});
+      /**
+       * Moodle weirdness means I have to do response.feedback.grade.grade. Don't ask me why.
+       */
+      try {
+        grade = response.feedback.grade.grade; // ???????????????????? 
+      } catch(e) {
+        grade = 0;
+      }
+    }
+
+    console.log(grade);
+    
+    return grade;
+  }
+
   debugData() {
     const returnData = {
       buildtime: this.cache.buildTime,
