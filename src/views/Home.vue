@@ -50,6 +50,9 @@
           <p style="font-weight: 200;"><b>{{debugData.loadedmoduleswithdata}} </b>MODULES W/ DATA</p>
           <p style="font-weight: 200;"><b>{{debugData.loadedmodules - debugData.loadedmoduleswithdata}} </b>MODULES W/O DATA</p>
         </div>
+        <div class="sidebarfooter nospacing" style="padding: 0px 20px 0px 20px;">
+          <p v-if="sharedStore.updateAvailable" style="font-size: 14px; font-weight: 200;" class="attention">UPDATE AVAILABLE</p>
+        </div>
       </div>  
       <div style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
         <transition name="transition" mode="out-in">
