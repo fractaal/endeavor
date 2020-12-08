@@ -4,7 +4,7 @@ declare const __static: string;
 import { app, protocol, BrowserWindow, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import { autoUpdater } from 'electron-updater';
+import { autoUpdater, UpdateInfo } from 'electron-updater';
 import path from 'path';
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -33,13 +33,20 @@ async function createWindow() {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
+    setTimeout(() => {
+      win.webContents.send("update-downloaded", {version: "69.420.1"});
+    }, 2000);
   } else {
     createProtocol('app')
     // Load the index.html when not in development
     win.removeMenu();
-    win.setTitle(`Endeavor Alpha ${app.getVersion()}`)
+    win.setTitle(`Endeavor ${app.getVersion()}`)
     win.loadURL('app://./index.html')
-    autoUpdater.checkForUpdatesAndNotify()
+    autoUpdater.checkForUpdates();
+    autoUpdater.on('update-downloaded', (info: UpdateInfo) => {
+      win.webContents.send("update-downloaded", info);
+      // dialog.showMessageBox({title: "Update available!", message: `Endeavor ${info.version} is available for download and will be installed automagically! 💖`});
+    });
   }
   // Handle redirect function
   const handleRedirect = (e, url) => {

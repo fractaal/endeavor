@@ -9,6 +9,8 @@ import {transformForPresentation} from './content-presentation';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
 import updateQueryString from './update-query-string';
+import {getCourseVisibility} from '../course-presentation';
+import sharedStore from '../store';
 
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
@@ -313,23 +315,24 @@ export class ELearn implements eLearnInterface {
         module.section = section.section;
         module.courseid = courseid;
 
+        // Inject tokens for any src attributes in description.
         if (module.description) {
           module.description = transformForPresentation(module.description, (await this.getSession()).token);
         }
+
+        // Capitalize the module type for display. 
+        module.modnameformatted = capitalize(module.modname);
+
+        /**
+         * I need to do this stupid thing because for some reason
+         * moodle reports assignments as "assign" instead of just
+         * assignment. 🤷‍♂️🤷‍♂️
+         */
+        if (module.modnameformatted.toLowerCase() == "assign") {
+          module.modnameformatted = "Assignment";
+        }
         
         if (info[module.modname]) {          
-          // Capitalize the module type for display. 
-          module.modnameformatted = capitalize(module.modname);
-
-          /**
-           * I need to do this stupid thing because for some reason
-           * moodle reports assignments as "assign" instead of just
-           * assignment. 🤷‍♂️🤷‍♂️
-           */
-          if (module.modnameformatted.toLowerCase() == "assign") {
-            module.modnameformatted = "Assignment";
-          }
-
           // Get additional data for this module (if available). 
           const data: Quiz & Assignment & Forum = findInArray(info[module.modname], module.instance);
           
@@ -444,10 +447,15 @@ export class ELearn implements eLearnInterface {
     // const courses = await Promise.all(coursesMetadata.map(course => this.getCourseInfo(course.id)));
     const courses: any = await Promise.all(coursesMetadata.map(course => {
       return new Promise((resolve, reject) => {
-        this.getCourseInfo(course.id).then(courseinfo => {
-          update("📚 Loaded " + course.shortname);
-          resolve(courseinfo);
-        })
+        if (getCourseVisibility(course.id) || sharedStore.settings.loadHiddenCourseData) {
+          this.getCourseInfo(course.id).then(courseinfo => {
+            update("✅ Loaded " + course.shortname);
+            resolve(courseinfo);
+          })
+        } else {
+          update("⏩ Skipped " + course.shortname + " (was hidden)");
+          resolve([]);
+        }
       })
     }));
 
@@ -463,7 +471,7 @@ export class ELearn implements eLearnInterface {
     this.cache.coursesMetadata = coursesMetadata;
     console.log("[elearn-api] 📃 Search cache build complete");
     console.timeEnd("search cache build time");
-    update("✔ Complete!");
+    update("💖 Complete!");
     this.cache.buildTime = Date.now() - startTime;
     await new Promise(r => setTimeout(r, 1000));
   }
