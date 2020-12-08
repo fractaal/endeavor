@@ -8,7 +8,7 @@
           <transition-group name="transition">
             <card v-for="module in sharedStore.searchResults.moduleResults" :key="module.id"
                 :title="module.name"
-                :subtitle="`${module.modnameformatted} in ${module.sectionname} - ${module.coursename}`"
+                :subtitle="module.modnameformatted"
                 :rightTitle="module.duedateformatted"
                 :rightSubtitle="module.duedatedistanceformatted"
                 :content="module.description"
