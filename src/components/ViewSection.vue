@@ -15,7 +15,7 @@
         <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
           <card v-for="module in section.modules" :key="module.id"
             :title="module.name"
-            :subtitle="module.modname"
+            :subtitle="module.modnameformatted"
             :rightTitle="module.duedateformatted"
             :rightSubtitle="module.duedatedistanceformatted"
             :content="module.intro"
