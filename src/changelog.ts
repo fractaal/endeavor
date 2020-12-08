@@ -1,14 +1,14 @@
 export default [
   {
-    title: "✨ Quality of Life Update #4",
+    title: "✨ Quality of Life Update #5",
     text: "Small (but hopefully helpful) tweaks to Endeavor."
   },
   {
-    title: "✨ Improved button UX!",
-    text: "Buttons now feel better. 🤷‍♂️"
+    title: "📑 Grades!",
+    text: "Endeavor should properly display grades now!",
   },
   {
-    title: "🖼 Pictures!",
-    text: "Endeavor now displays pictures embedded in Moodle responses, including your profile picture! (experimental!)"
+    title: "✨ Faster load time!",
+    text: "Endeavor will no longer load hidden courses, meaning it'll load faster!"
   },
 ]
