@@ -28,9 +28,9 @@ export interface eLearnInterface {
   getTimeline(): Promise<Event[]>;
   buildCache(update: Function): Promise<void>; 
   debugData(): Record<string,any>;
+  getActualGrade(type: string, id: number): Promise<number>;
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
   };
-  getActualGrade(type: string, id: number): Promise<number>;
 }
