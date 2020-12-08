@@ -16,6 +16,7 @@ interface Store {
   userDoneTypingOnSearch: boolean;
   fullPageLoadText: string;
   fullPageLoadLog: string[];
+  updateAvailable: boolean;
 }
 
 const store: Store = {
@@ -33,6 +34,7 @@ const store: Store = {
   userDoneTypingOnSearch: true,
   fullPageLoadLog: [],
   fullPageLoadText: "",
+  updateAvailable: false,
 };
 
 export default store;
