@@ -1,5 +1,6 @@
 <template>
   <div id="app" :class="sharedStore.settings.theme" class="fullPage loginBackground">
+    <Modal v-if="showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view name="default"></router-view>
@@ -16,7 +17,9 @@ import sharedStore from './store';
 
 import {ELearn} from './elearn';
 import keytar from 'keytar';
-import {remote} from 'electron';
+import {remote, ipcRenderer} from 'electron';
+
+import Modal from './components/Modal.vue'
 
 const data = remote.app.getPath("userData");
 let endeavor;
@@ -27,9 +30,20 @@ export default {
   data() {
     return {
       sharedStore,
+      showModal: false,
     };
   },
+  components: {
+    Modal,
+  },
   async created () {
+    // Show modal if ipcRenderer gets update-available event. 
+    ipcRenderer.on("update-downloaded", (e, info) => {
+      this.showModal = true;
+      this.modalTitle = "💖 Update downloaded!";
+      this.modalBody = `Endeavor has a new version: ${info.releaseName} - (${info.version})! It'll be installed once you exit Endeavor.`;
+      this.sharedStore.updateAvailable = true;
+    });
     // Creating new eLearn object in store...
     this.sharedStore.eLearn = new ELearn();
     this.sharedStore.fullPageLoadText = "Checking for existing config file..."
