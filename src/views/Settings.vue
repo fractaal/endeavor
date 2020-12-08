@@ -27,6 +27,17 @@
           <p class="nospacing">Saves your login details and automatically logs you in on any future Endeavor session.</p>
         </div>
       </div>
+      <div style="display: flex; align-items: center;">
+        <div class="toggle">
+          <input type="checkbox" class="check" v-model="sharedStore.settings.loadHiddenCourseData">
+          <b class="b switch"></b>
+          <b class="b track"></b>
+        </div>
+        <div style="margin-left: 25px;">
+          <h2 class="nospacing" style="font-weight: 400;">LOAD DATA FOR HIDDEN COURSES</h2>
+          <p class="nospacing">To improve load time, Endeavor (by default) won't load data for courses you've hidden.<br>If you don't like this behavior, turn this on.<br><br><i>This option will prolong your load time.</i></p>
+        </div>
+      </div>
       <h3 class="nospacing" style="margin-left: 10px; font-weight: 200;">DATA</h3>
       <hr>
       <div style="display: flex; align-items: center;">
