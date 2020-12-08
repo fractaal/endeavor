@@ -1,5 +1,46 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
 
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 500px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: var(--cardDarker);
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .windowbuttons {
   -webkit-app-region: drag;
   -webkit-user-select: none;
@@ -172,6 +213,12 @@ body {
   padding: 30px 20px 10px 20px;
   text-align: center;
   font-weight: 300;
+}
+
+.sidebarfooter {
+  margin: 20px 0;
+  position: fixed;
+  bottom: 0;
 }
 
 .searchbar {
@@ -460,6 +507,26 @@ input.transparent:hover {
   transform: scale(0.75);
   opacity: 0;
 }
+
+/* Fancy modals! */
+.modal-enter-active {
+  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.modal-leave-active {
+  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+  position: absolute;
+}
+.modal-enter {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.modal-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
 
 
 /* Fancy scrollbar! */
