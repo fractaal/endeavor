@@ -31,6 +31,7 @@
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
+        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
         <hr>
         <br>
         <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
@@ -66,12 +67,15 @@
 </template>
 
 <script>
+import fs from 'fs';
+import path from 'path';
 import sharedStore from '../store';
 
 import { remote } from 'electron';
 import capitalize from '../util/capitalize';
 
 const {BrowserWindow} = remote;
+const data = remote.app.getPath("userData");
 
 export default {
   name: 'Home',
@@ -86,6 +90,16 @@ export default {
     };
   },
   async created() {
+    // Check if version in settings is the same as current version. If not, display changelog
+    if (!(this.sharedStore.settings.version == remote.app.getVersion())) {
+      console.log("!!!")
+      this.navTo('/changelog');
+      this.sharedStore.settings.version = remote.app.getVersion();
+      fs.writeFileSync(path.join(data, "endeavor.json"), JSON.stringify({
+        settings: this.sharedStore.settings
+      }))
+    }
+    
     this.sharedStore.session = await sharedStore.eLearn.getSession();
     this.fullNamePascalCased = capitalize(this.sharedStore.session.fullname);
     this.debugData = sharedStore.eLearn.debugData();
