@@ -2,10 +2,16 @@
   <div :class="styling">
     <div class="cardUpper" style="border-radius: 10px 10px 0px 0px; margin-bottom: 0;">
       <div style="display: flex; justify-content: space-between;">
-        <div style="display: flex; flex-direction: column;">
-          <p style="font-weight: 800; margin: 0;">{{title}}</p>
-          <p style="margin:0; font-weight: 400;">{{subtitle}}</p>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <div v-if="pictureurl" style="margin-right: 10px;">
+            <img :src="pictureurl" style="min-width: 60px; border-radius: 50%;"/>
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <p style="font-weight: 800; margin: 0;">{{title}}</p>
+            <p style="margin:0; font-weight: 400;">{{subtitle}}</p>
+          </div>
         </div>
+
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div style="display: flex; flex-direction: column;">
             <p style="font-weight: 800; margin: 0;">{{rightTitle}}</p>
@@ -63,6 +69,7 @@ export default {
     rightTitle: String,
     rightSubtitle: String,
     buttons: Array,
+    pictureurl: String,
     id: [String, Number],
     content: String,
     externalLink: String,
