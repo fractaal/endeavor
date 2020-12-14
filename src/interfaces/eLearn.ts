@@ -1,6 +1,7 @@
 import {Module, Section} from './Section';
 import {CourseMetadata} from './CourseMetadata';
 import { Event } from './Timeline';
+import { Discussion } from './Discussion';
 
 export interface eLearnSession {
   token: string;
@@ -29,6 +30,7 @@ export interface eLearnInterface {
   buildCache(update: Function): Promise<void>; 
   debugData(): Record<string,any>;
   getActualGrade(type: string, id: number): Promise<number>;
+  getForumDiscussions(forumid: string): Promise<Discussion[]>;
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
