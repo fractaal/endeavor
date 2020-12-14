@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
 
+.changelog-view {
+  margin: 30px 20%;
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9998;
