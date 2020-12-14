@@ -2,13 +2,14 @@ import cheerio from 'cheerio';
 import updateQueryString from './update-query-string';
 
 /**
- * We need to inject the token onto any src attributes or file download URLs
- * in order for them to display at all in Endeavor. Also, add a styling that restrains img width to size of card.
+ * Transforms the HTML string. Injects tokens into img src attributes so that 
+ * images actually display. 
+ * 
+ * @param html The HTML string to inject tokens into.
+ * @param token Token string to inject into URLs as query strings.
  */
-
-export function transformForPresentation(html: string, token: string) {
+export function transformHtml(html: string, token: string) {
   const $ = cheerio.load(html);
-  let dominantColor;
 
   $('img').each(function() {
     const oldSrc = $(this).attr("src");
@@ -21,4 +22,24 @@ export function transformForPresentation(html: string, token: string) {
   })
 
   return $.html();
+}
+
+/**
+ * Transforms the URL string. Injects token into it as a query string. 
+ * 
+ * @param url URL to inject token into.
+ * @param token Token string to inject into URL as a query string.
+ */
+export function transformUrl(url: string, token: string) {
+  return updateQueryString("token", token, url.replace("pluginfile", "webservice/pluginfile"));
+}
+
+/**
+ * Transforms the URL string without replacing pluginfile w/ webservice/pluginfile.
+ * 
+ * @param url URL to inject token into.
+ * @param token Token string to inject into URL as a query string.
+ */
+export function transformUrlWithoutChangingBaseURL(url: string, token: string) {
+  return updateQueryString("token", token, url);
 }
