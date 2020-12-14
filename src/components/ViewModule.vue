@@ -29,13 +29,17 @@
         <p v-html="module.intro"/>
       </div>
       <br>
-      <div v-if="module.contents && module.contents.length > 0">
-        <h3>Contents</h3>
-        <card v-for="content in module.contents" :key="content.filename" 
-        :title="content.filename"
-        :subtitle="content.type"
-        />
+      <!-- If the module is a page... --> 
+      <div v-if="module.modname == 'page'" >
+        <div v-for="file in module.contents" :key="file.filename">
+          <ContentView :type="file.mimetype" :link="file.fileurl" :token="sharedStore.session.token"/>
+          <br>
+        </div>
       </div>
+      <br>
+
+      <!-- If the module is a forum... -->
+      <Discussions v-if="module.modname == 'forum'" :discussions="discussions"/>
       <br>
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
@@ -61,12 +65,15 @@
 <script>
 import sharedStore from '../store';
 
+import Discussions from './Discussions.vue';
+import ContentView from './ContentView.vue';
 import Card from './Card.vue';
 import Loader from './Loader.vue';
 import EndeavorButton from './EndeavorButton.vue';
 
 import Grade from './Grade.vue'; 
 import { shell } from 'electron';
+
 
 export default {
   name: "ViewModule",
@@ -75,6 +82,8 @@ export default {
     Grade,
     Card,
     EndeavorButton,
+    Discussions,
+    ContentView,
   },
   data() {
     return {
@@ -82,6 +91,7 @@ export default {
       module: {},
       isLoading: false,
       actualGrade: 0,
+      discussions: [],
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -93,8 +103,12 @@ export default {
     async getModule() {
       this.module = {};
       this.module = await this.sharedStore.eLearn.getModule(this.$route.params.course, this.$route.params.instance);
-
       this.actualGrade = Number((await this.sharedStore.eLearn.getActualGrade(this.module.modname, this.module.id)));
+
+      // Get forum discussions if this specific module is of type forum.
+      if (this.module.modname == "forum") {
+        this.discussions = await this.sharedStore.eLearn.getForumDiscussions(this.module.id);
+      }
     },
     openExternalLink() {
       shell.openExternal(this.module.url);

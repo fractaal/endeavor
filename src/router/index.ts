@@ -59,6 +59,11 @@ const routes: Array<RouteConfig> = [
         path: "/search",
         name: "Search",
         component: () => import('../views/Search.vue'),
+      },
+      {
+        path: "/changelog",
+        name: "What's New",
+        component: () => import('../components/ChangeLogView.vue'),
       }
     ]
   },

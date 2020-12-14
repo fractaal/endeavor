@@ -5,7 +5,7 @@ import got from 'got';
 import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
-import {transformForPresentation} from './content-presentation';
+import {transformHtml, transformUrl} from './content-presentation';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
 import updateQueryString from './update-query-string';
@@ -20,6 +20,8 @@ import { CourseMetadata } from '@/interfaces/CourseMetadata';
 import { Assignment } from '@/interfaces/Assignment';
 import { Forum } from '@/interfaces/Forum';
 import { Quiz } from '@/interfaces/Quiz';
+import { Discussion } from '@/interfaces/Discussion';
+import { getPageHtml } from './page-module';
 
 // Enums
 enum Urgency {
@@ -114,10 +116,7 @@ export class ELearn implements eLearnInterface {
 
       // Transform the userpictureurl present in the API response to an address that actually works 😬
       // Change the URL. webservice/pluginfile API endpoint accepts token as a parameter.
-      session.userpictureurl = session.userpictureurl.replace("pluginfile", "webservice/pluginfile");
-
-      // Add the token to the query string.
-      session.userpictureurl = updateQueryString('token', token, session.userpictureurl);
+      session.userpictureurl = transformUrl(session.userpictureurl, token)
       
       session.token = token;
       update("Building search cache");
@@ -304,7 +303,7 @@ export class ELearn implements eLearnInterface {
     for (const section of entries) {
 
       if (section.summary) {
-        section.summary = transformForPresentation(section.summary, (await this.getSession()).token);
+        section.summary = transformHtml(section.summary, (await this.getSession()).token);
       }
 
       // Module-level parsing. (Middle-level objects are modules!)
@@ -317,9 +316,9 @@ export class ELearn implements eLearnInterface {
 
         // Inject tokens for any src attributes in description.
         if (module.description) {
-          module.description = transformForPresentation(module.description, (await this.getSession()).token);
+          module.description = transformHtml(module.description, (await this.getSession()).token);
         }
-
+        
         // Capitalize the module type for display. 
         module.modnameformatted = capitalize(module.modname);
 
@@ -342,7 +341,7 @@ export class ELearn implements eLearnInterface {
             module.hasextradata = true;
 
             if (data.intro) {
-              data.intro = transformForPresentation(data.intro, (await this.getSession()).token);
+              data.intro = transformHtml(data.intro, (await this.getSession()).token);
             }
             
             // Time formatting
@@ -522,6 +521,19 @@ export class ELearn implements eLearnInterface {
     }
 
     return returnData;
+  }
+
+  async getForumDiscussions(forumid: string) {
+    const res: Discussion[] = (await this.wsFunction("mod_forum_get_forum_discussions", {forumid})).discussions;
+    for (const discussion of res) {
+      discussion.userpictureurl = transformUrl(discussion.userpictureurl, session.token);
+    }
+
+    if (res) {
+      return res;
+    } else {
+      console.warn("[elearn-api] Forum discussion retrieval failed - res does not exist: " + res);
+    }
   }
 }
 

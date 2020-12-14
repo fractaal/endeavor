@@ -1,28 +1,25 @@
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
+  <div class="modal-mask" v-if="show">
+    <div class="modal-wrapper">
+      <div class="modal-container">
+        <div class="modal-header">
+          <slot name="header">
+            <h3>{{header}}</h3>
+          </slot>
+        </div>
 
-          <div class="modal-header">
-            <slot name="header">
-              <h3>{{header}}</h3>
-            </slot>
-          </div>
+        <div class="modal-body">
+          <slot name="body">
+            {{body}}
+          </slot>
+        </div>
 
-          <div class="modal-body">
-            <slot name="body">
-              {{body}}
-            </slot>
-          </div>
-
-          <div class="modal-footer">
-              <EndeavorButton @click="$emit('close')">👍 Okay</EndeavorButton>
-          </div>
+        <div class="modal-footer">
+            <EndeavorButton @click="$emit('close')">👍 Okay</EndeavorButton>
         </div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script>
@@ -36,7 +33,8 @@ export default {
   props: {
     body: String,
     header: String,
-  }
+    show: Boolean,
+  },
 }
 </script>
 

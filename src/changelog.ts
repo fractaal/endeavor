@@ -1,14 +1,10 @@
 export default [
   {
-    title: "✨ Quality of Life Update #5",
-    text: "Small (but hopefully helpful) tweaks to Endeavor."
+    title: "📄 Pages & Forums",
+    text: "Endeavor can display page modules and forum modules now! 💖",
   },
   {
-    title: "📑 Grades!",
-    text: "Endeavor should properly display grades now!",
-  },
-  {
-    title: "✨ Faster load time!",
-    text: "Endeavor will no longer load hidden courses, meaning it'll load faster!"
+    title: "⚙ Small UI/UX changes",
+    text: "Things such as the window buttons having better highlighting, etc."
   },
 ]
