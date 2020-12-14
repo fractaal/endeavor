@@ -1,6 +1,8 @@
 <template>
   <div id="app" :class="sharedStore.settings.theme" class="fullPage loginBackground">
-    <Modal v-if="showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
+    <transition name="modal">
+      <Modal v-if="this.showModal" :show="this.showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
+    </transition>
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view name="default"></router-view>
@@ -41,7 +43,7 @@ export default {
     ipcRenderer.on("update-downloaded", (e, info) => {
       this.showModal = true;
       this.modalTitle = "💖 Update downloaded!";
-      this.modalBody = `Endeavor has a new version: ${info.releaseName} - (${info.version})! It'll be installed once you exit Endeavor.`;
+      this.modalBody = `Hey hey! It looks like Endeavor has a new version: ${info.releaseName} - (${info.version})! It'll be installed once you exit Endeavor.`;
       this.sharedStore.updateAvailable = true;
     });
     // Creating new eLearn object in store...
