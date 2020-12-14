@@ -7,7 +7,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.25);
   display: table;
   transition: opacity 0.3s ease;
 }
@@ -23,7 +23,7 @@
   padding: 20px 30px;
   background-color: var(--cardDarker);
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  box-shadow: 0 2px 50px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -50,12 +50,19 @@
 }
 
 .windowbutton {
+  transition: 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   -webkit-app-region: no-drag;
   padding: 7px 17px 7px 17px;
 }
 
 .windowbutton:hover {
-  background-color: var(--background);
+  background-color: var(--foreground);
+  color: var(--background);
+  transform: scale(1.1);
+}
+
+.windowbutton:hover * {
+  color: var(--background);
 }
 
 .nospacing {
@@ -276,7 +283,6 @@ body {
 }
 
 .buttonwithlabel:hover {
-  cursor: pointer;
   transform: scale(1.1);
   background-color: var(--foreground);
   color: var(--background);
@@ -362,7 +368,6 @@ body {
 
 .roundButton:hover {
   border: none;
-  cursor: pointer;
   background-color: var(--foreground);
   color: var(--background);
   transform: scale(1.1);
@@ -510,20 +515,19 @@ input.transparent:hover {
 
 /* Fancy modals! */
 .modal-enter-active {
-  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
 .modal-leave-active {
-  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   position: absolute;
 }
-.modal-enter {
-  transform: scale(0.5);
+
+.modal-enter, .modal-leave-to {
+  transform: scale(0.8);
   opacity: 0;
 }
 
-.modal-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: scale(0.5);
+.modal-enter, .modal-leave-to {
   opacity: 0;
 }
 
@@ -532,7 +536,7 @@ input.transparent:hover {
 /* Fancy scrollbar! */
 ::-webkit-scrollbar-track
 {
-	background-color: var(--background);
+  background-color: var(--background);
 }
 
 ::-webkit-scrollbar
