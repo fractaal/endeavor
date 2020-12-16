@@ -6,6 +6,7 @@ import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
 import {transformHtml, transformUrl} from './content-presentation';
+import { getPageHtml } from './page-module';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
 import updateQueryString from './update-query-string';
@@ -21,7 +22,7 @@ import { Assignment } from '@/interfaces/Assignment';
 import { Forum } from '@/interfaces/Forum';
 import { Quiz } from '@/interfaces/Quiz';
 import { Discussion } from '@/interfaces/Discussion';
-import { getPageHtml } from './page-module';
+import { Page } from '@/interfaces/Page';
 
 // Enums
 enum Urgency {
@@ -472,7 +473,6 @@ export class ELearn implements eLearnInterface {
     console.timeEnd("search cache build time");
     update("💖 Complete!");
     this.cache.buildTime = Date.now() - startTime;
-    await new Promise(r => setTimeout(r, 1000));
   }
 
   findInCache(courseid: number): CourseMetadata {
@@ -534,6 +534,21 @@ export class ELearn implements eLearnInterface {
     } else {
       console.warn("[elearn-api] Forum discussion retrieval failed - res does not exist: " + res);
     }
+  }
+
+  async getLessonPages(lessonid: string): Promise<Page[]> {
+    let pages;
+    try {
+      const _pages: Page[] = (await this.wsFunction('mod_lesson_get_pages', {lessonid})).pages;
+      pages = _pages.filter(page => page.page.typestring == "Content");
+      for (const page of pages) {
+        page.page.contents = transformHtml(page.page.contents, session.token, true);
+      }
+    } catch(err) {
+      console.warn(`[elearn-api] Failed to get lesson pages for ID ${lessonid} reason: ${err}`);
+      pages = null;
+    }
+    return pages;
   }
 }
 
