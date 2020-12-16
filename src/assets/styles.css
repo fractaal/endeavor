@@ -479,10 +479,10 @@ input.transparent:hover {
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
 .transition-enter-active {
-  transition: all .15s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all .15s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
 .transition-leave-active {
-  transition: all .15s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all .15s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   position: absolute;
 }
 .transition-enter {
