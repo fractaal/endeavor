@@ -32,7 +32,7 @@
       <!-- If the module is a page... --> 
       <div v-if="module.modname == 'page'" >
         <div v-for="file in module.contents" :key="file.filename">
-          <ContentView :type="file.mimetype" :link="file.fileurl" :token="sharedStore.session.token"/>
+          <ContentView :filename="file.filename" :link="file.fileurl" :token="sharedStore.session.token"/>
           <br>
         </div>
       </div>
