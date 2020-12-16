@@ -5,8 +5,8 @@
     <br>
     <div style="margin-left: 50%; margin-right: 50%; display: flex; flex-direction: column; align-items: center;">
       <div class="lds-ripple"><div></div><div></div></div>
-      <h2 class="shimmer" style="width: 250px; text-align: center; font-weight: 200;" v-if="text">{{text}}</h2>
-      <h2 class="shimmer" style="width: 250px; text-align: center; font-weight: 200;" v-if="!text">LOADING...</h2>
+      <h2 class="shimmer" style="width: 250px; text-align: center; font-weight: 300;" v-if="text">{{text}}</h2>
+      <h2 class="shimmer" style="width: 250px; text-align: center; font-weight: 300;" v-if="!text">LOADING...</h2>
     </div>
   </div>
 </template>
