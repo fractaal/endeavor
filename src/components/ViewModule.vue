@@ -24,11 +24,15 @@
       </div>
       <hr>
     </div>
-    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 70vh;">
+    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 75vh;">
       <div class="level" v-if="module.intro">
         <p v-html="module.intro"/>
+        <br>
       </div>
-      <br>
+      
+      <!-- If the module is a lesson... -->
+      <LessonView v-if="module.modname =='lesson'" :lessonid="module.instance"/>
+
       <!-- If the module is a page... --> 
       <div v-if="module.modname == 'page'" >
         <div v-for="file in module.contents" :key="file.filename">
@@ -36,11 +40,10 @@
           <br>
         </div>
       </div>
-      <br>
 
       <!-- If the module is a forum... -->
       <Discussions v-if="module.modname == 'forum'" :discussions="discussions"/>
-      <br>
+      
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
         <card v-for="content in module.introattachments" :key="content.filename" 
@@ -48,7 +51,7 @@
         :subtitle="content.type"
         />
       </div>
-      <br>
+      
       <div class="level" v-if="sharedStore.settings.showDebugInfo">
         <div>
           <h3>Debug Data</h3>
@@ -67,6 +70,7 @@ import sharedStore from '../store';
 
 import Discussions from './Discussions.vue';
 import ContentView from './ContentView.vue';
+import LessonView from './LessonView.vue';
 import Card from './Card.vue';
 import Loader from './Loader.vue';
 import EndeavorButton from './EndeavorButton.vue';
@@ -84,6 +88,7 @@ export default {
     EndeavorButton,
     Discussions,
     ContentView,
+    LessonView,
   },
   data() {
     return {
