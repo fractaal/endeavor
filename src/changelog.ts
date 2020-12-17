@@ -1,10 +1,14 @@
 export default [
   {
-    title: "📄 Pages & Forums",
-    text: "Endeavor can display page modules and forum modules now! 💖",
+    title: "📄 Lessons & Books",
+    text: "Endeavor can display lesson modules and book modules now! 💖",
   },
   {
     title: "⚙ Small UI/UX changes",
-    text: "Things such as the window buttons having better highlighting, etc."
+    text: "New settings icons!"
   },
+  {
+    title: "💻 Debug Console",
+    text: "Make things easier to debug - a log can be accessed via Endeavor settings now!"
+  }
 ]
