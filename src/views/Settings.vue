@@ -41,14 +41,14 @@
       <h3 class="nospacing" style="margin-left: 10px; font-weight: 200;">DATA</h3>
       <hr>
       <div style="display: flex; align-items: center;">
-        <button @click="purgeLoginData" class="roundButton">⭕</button>
+        <button @click="purgeLoginData" class="roundButton"><fai icon="broom"/></button>
         <div style="margin-left: 25px;">
           <h2 class="nospacing" style="font-weight: 400;">REMOVE LOGIN DATA</h2>
           <p class="nospacing">Endeavor saves your login details for automatic login. To purge this data, click this button.</p>
         </div>
       </div>
       <div style="display: flex; align-items: center;">
-        <button @click="resetEndeavor" class="roundButton">⭕</button>
+        <button @click="resetEndeavor" class="roundButton"><fai icon="power-off"/></button>
         <div style="margin-left: 25px;">
           <h2 class="nospacing" style="font-weight: 400;">RESET ENDEAVOR</h2>
           <p class="nospacing">Endeavor, due to its nature of being a Beta program <i>(and also because it's developed by a dumbass)</i> can break.<br>A quick and easy fix for most issues is a configuration reset.</p>
@@ -65,6 +65,13 @@
         <div style="margin-left: 25px;">
           <h2 class="nospacing" style="font-weight: 400;">DISPLAY DEBUG INFORMATION</h2>
           <p class="nospacing">Display <i>complicated and very ugly</i> debug information such as current route open, route parameters and forum information.<br>Don't turn this on if you don't want ugly things!</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <button @click="$router.push('/console')" class="roundButton"><fai icon="terminal"/></button>
+        <div style="margin-left: 25px;">
+          <h2 class="nospacing" style="font-weight: 400;">DISPLAY DEBUG CONSOLE</h2>
+          <p class="nospacing">Display the internal debug console that reports any errors that might have happened.</p>
         </div>
       </div>
     </div>
