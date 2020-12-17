@@ -7,13 +7,14 @@ import updateQueryString from './update-query-string';
  * 
  * @param html The HTML string to inject tokens into.
  * @param token Token string to inject into URLs as query strings.
+ * @param changeBaseUrl Whether or not to change base URL from /pluginfile to /webservice/pluginfile.
  */
-export function transformHtml(html: string, token: string) {
+export function transformHtml(html: string, token: string, changeBaseUrl?: boolean) {
   const $ = cheerio.load(html);
 
   $('img').each(function() {
     const oldSrc = $(this).attr("src");
-    const newSrc = updateQueryString("token", token, oldSrc);
+    const newSrc = updateQueryString("token", token, changeBaseUrl ? oldSrc.replace("pluginfile", "webservice/pluginfile") : oldSrc);
     $(this).attr("src", newSrc);
 
     const oldStyle = $(this).attr("style");

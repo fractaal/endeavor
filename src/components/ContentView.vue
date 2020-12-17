@@ -6,7 +6,7 @@
         <div v-if="!isLoading" key="content">
           <img v-if="extension == '.png' || extension == '.jpg' || extension == '.jpeg' || extension == '.gif'" :src="modifiedLink" style="max-width: 100% !important; height: auto; border-radius: 5px; margin: 5px;">
           <p v-else-if="extension == '.html'" v-html="content"></p>
-          <p v-else><a :href="modifiedLink">{{link}}</a></p>
+          <div v-else><a :href="modifiedLink">{{link}}</a></div>
         </div>
       </transition-group>
     </div>

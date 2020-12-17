@@ -1,11 +1,13 @@
 /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
 
 // Required libraries
+import path from 'path';
 import got from 'got';
 import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
-import {transformHtml, transformUrl} from './content-presentation';
+import {transformHtml, transformUrl, transformUrlWithoutChangingBaseURL} from './content-presentation';
+import { getPageHtml } from './page-module';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
 import updateQueryString from './update-query-string';
@@ -15,13 +17,14 @@ import sharedStore from '../store';
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
 import { Module, Section } from '@/interfaces/Section';
-import { Event } from '@/interfaces/Timeline';
+import { Course, Event } from '@/interfaces/Timeline';
 import { CourseMetadata } from '@/interfaces/CourseMetadata';
 import { Assignment } from '@/interfaces/Assignment';
 import { Forum } from '@/interfaces/Forum';
 import { Quiz } from '@/interfaces/Quiz';
 import { Discussion } from '@/interfaces/Discussion';
-import { getPageHtml } from './page-module';
+import { Page } from '@/interfaces/Page';
+import { BookPage } from '@/interfaces/BookPage';
 
 // Enums
 enum Urgency {
@@ -472,7 +475,6 @@ export class ELearn implements eLearnInterface {
     console.timeEnd("search cache build time");
     update("💖 Complete!");
     this.cache.buildTime = Date.now() - startTime;
-    await new Promise(r => setTimeout(r, 1000));
   }
 
   findInCache(courseid: number): CourseMetadata {
@@ -494,9 +496,6 @@ export class ELearn implements eLearnInterface {
         grade = 0;
       }
     }
-
-    console.log(grade);
-    
     return grade;
   }
 
@@ -533,6 +532,98 @@ export class ELearn implements eLearnInterface {
       return res;
     } else {
       console.warn("[elearn-api] Forum discussion retrieval failed - res does not exist: " + res);
+    }
+  }
+
+  async getLessonPages(lessonid: string): Promise<Page[]> {
+    let pages;
+    try {
+      const _pages: Page[] = (await this.wsFunction('mod_lesson_get_pages', {lessonid})).pages;
+      pages = _pages.filter(page => page.page.typestring == "Content");
+      for (const page of pages) {
+        page.page.contents = transformHtml(page.page.contents, session.token, true);
+      }
+    } catch(err) {
+      console.warn(`[elearn-api] Failed to get lesson pages for ID ${lessonid} reason: ${err}`);
+      pages = null;
+    }
+    return pages;
+  }
+
+  /**
+   * Get pages of a module of type book. Please, God, this was horrible to code. 
+   * I feel like my lifespan was reduced 20 by years after writing this. 
+   * 
+   * @param courseid Course ID. We need this to save a teeny tiny bit of performance.
+   * @param bookid Book ID to retrieve.
+   */
+  async getBookPages(courseid: string, bookid: string): Promise<BookPage[]> {
+    const flattenedStructure: BookPage[] = [];
+
+    // Function that recursively flattens structure hierarchy. 
+    const flattenStructure = (structure: BookPage[]): BookPage[] => {
+      for (const element of structure) {
+        flattenedStructure.push(element); 
+        flattenStructure(element.subitems);
+      }
+
+      return flattenedStructure;
+    }
+
+    // Function that can be called recursively in order to construct the book.
+    const parseStructureNode = async (raw, item: BookPage): Promise<BookPage> => {
+      let data;
+      for (const element of raw.contents) {
+        try {
+          //  Find ID from href.           Match it with filepath                         Make sure it's matching the actual ID
+          //                               from contents array.                           and not blank space.
+          if (item.href.match(/[0-9]+/g)[0] .match(path.basename(element.filepath))[0] == item.href.match(/[0-9]+/g)[0]) {
+          // This is horrible. Don't ever make me do this again. My heart breaks every time I see this line of code.
+            data = element;
+            break;
+          }
+        } catch(err) {}
+      }
+      const modified = Object.assign({}, item);
+      modified.url = transformUrlWithoutChangingBaseURL(data.fileurl, session.token);
+      let res;
+      [res, modified.subitems] = await Promise.all([
+        client(modified.url),
+        Promise.all(modified.subitems.map(item => parseStructureNode(raw, item)))
+      ])
+      modified.content = res.body;
+      return modified;
+    }
+
+    const course: CourseMetadata = findInArray(this.cache.coursesMetadata, courseid as unknown as number);
+    if (course) {
+      let structure: BookPage[];
+      let found; 
+      try {
+        for (const section of course.sections) {
+          found = findInArray(section.modules, bookid as unknown as number);
+          if (found) break;
+        }
+        if (found) {
+          // Find the structure object that defines the structure of the book.
+          // It's encoded as a JSON string, so parse it.
+          structure = JSON.parse((found.contents.filter(element => element.filename == "structure")[0]).content);
+
+          // Call recursive function parseStructureNode to add content into book structure.
+          structure = await Promise.all(structure.map(item => parseStructureNode(found, item)));
+          
+          return flattenStructure(structure);
+        } else {
+          console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - Book not found in course`);
+          return null;
+        }
+      } catch(err) {
+        console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - reason: ${err}`);
+        return null;
+      }
+    } else {
+      console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - course not found`);
+      return null;
     }
   }
 }

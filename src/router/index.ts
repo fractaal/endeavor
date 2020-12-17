@@ -64,6 +64,11 @@ const routes: Array<RouteConfig> = [
         path: "/changelog",
         name: "What's New",
         component: () => import('../components/ChangeLogView.vue'),
+      },
+      {
+        path: "/console",
+        name: "Console",
+        component: () => import("../views/Console.vue"),
       }
     ]
   },

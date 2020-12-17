@@ -114,7 +114,7 @@ export default {
       this.sharedStore.fullPageLoadLog = [];
       let loginResult;
       try {
-        this.sharedStore.fullPageLoadText = "Logging you in..."
+        this.sharedStore.fullPageLoadText = "LOGGING YOU IN"
 
         loginResult = await this.sharedStore.eLearn.login(username, password, log => {
           this.sharedStore.fullPageLoadLog.push(log);
@@ -126,9 +126,10 @@ export default {
       }
       
       if (loginResult) {
-        this.sharedStore.fullPageLoadText = "Welcome!"
+        this.sharedStore.fullPageLoadText = "WELCOME!"
         await keytar.setPassword("endeavor", username, password);
         console.log("Login success");
+        await new Promise(r => setTimeout(r, 300));
         return true;
       } else {
         this.sharedStore.fullPageLoadText = "❌ Login failed!"

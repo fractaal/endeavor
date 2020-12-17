@@ -1,7 +1,7 @@
 <template>
   <div>
     <loader v-if="!module" :text="`Loading module`"/>
-    <div v-else style="margin-left: 50px; margin-top: 25px; margin-bottom: 10px; margin-right: 50px;">
+    <div v-else style="margin-left: 50px; margin-top: 10px; margin-bottom: 10px; margin-right: 50px;">
       <div style="display: flex; justify-content: space-between;">
         <div style="max-width: 50%;">
           <h1 class="nospacing">{{module.name}}</h1> 
@@ -24,11 +24,18 @@
       </div>
       <hr>
     </div>
-    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: 70vh;">
+    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: calc(100vh - 300px);">
       <div class="level" v-if="module.intro">
         <p v-html="module.intro"/>
+        <br>
       </div>
-      <br>
+      
+      <!-- If the module is a lesson... -->
+      <LessonView v-if="module.modname =='lesson'" :lessonid="module.instance"/>
+
+      <!-- If the module is a book... -->
+      <BookView v-if="module.modname == 'book'" :bookid="module.instance" :courseid="$route.params.course"/>
+
       <!-- If the module is a page... --> 
       <div v-if="module.modname == 'page'" >
         <div v-for="file in module.contents" :key="file.filename">
@@ -36,11 +43,12 @@
           <br>
         </div>
       </div>
-      <br>
 
       <!-- If the module is a forum... -->
-      <Discussions v-if="module.modname == 'forum'" :discussions="discussions"/>
-      <br>
+      <div v-if="module.modname == 'forum'" style="margin: 20px;">
+        <Discussions :discussions="discussions"/>
+      </div>
+      
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
         <card v-for="content in module.introattachments" :key="content.filename" 
@@ -48,7 +56,7 @@
         :subtitle="content.type"
         />
       </div>
-      <br>
+      
       <div class="level" v-if="sharedStore.settings.showDebugInfo">
         <div>
           <h3>Debug Data</h3>
@@ -67,12 +75,14 @@ import sharedStore from '../store';
 
 import Discussions from './Discussions.vue';
 import ContentView from './ContentView.vue';
+import LessonView from './LessonView.vue';
 import Card from './Card.vue';
 import Loader from './Loader.vue';
 import EndeavorButton from './EndeavorButton.vue';
 
 import Grade from './Grade.vue'; 
 import { shell } from 'electron';
+import BookView from './BookView.vue';
 
 
 export default {
@@ -84,6 +94,8 @@ export default {
     EndeavorButton,
     Discussions,
     ContentView,
+    LessonView,
+    BookView,
   },
   data() {
     return {

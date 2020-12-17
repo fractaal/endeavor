@@ -17,6 +17,7 @@ interface Store {
   fullPageLoadText: string;
   fullPageLoadLog: string[];
   updateAvailable: boolean;
+  debugLog: string[];
 }
 
 const store: Store = {
@@ -35,6 +36,7 @@ const store: Store = {
   fullPageLoadLog: [],
   fullPageLoadText: "",
   updateAvailable: false,
+  debugLog: [],
 };
 
 export default store;

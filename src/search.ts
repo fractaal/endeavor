@@ -10,6 +10,7 @@ const options = {
     "sections.name",
     "sections.summary",
     "sections.modules.name",
+    "sections.modules.modnameformatted",
   ],
   includeScore: true,
   includeMatches: true,
