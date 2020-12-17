@@ -20,20 +20,20 @@
         <button style="margin-left: 10px; margin-right: 20px;" class="roundButton" @click="$router.go(1)"><fai icon="arrow-right"/></button>
         <!-- Search bar -->
         <form @submit="startSearch" class="searchbar">
-          <input type="text" v-model="search" placeholder="Universal Search" style="width: 30vw;"/>
+          <input type="text" v-model="search" placeholder="Search your courses..." style="width: 30vw;"/>
           <fai class="searchicon" icon="search"/>
         </form>
       </div>
     </div>
     <div style="display: grid; grid-template-columns: 2fr 10fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
       <div class="sidebar">
-        <h1>{{codeEmoji}} {{codeName}} </h1>
+        <div style="padding-top: 75px;"></div>
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
         <h3 @click="navTo('/changelog')">✨ What's New? </h3>
+        <div style="padding-top: 75px;"></div>
         <hr>
-        <br>
         <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
           <p style="font-weight: 200;">ROUTE PATH</p>
           <h4>{{$route.path}}</h4>
