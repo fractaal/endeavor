@@ -3,9 +3,9 @@
     <div v-if="failedToLoad" class="nospacing emptylistplaceholder">
       <fai size="10x" icon="exclamation-circle" />
       <h1 style="font-weight: 400;">FAILED TO LOAD</h1>
-      <p>There's nothing in this lesson yet, or you might not have the permissions to do so.</p>
+      <p>Something scary happened while trying to load this book.<br>Trying again might help!</p>
     </div>
-    <Loader v-else-if="pages.length == 0" text="LOADING LESSON..."/>
+    <Loader v-else-if="pages.length == 0" text="LOADING BOOK..."/>
     <div v-else style="display: grid; grid-template-columns: 8fr 2fr;">
       <div>
         <div style="display: flex; align-items: center;">
