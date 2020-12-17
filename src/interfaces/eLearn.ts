@@ -3,6 +3,7 @@ import {CourseMetadata} from './CourseMetadata';
 import { Event } from './Timeline';
 import { Discussion } from './Discussion';
 import { Page } from './Page';
+import { BookPage } from './BookPage';
 
 export interface eLearnSession {
   token: string;
@@ -33,6 +34,7 @@ export interface eLearnInterface {
   getActualGrade(type: string, id: number): Promise<number>;
   getForumDiscussions(forumid: string): Promise<Discussion[]>;
   getLessonPages(lessonid: string): Promise<Page[]>;
+  getBookPages(courseid: string, bookid: string): Promise<BookPage[]>;
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
