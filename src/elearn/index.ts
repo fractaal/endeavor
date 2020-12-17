@@ -558,6 +558,18 @@ export class ELearn implements eLearnInterface {
    * @param bookid Book ID to retrieve.
    */
   async getBookPages(courseid: string, bookid: string): Promise<BookPage[]> {
+    const flattenedStructure: BookPage[] = [];
+
+    // Function that recursively flattens structure hierarchy. 
+    const flattenStructure = (structure: BookPage[]): BookPage[] => {
+      for (const element of structure) {
+        flattenedStructure.push(element); 
+        flattenStructure(element.subitems);
+      }
+
+      return flattenedStructure;
+    }
+
     // Function that can be called recursively in order to construct the book.
     const parseStructureNode = async (raw, item: BookPage): Promise<BookPage> => {
       let data;
@@ -574,8 +586,12 @@ export class ELearn implements eLearnInterface {
       }
       const modified = Object.assign({}, item);
       modified.url = transformUrlWithoutChangingBaseURL(data.fileurl, session.token);
-      modified.content = (await client(modified.url)).body
-      modified.subitems = await Promise.all(modified.subitems.map(item => parseStructureNode(raw, item)));
+      let res;
+      [res, modified.subitems] = await Promise.all([
+        client(modified.url),
+        Promise.all(modified.subitems.map(item => parseStructureNode(raw, item)))
+      ])
+      modified.content = res.body;
       return modified;
     }
 
@@ -596,7 +612,7 @@ export class ELearn implements eLearnInterface {
           // Call recursive function parseStructureNode to add content into book structure.
           structure = await Promise.all(structure.map(item => parseStructureNode(found, item)));
           
-          return structure;
+          return flattenStructure(structure);
         } else {
           console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - Book not found in course`);
           return null;
