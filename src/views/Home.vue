@@ -32,8 +32,8 @@
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
         <h3 @click="navTo('/changelog')">✨ What's New? </h3>
-        <div style="padding-top: 75px;"></div>
         <hr>
+        <h3 @click="showGlobalScratchpad = !showGlobalScratchpad">📝 Scratchpad</h3>
         <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
           <p style="font-weight: 200;">ROUTE PATH</p>
           <h4>{{$route.path}}</h4>
@@ -62,6 +62,13 @@
           </keep-alive>
         </transition>
       </div>
+      <!-- global scratchpad -->
+      <floating-editor 
+        v-model="globalScratchPadContent" 
+        :title="'GLOBAL'" 
+        :show="showGlobalScratchpad" 
+        @close="setGlobalScratchPadAndClose"
+      />
     </div>
   </div>
 </template>
@@ -71,8 +78,11 @@ import fs from 'fs';
 import path from 'path';
 import sharedStore from '../store';
 
+import FloatingEditor from '../components/FloatingEditor.vue';
+
 import { remote } from 'electron';
 import capitalize from '../util/capitalize';
+import { getScratchpadContent, setScratchpadContent } from '@/scratchpad';
 
 const {BrowserWindow} = remote;
 const data = remote.app.getPath("userData");
@@ -87,7 +97,12 @@ export default {
       codeName: "Performant",
       search: "",
       debugData: {},
+      showGlobalScratchpad: false,
+      globalScratchPadContent: "",
     };
+  },
+  components: {
+    FloatingEditor
   },
   async created() {
     // Check if version in settings is the same as current version. If not, display changelog
@@ -103,6 +118,9 @@ export default {
     this.sharedStore.session = await sharedStore.eLearn.getSession();
     this.fullNamePascalCased = capitalize(this.sharedStore.session.fullname);
     this.debugData = sharedStore.eLearn.debugData();
+
+    // Get scratch pad data from disk
+    this.getGlobalScratchPad();
   },
   watch: {
     search: function(value) {
@@ -144,6 +162,15 @@ export default {
     },
     closeWindow() {
       BrowserWindow.getFocusedWindow().close();
+    },
+    getGlobalScratchPad() {
+      console.log("Retrieving global scratch pad content...");
+      this.globalScratchPadContent = getScratchpadContent("GLOBAL");
+    },
+    setGlobalScratchPadAndClose(content) {
+      console.log("Saving scratch pad content and closing...");
+      setScratchpadContent("GLOBAL", content);
+      this.showGlobalScratchpad = false;
     }
   }
 };
