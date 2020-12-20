@@ -159,6 +159,7 @@ body {
   --highlight: #e7e7e7;
   --highlight-lighter: #d6d6d6;
   --topbar-color: #eeeeee;
+  --scratchpad-background: #fdfdfd;
 }
 
 .dark-theme {
@@ -173,6 +174,7 @@ body {
   --highlight: #102336;
   --highlight-lighter: #0e1d2e;
   --topbar-color: #112b46;
+  --scratchpad-background: #1b3755;
 }
 
 .bar {
@@ -355,7 +357,37 @@ body {
   filter: brightness(1.05);
 }
 
+.draggable {
+  cursor: move;
+}
 
+.floating-editor-textarea {
+  overflow-y: auto !important; 
+  max-height: calc(100% - 100px) !important; 
+  max-width: 100% !important;
+}
+
+.floating-editor {
+  z-index: 5;
+  background-color: var(--scratchpad-background);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  border-radius: 5px;
+  position: absolute;
+  max-height: 50vh;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+.menubar {
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.menubar > button {
+  margin: 5px;
+}
 
 .center {
   padding-top: 50px;
@@ -379,11 +411,25 @@ body {
   border-radius: 50%;
 }
 
+.roundButton.danger {
+  background-color: #F05661;
+}
+
 .roundButton:hover {
   border: none;
   background-color: var(--foreground);
   color: var(--background);
   transform: scale(1.1);
+}
+
+.roundButton:active {
+  transform: scale(0.9);
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+.roundButton:active * {
+  color: var(--foreground);
 }
 
 .roundButton:hover * {
@@ -528,10 +574,10 @@ input.transparent:hover {
 
 /* Fancy modals! */
 .modal-enter-active {
-  transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition: all 0.25s cubic-bezier(1, 0, 0, 1);
 }
 .modal-leave-active {
-  transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition: all 0.25s cubic-bezier(1, 0, 0, 1);
   position: absolute;
 }
 
