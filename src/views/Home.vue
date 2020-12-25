@@ -30,10 +30,11 @@
         <div style="padding-top: 75px;"></div>
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
-        <h3 @click="navTo('/settings')">⚙  Settings </h3>
-        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
-        <hr>
         <h3 @click="toggleGlobalScratchpad()">📝 Scratchpad</h3>
+        <h3 @click="navTo('/settings')">⚙  Settings </h3>
+        
+        <hr>
+        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
         <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
           <p style="font-weight: 200;">ROUTE PATH</p>
           <h4>{{$route.path}}</h4>
