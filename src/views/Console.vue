@@ -16,12 +16,19 @@ export default {
   data() {
     return {
       sharedStore,
+      trunctatedLog: [],
     };
   },
-  computed: {
-    trunctatedLog: function() {
-      return this.sharedStore.debugLog.slice(this.sharedStore.debugLog.length-101, this.sharedStore.debugLog.length-1);
+  methods: {
+    updateLog() {
+      this.trunctatedLog = this.sharedStore.debugLog.slice(this.sharedStore.debugLog.length-101, this.sharedStore.debugLog.length-1);
     }
-  }
+  },
+  created() {
+    this.updateLog();
+  },
+  mounted() {
+    this.updateLog();
+  },
 };
 </script>

@@ -536,18 +536,21 @@ export class ELearn implements eLearnInterface {
   }
 
   async getLessonPages(lessonid: string): Promise<Page[]> {
-    let pages;
+    let finalPageData: Page[];
     try {
-      const _pages: Page[] = (await this.wsFunction('mod_lesson_get_pages', {lessonid})).pages;
-      pages = _pages.filter(page => page.page.typestring == "Content");
-      for (const page of pages) {
-        page.page.contents = transformHtml(page.page.contents, session.token, true);
-      }
+      const pageMetadata: Page[] = (await this.wsFunction('mod_lesson_get_pages', {lessonid})).pages;
+      const usablePageMetadata = pageMetadata.filter(page => page.page.typestring == "Content");
+      finalPageData = await Promise.all(usablePageMetadata.map(async pageMetadata => {
+        const data = await this.wsFunction("mod_lesson_get_page_data", {lessonid, pageid: pageMetadata.page.id});
+        pageMetadata.page.contents = data.page.contents;
+        pageMetadata.page.title = data.page.title;
+        return pageMetadata;
+      }))
     } catch(err) {
       console.warn(`[elearn-api] Failed to get lesson pages for ID ${lessonid} reason: ${err}`);
-      pages = null;
+      finalPageData = null;
     }
-    return pages;
+    return finalPageData;
   }
 
   /**

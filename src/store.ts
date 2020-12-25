@@ -1,4 +1,4 @@
-import {eLearnInterface} from './interfaces/eLearn';
+import {eLearnInterface, eLearnSession} from './interfaces/eLearn';
 import fuseSearch from './search';
 
 interface Store {
@@ -18,6 +18,7 @@ interface Store {
   fullPageLoadLog: string[];
   updateAvailable: boolean;
   debugLog: string[];
+  session: eLearnSession;
 }
 
 const store: Store = {
@@ -37,6 +38,7 @@ const store: Store = {
   fullPageLoadText: "",
   updateAvailable: false,
   debugLog: [],
+  session: {} as eLearnSession,
 };
 
 export default store;

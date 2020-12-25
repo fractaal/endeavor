@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import movable from "v-movable";
 
 import sharedStore from './store';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal);
+library.add(faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo, faTimes);
 Vue.component('fai', FontAwesomeIcon);
 Vue.config.productionTip = false
 
@@ -24,6 +25,8 @@ window.onerror = function(msg, source, line, col, err) {
 
 export const Bus = new Vue();
 
+
+Vue.use(movable);
 new Vue({
   router,
   render: h => h(App)

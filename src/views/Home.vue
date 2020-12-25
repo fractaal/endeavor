@@ -30,10 +30,11 @@
         <div style="padding-top: 75px;"></div>
         <h3 @click="navTo('/home')">🕐 Timeline</h3>
         <h3 @click="navTo('/home/courses')">📚 Courses </h3>
+        <h3 @click="toggleGlobalScratchpad()">📝 Scratchpad</h3>
         <h3 @click="navTo('/settings')">⚙  Settings </h3>
-        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
-        <div style="padding-top: 75px;"></div>
+        
         <hr>
+        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
         <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
           <p style="font-weight: 200;">ROUTE PATH</p>
           <h4>{{$route.path}}</h4>
@@ -62,14 +63,19 @@
           </keep-alive>
         </transition>
       </div>
+      <!-- scratchpads -->
+      <scratchpads/>
     </div>
   </div>
 </template>
 
 <script>
+import { Bus } from '../main';
 import fs from 'fs';
 import path from 'path';
 import sharedStore from '../store';
+
+import Scratchpads from '../components/Scratchpads.vue';
 
 import { remote } from 'electron';
 import capitalize from '../util/capitalize';
@@ -89,6 +95,9 @@ export default {
       debugData: {},
     };
   },
+  components: {
+    Scratchpads
+  },
   async created() {
     // Check if version in settings is the same as current version. If not, display changelog
     if (!(this.sharedStore.settings.version == remote.app.getVersion())) {
@@ -103,6 +112,7 @@ export default {
     this.sharedStore.session = await sharedStore.eLearn.getSession();
     this.fullNamePascalCased = capitalize(this.sharedStore.session.fullname);
     this.debugData = sharedStore.eLearn.debugData();
+
   },
   watch: {
     search: function(value) {
@@ -144,6 +154,9 @@ export default {
     },
     closeWindow() {
       BrowserWindow.getFocusedWindow().close();
+    },
+    toggleGlobalScratchpad() {
+      Bus.$emit("toggle-scratchpad", 0, "MAIN");
     }
   }
 };

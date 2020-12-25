@@ -8,6 +8,7 @@
           <p class="nospacing">{{module['modnameformatted']}}</p>
         </div>
         <div style="display: flex;">
+          <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
           <EndeavorButton @click="openExternalLink">🔎 Open in eLearn</EndeavorButton>
           <EndeavorButton @click="$router.push('/home/courses/'+module.courseid)">📚 See course</EndeavorButton>
           <EndeavorButton @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
@@ -83,6 +84,7 @@ import EndeavorButton from './EndeavorButton.vue';
 import Grade from './Grade.vue'; 
 import { shell } from 'electron';
 import BookView from './BookView.vue';
+import { Bus } from '@/main';
 
 
 export default {
@@ -124,6 +126,9 @@ export default {
     },
     openExternalLink() {
       shell.openExternal(this.module.url);
+    },
+    openScratchpad() {
+      Bus.$emit("open-scratchpad", this.module.id, this.module.name);
     }
   }
 }

@@ -21,7 +21,7 @@ import {ELearn} from './elearn';
 import keytar from 'keytar';
 import {remote, ipcRenderer} from 'electron';
 
-import Modal from './components/Modal.vue'
+import Modal from './components/Modal.vue';
 
 const data = remote.app.getPath("userData");
 let endeavor;
