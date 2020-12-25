@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div class="floating-editor" ref="parent" v-if="show" style="height: 500px;">
+    <div :class="focused ? '' : 'unfocused'" class="floating-editor" ref="parent" v-if="show" style="height: 500px;" @click="$emit('editor-clicked')">
       <movable target="parent">
         <div class="draggable">
           <div>
@@ -153,7 +153,7 @@ export default {
       editorChange: false,
     };
   },
-  props: ['value', 'title', 'show'],
+  props: ['value', 'title', 'show', 'focused'],
   components: {
     EditorContent,
     EditorMenuBar,
