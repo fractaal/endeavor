@@ -368,6 +368,7 @@ body {
 }
 
 .floating-editor {
+  transition: filter 0.2s;
   z-index: 5;
   background-color: var(--scratchpad-background);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
@@ -377,6 +378,10 @@ body {
   max-height: 50vh;
   resize: vertical;
   overflow-y: auto;
+}
+
+.floating-editor.unfocused {
+  filter: saturate(0.75) brightness(0.5);
 }
 
 .menubar {
