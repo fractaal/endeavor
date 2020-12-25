@@ -88,11 +88,11 @@ body {
 }
 
 .dark-theme hr {
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.02);
 }
 
 .light-theme hr {
-  border: 1px solid rgba(2,2,2,0.1);
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .emptylistplaceholder {
@@ -230,6 +230,10 @@ body {
   padding: 30px 20px 10px 20px;
   text-align: center;
   font-weight: 300;
+}
+
+.sidebar hr {
+  margin: 20px 0 20px 0;
 }
 
 .sidebarfooter {
