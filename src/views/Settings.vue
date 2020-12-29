@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div class="settingsHighlight" style="margin-left: 50px; margin-right: 50px; margin-top: 25px; margin-bottom: 10px; max-height: 70vh;">
+    <div class="header">
+      <h1 class="light">SETTINGS</h1>
+    </div>
+    <div class="content settingsHighlight">
+      <div class="centered">
+        <img src="@/assets/icon_bw.png" class="logo"/>
+        <h1 class="light">ENDEAVOR {{require('electron').remote.app.getVersion()}}</h1>
+      </div>
       <h3 class="nospacing" style="margin-left: 10px; font-weight: 200;">APPEARANCE</h3>
       <hr>
       <div style="display: flex; align-items: center;">

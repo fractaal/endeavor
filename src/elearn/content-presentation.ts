@@ -12,6 +12,12 @@ import updateQueryString from './update-query-string';
 export function transformHtml(html: string, token: string, changeBaseUrl?: boolean) {
   const $ = cheerio.load(html);
 
+  // Overwrite all classes and styles
+  $('*').each(function() {
+    $(this).attr("class", "");
+    $(this).attr("style", "")
+  });
+
   $('img').each(function() {
     const oldSrc = $(this).attr("src");
     const newSrc = updateQueryString("token", token, changeBaseUrl ? oldSrc.replace("pluginfile", "webservice/pluginfile") : oldSrc);

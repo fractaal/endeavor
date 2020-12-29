@@ -1,11 +1,11 @@
 <template>
   <div>
     <loader v-if="!module" :text="`Loading module`"/>
-    <div v-else style="margin-left: 50px; margin-top: 10px; margin-bottom: 10px; margin-right: 50px;">
-      <div style="display: flex; justify-content: space-between;">
+    <div v-else>
+      <div class="header">
         <div style="max-width: 50%;">
-          <h1 class="nospacing">{{module.name}}</h1> 
-          <p class="nospacing">{{module['modnameformatted']}}</p>
+          <h1 class="light nospacing no-overflow">{{module.name.toUpperCase()}}</h1> 
+          <p class="light nospacing">{{module['modnameformatted'].toUpperCase()}}</p>
         </div>
         <div style="display: flex;">
           <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
@@ -14,7 +14,7 @@
           <EndeavorButton @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
         </div>
       </div>
-      <div style="display: flex; justify-content: space-between">
+      <div class="content">
         <div>
           <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
           <div class="badge" v-if="module.timelimitformatted">{{module.timelimitformatted}}</div>
@@ -25,7 +25,7 @@
       </div>
       <hr>
     </div>
-    <div style="margin-left: 50px; margin-right: 50px; overflow-y: scroll; max-height: calc(100vh - 300px);">
+    <div>
       <div class="level" v-if="module.intro">
         <p v-html="module.intro"/>
         <br>

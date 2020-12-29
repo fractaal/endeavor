@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
 
+:root {
+  --nav-bar-size: 75px;
+}
+
 .floating {
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
 }
@@ -50,6 +54,7 @@
 }
 
 .windowbuttons {
+  background-color: var(--background);
   -webkit-app-region: drag;
   -webkit-user-select: none;
   display: flex;
@@ -58,6 +63,7 @@
 }
 
 .windowbutton {
+  z-index: 70;
   transition: 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   -webkit-app-region: no-drag;
   padding: 7px 17px 7px 17px;
@@ -105,21 +111,16 @@ body {
 }
 
 .userpicture {
+  margin: 50px 0 20px 0;
+  width: calc(var(--nav-bar-size)/1.5);
   border-radius: 50%;
 }
 
 .cardlist {
-  overflow-y: scroll;
-  max-height: 75vh; 
-  margin-left: 25px; 
-  margin-right: 25px;
+
 }
 
 .compactcardlist {
-  max-height: 75vh;
-  overflow-y: auto;
-  margin-left: 25px; 
-  margin-right: 25px;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
@@ -148,22 +149,20 @@ body {
 }
 
 .light-theme {
-  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
   --foreground: black;
-  --background: #cacaca;
+  --background: #dcdcdc;
   --sidebar: #e9e9e9;
-  --card: #e0e0e0;
-  --cardDarker: #e0e0e0;
+  --card: #ededed;
+  --cardDarker: #eeeeee;
   --gradient1: #680054;
   --gradient2: #F05661;
   --highlight: #e7e7e7;
   --highlight-lighter: #d6d6d6;
-  --topbar-color: #eeeeee;
+  --topbar-color: linear-gradient(180deg, rgb(68, 0, 102) 0%, rgb(92, 90, 191) 100%);
   --scratchpad-background: #fdfdfd;
 }
 
 .dark-theme {
-  transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1) !important;
   --foreground: white;
   --background: #071829;
   --sidebar: #102132;
@@ -173,13 +172,17 @@ body {
   --gradient2: #F05661;
   --highlight: #102336;
   --highlight-lighter: #0e1d2e;
-  --topbar-color: #112b46;
+  --topbar-color: linear-gradient(180deg, rgba(104,0,84,1) 0%, rgba(240,86,97,1) 100%);
   --scratchpad-background: #1b3755;
+}
+
+.light-theme .navbar-button *, .light-theme .navbar-item * {
+  color: white;
 }
 
 .bar {
 	background: rgba(255,255,255,0.025);
-  margin: 0px 20px 0px 20px;
+  margin: 0px 10px; 
   padding: 0;
 }
 
@@ -194,13 +197,10 @@ body {
   color: var(--foreground);
 }
 
-.loginBackground {
+.app {
   background-color: var(--background);
   height: 100vh;
-  /*
-  background-image: url("gradient-01.png");
-  background-attachment: fixed;
-  background-size: 1500px;*/
+  width: 100vw;
 }
 
 .background {
@@ -258,13 +258,13 @@ body {
 .cardUpper {
   background-color: var(--card);
   padding: 15px 20px 15px 20px;
-  margin: 20px 20px 20px 20px; 
+  margin: 20px 10px; 
 }
 
 .cardLower {
   background-color: var(--cardDarker);
   padding: 15px 20px 15px 20px;
-  margin: 20px 20px 20px 20px;
+  margin: 20px 10px; 
 }
 
 .level {
@@ -342,14 +342,15 @@ body {
   padding: 20px 30px;
 }
 
-.settingsHighlight>div {
+
+.settingsHighlight>div:not(:first-child) {
   transition: all 0.1s;
   border-radius: 10px;  
   padding: 50px;
   margin: 10px 0px 10px 0px;
 }
 
-.settingsHighlight>div:nth-of-type(odd) {
+.settingsHighlight>div:nth-of-type(odd):not(:first-child) {
   background-color: var(--highlight);
 }
 
@@ -373,7 +374,7 @@ body {
 
 .floating-editor {
   transition: filter 0.2s;
-  z-index: 5;
+  z-index: 100;
   background-color: var(--scratchpad-background);
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
   padding: 20px;
@@ -486,6 +487,11 @@ button.transparent:hover {
 
 input.transparent:hover {
   background-color: rgba(0,0,0,0.4); 
+}
+
+input[type="text"].seamless {
+  background-color: rgba(255,255,255,0);
+  font-size: 24pt;
 }
 
 /* Fancy animations! */
@@ -602,21 +608,35 @@ input.transparent:hover {
 
 
 /* Fancy scrollbar! */
-::-webkit-scrollbar-track
-{
-  background-color: var(--background);
+::-webkit-scrollbar {
+  width: 30px;
+  height: 18px;
+}
+::-webkit-scrollbar-thumb {
+  height: 6px;
+  border: 9px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 14px;
+  background-color: rgba(170, 170, 170, 0.25);
+  box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+}
+.light-theme ::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.5);
 }
 
-::-webkit-scrollbar
-{
-	width: 10px;
-	background-color: var(--cardDarker);
+.dark-theme ::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.5);
 }
-
-::-webkit-scrollbar-thumb
-{
-  background-color: var(--highlight);	
-  border-radius: 5px;
+::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color: rgba(255, 255, 255, 0.089);
 }
 
 /* Toggle switches! */
@@ -684,4 +704,211 @@ input.transparent:hover {
   transition: .35s cubic-bezier(0.785, 0.135, 0.150, 0.860);
   box-shadow: inset 0 0 0 2px rgba(0,0,0,.05);
   border-radius: 40px;
+}
+
+.navbar-picture {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  transition: width 150ms ease;
+  top: 0;
+  z-index: 10;
+  position: fixed;
+  background: var(--topbar-color);
+  width: var(--nav-bar-size);
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.navbar-extra-info {
+  display: none;
+}
+
+.navbar:hover {
+  width: calc(var(--nav-bar-size) * 4);
+}
+
+.navbar:hover .navbar-item {
+  width: calc(var(--nav-bar-size) * 4);
+}
+
+.navbar:hover .link-text {
+  filter: opacity(1);
+  display: block;
+}
+
+.navbar:hover .navbar-extra-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.link-text {
+  transition: all 200ms;
+  margin-left: 15px;
+  filter: opacity(0);
+  display: none;
+}
+
+.navbar-item {
+  background-color: rgba(0,0,0,0.125);
+  display: flex;
+  align-items: center;
+}
+
+.navbar-item:nth-child(2) {
+  margin-top: 20px;
+}
+.navbar-item:last-child {
+  margin-top: auto;
+}
+
+.navbar-button {
+  transition: all 0.2s;
+  font-size: 20px;
+  background-color: rgba(0,0,0,0);
+  width: var(--nav-bar-size);
+  height: 75px;
+
+  outline: none;
+  border: none;
+}
+
+.navbar-button * {
+  transition: all 0.2s;
+}
+
+.navbar-button:hover {
+  background-color: rgba(255,255,255,0.15);
+  font-size: 1.5rem;
+}
+
+.navbar-button:active, .navbar-button:active * {
+  background-color: var(--foreground);
+  color: var(--background);
+  font-size: 0.8rem;
+}
+
+.view {
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
+  margin-left: var(--nav-bar-size);
+  padding: 0px 40px 0px 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 9;
+  position: fixed;
+  height: 70px;
+  width: calc(100vw);
+  left: var(--nav-bar-size);
+  background-color: var(--background);
+  box-shadow: 0px 0px 10px 10px var(--background);
+  padding: 30px 40px;
+}
+
+.header>*:not(:first-child) {
+  margin: 0 20px;
+}
+
+.header>*:last-child {
+  margin-right: 17.5rem;
+}
+
+.content {
+  padding-top: 130px;
+}
+
+.light {
+  font-weight: 300;
+}
+
+.logo {
+  width: 300px;
+  margin: -20px 0 -50px 0;
+}
+
+.light-theme .logo, .light-theme .splash-logo, .light-theme .settle {
+  filter: invert() opacity(1);
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.splash-logo {
+  outline: 1px solid transparent;
+  animation: bobbing 2s cubic-bezier(0.77, 0, 0.175, 1) alternate infinite;
+  width: 500px;
+  margin: 5vw 0 -25px 0;
+}
+
+.settle {
+  outline: 1px solid transparent;
+  width: 500px;
+  margin: 5vw 0 -25px 0;
+  animation: settle 2s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.no-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lesson-or-book-view {
+  display: flex;
+}
+
+.lesson-or-book-view>*:first-child {
+  max-width: calc(85vw - var(--nav-bar-size) - 5rem);
+  overflow: scroll;
+}
+
+.lesson-or-book-view>*:nth-child(2) {
+  max-width: 15vw;
+}
+
+.table-of-contents {
+  width: 20rem;
+  position: fixed;
+  right: 50px;
+}
+
+@keyframes bobbing {
+  0% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1.25);
+  }
+}
+
+@keyframes settle {
+  0% {
+    transform: scale(1.75);
+  }
+
+  100% {
+    transform: scale(0.95);
+  }
 }

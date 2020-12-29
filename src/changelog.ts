@@ -1,10 +1,6 @@
 export default [
   {
-    title: "📝 Scratchpad",
-    text: "Write down notes for specific activities in Endeavor seamlessly!",
+    title: "✨ User Interface Overhaul",
+    text: "Sleeker, cleaner, and faster!",
   },
-  {
-    title: "⚙ Small UI/UX changes",
-    text: "Changed the sidebar layout!"
-  }
 ]
