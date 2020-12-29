@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
-      <div style="max-width: 50%;">
-        <h1 class="nospacing">{{course.displayname}}</h1> 
-      </div>
-      <div style="display: flex;">
-        <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
-      </div>
+    <div class="header">
+      <h1 class="light">{{course.displayname}}</h1> 
+      <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
     </div>
-    <div class="cardlist">
+    <div class="content">
       <transition-group name="transition">
         <card v-for="section in sections" :key="section.section"
           :title="section.name"

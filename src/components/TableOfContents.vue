@@ -1,7 +1,7 @@
 <template>
-  <div style="display: block; margin: 20px 10px; overflow-x: hidden;">
+  <div class="table-of-contents">
     <h3 class="nospacing" style="font-weight: 300; margin: 10px;">OUTLINE</h3>
-    <div style="max-height: 60vh; overflow-y: auto; overflow-x: hidden;">
+    <div style="max-height: 80vh; overflow-y: auto; overflow-x: hidden;">
       <EndeavorButton v-for="(item, index) in list" :key="item" :styling="activeitem == index ? 'active' : ''" @click="emitNavigationEvent(index)">{{index+1}}. {{item}}</EndeavorButton>
     </div>
   </div>

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 style="margin-left: 50px; margin-bottom: 0;">Timeline</h1>
-    <p :class="dayOfTheWeekStyling" style="margin-left: 50px; margin-top: 0; font-weight: 200;">Today is {{dayOfTheWeek}}.</p>
-    <div class="cardlist">
-
+    <div class="header">
+      <h1 class="light">TIMELINE</h1>
+    </div>
+    <div class="content">
       <transition name="transition">
         <div class="nospacing emptylistplaceholder" v-if="timeline.length == 0 && !isLoading">
           <fai size="10x" icon="check-circle" />
@@ -11,8 +11,7 @@
           <p>Time to sit back and relax.</p>
         </div>
       </transition>
-
-      <transition-group name="transition" mode="out-in" style="min-height: 80vh;">
+      <transition-group name="transition" mode="out-in">
         <card v-for="event in timeline" :key="event.instance"
         :title="event.name" 
         :subtitle="event.course.fullnamedisplay" 

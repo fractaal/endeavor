@@ -2,16 +2,15 @@
   <div>
     <Loader v-if="!section"/>
     <div v-else>
-      <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
-        <div style="max-width: 50%;">
-          <h1 class="nospacing">{{section.name}}</h1> 
-        </div>
-        <div style="display: flex;">
+      <div class="header">
+        <h1 class="light">{{section.name.toUpperCase()}}</h1> 
+        <div>
           <EndeavorButton @click="openExternalLink">🔍 Open in eLearn</EndeavorButton>
           <EndeavorButton @click="$router.push('/home/courses/'+section.courseid)">📚 See course</EndeavorButton>
         </div>
+
       </div>
-      <div class="cardlist">
+      <div class="content">
         <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
           <card v-for="module in section.modules" :key="module.id"
             :title="module.name"

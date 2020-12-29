@@ -6,7 +6,7 @@
       <p>Something scary happened while trying to load this book.<br>Trying again might help!</p>
     </div>
     <Loader v-else-if="pages.length == 0" text="LOADING BOOK..."/>
-    <div v-else style="display: grid; grid-template-columns: 8fr 2fr;">
+    <div v-else class="lesson-or-book-view">
       <div>
         <div style="display: flex; align-items: center;">
           <div class="nospacing" style="font-size: 1.2em; margin-right: 20px;">
@@ -15,7 +15,7 @@
           </div>
           <h2 style="display: inline-block; font-weight: 400;">{{activePage.title.toUpperCase()}}</h2> 
         </div>
-        <div class="level" :key="activePage.title" style="max-height: 60vh; overflow-y: auto; flex-direction: column;">
+        <div :key="activePage.title">
           <p v-html="activePage.content"></p>
           <span style="min-height: 25px;"></span>
         </div>

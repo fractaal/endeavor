@@ -1,5 +1,5 @@
 <template>
-  <div style="position: fixed; pointer-events: none; width: 100vw; height: 100vh;">
+  <div style="position: fixed; pointer-events: none; width: 100vw; height: 100vh; z-index: 100;">
     <transition-group name="modal">
       <floating-editor v-for="scratchpad in scratchpads" :key="scratchpad.id"
         :show="true"
@@ -8,7 +8,7 @@
         v-model="scratchpad.content"
         @close="closeScratchpad(scratchpad.id)"
         style="pointer-events: auto !important;"
-        :style="scratchpad.focused ? 'z-index: 10' : 'z-index: 1'"
+        :style="scratchpad.focused ? 'z-index: 150' : 'z-index: 100'"
         @editor-clicked="focusScratchpad(scratchpad.id)"
       />
     </transition-group>

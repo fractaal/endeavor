@@ -1,14 +1,10 @@
 <template>
   <div>
-    <div style="margin: 25px 50px 10px 50px; display: flex; justify-content: space-between;">
-      <div style="max-width: 50%;">
-        <h1 class="nospacing">{{hiddenCoursesView ? 'Your Hidden Courses': 'Your Courses'}}</h1> 
-      </div>
-      <div style="display: flex;">
-        <EndeavorButton @click="toggleHiddenCoursesView">{{hiddenCoursesView ? '👓 Back to normal' : '🕶 Show hidden'}}</EndeavorButton>
-      </div>
+    <div class="header">
+      <h1 class="light">{{hiddenCoursesView ? 'COURSES - HIDDEN': 'COURSES'}}</h1> 
+      <EndeavorButton @click="toggleHiddenCoursesView">{{hiddenCoursesView ? '👓 Back to normal' : '🕶 Show hidden'}}</EndeavorButton>
     </div>
-    <div>
+    <div class="content">
       <transition-group name="transition" class="compactcardlist">
         <card v-for="course in courses" :key="course.id"
             :title="course.displayname"
@@ -21,10 +17,9 @@
             :styling="course.styling"
             />
       </transition-group>
+      <Loader v-if="coursesLoading"/>
     </div>
-    <Loader v-if="coursesLoading"/>
   </div>
-
 </template>
 
 <script>

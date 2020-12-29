@@ -6,7 +6,7 @@
       <p>There's nothing in this lesson yet, or you might not have the permissions to do so.</p>
     </div>
     <Loader v-else-if="pages.length == 0" text="LOADING LESSON..."/>
-    <div v-else style="display: grid; grid-template-columns: 8fr 2fr;">
+    <div v-else class="lesson-or-book-view">
       <div>
         <div style="display: flex; align-items: center;">
           <div class="nospacing" style="font-size: 1.2em; margin-right: 20px;">
@@ -15,9 +15,8 @@
           </div>
           <h2 style="display: inline-block; font-weight: 400;">{{activePage.page.title.toUpperCase()}}</h2> 
         </div>
-        <div class="level" :key="activePage.page.title" style="max-height: 60vh; overflow-y: auto; flex-direction: column;">
+        <div :key="activePage.page.title">
           <p v-html="activePage.page.contents"></p>
-          <span style="min-height: 25px;"></span>
         </div>
         <br>
         <div style="position: fixed; bottom: 0;">
