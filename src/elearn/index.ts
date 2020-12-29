@@ -542,7 +542,7 @@ export class ELearn implements eLearnInterface {
       const usablePageMetadata = pageMetadata.filter(page => page.page.typestring == "Content");
       finalPageData = await Promise.all(usablePageMetadata.map(async pageMetadata => {
         const data = await this.wsFunction("mod_lesson_get_page_data", {lessonid, pageid: pageMetadata.page.id});
-        pageMetadata.page.contents = data.page.contents;
+        pageMetadata.page.contents = transformHtml(data.page.contents, session.token, true);
         pageMetadata.page.title = data.page.title;
         return pageMetadata;
       }))
@@ -594,7 +594,7 @@ export class ELearn implements eLearnInterface {
         client(modified.url),
         Promise.all(modified.subitems.map(item => parseStructureNode(raw, item)))
       ])
-      modified.content = res.body;
+      modified.content = transformHtml(res.body, session.token, true);
       return modified;
     }
 
