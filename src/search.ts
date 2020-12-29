@@ -22,7 +22,7 @@ export default function search(term) {
   if (!fuse) {
     fuse = new Fuse(sharedStore.eLearn.cache.coursesMetadata, options); 
   }
-  const rawResult = fuse.search(term);
+  const rawResult = fuse.search(term, {limit: 100});
 
   const courseResults = [];
   const sectionResults = [];
