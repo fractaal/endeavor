@@ -1,8 +1,9 @@
 <template>
-  <div style="margin: 0; padding: 0; width: 100vw; height: 100vh;">
-    <loader :text="sharedStore.fullPageLoadText"/>
-    <div style="width: 100vw; display: flex; justify-content: center;">
-      <div style="max-height: 200px; overflow: hidden;">
+  <div style="margin: 0; padding: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; align-items: center;">
+    <img src="@/assets/icon_bw.png" :class="classToApply"/>
+    <div style="width: 100vw; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+      <h1 class="light shimmer">{{sharedStore.fullPageLoadText}}</h1>
+      <div style="max-height: 125px; overflow: hidden;">
         <transition-group name="transition" mode="out-in">
           <p v-for="logItem in reverseLog" :key="logItem" style="text-align: center;">{{logItem}}</p>
         </transition-group>
@@ -12,23 +13,27 @@
 </template>
 
 <script>
-import Loader from '@/components/Loader.vue';
+// import Loader from '@/components/Loader.vue';
 import sharedStore from '../store';
 
 export default {
   name: "FullPageLoad",
-  components: {
-    Loader,
-  },
   data() {
     return {
       sharedStore,
+      classToApply: "",
     }
   },
   computed: {
     reverseLog: function() {
       return [...this.sharedStore.fullPageLoadLog].reverse();
     }
+  },
+  mounted() {
+    this.classToApply = "settle";
+    setTimeout(() => {
+      this.classToApply = "splash-logo";
+    }, 2000)
   }
 }
 </script>

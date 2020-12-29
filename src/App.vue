@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="sharedStore.settings.theme" class="fullPage loginBackground">
+  <div :class="sharedStore.settings.theme" class="app">
     <transition name="modal">
       <Modal v-if="this.showModal" :show="this.showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
     </transition>

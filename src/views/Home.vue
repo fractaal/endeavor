@@ -1,37 +1,80 @@
 <template>
   <div>
+    <scratchpads/>
+    <div class="windowbuttons">
+      <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
+      <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
+      <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+    </div>
+    <!--
     <div class="topbar">
-      <div class="windowbuttons">
-        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
-        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
-        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
-      </div>
+
       <div class="topbarelements">
-        <div v-if="sharedStore.session">
-          <img class="userpicture" :src="sharedStore.session.userpictureurl" style="width: 60px; margin-right: 20px;"/>
-        </div>
-        <!-- Name -->
+
+
         <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
           <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
           <p style="margin: 0;">Endeavor <b class="attention">BETA</b> {{require('electron').remote.app.getVersion()}}</p>
         </div>
-        <!-- Buttons --> 
+
         <button class="roundButton" @click="$router.go(-1)"><fai icon="arrow-left"/></button>
         <button style="margin-left: 10px; margin-right: 20px;" class="roundButton" @click="$router.go(1)"><fai icon="arrow-right"/></button>
-        <!-- Search bar -->
+
         <form @submit="startSearch" class="searchbar">
           <input type="text" v-model="search" placeholder="Search your courses..." style="width: 30vw;"/>
           <fai class="searchicon" icon="search"/>
         </form>
       </div>
     </div>
+
+    -->
+    <nav class="navbar">
+      <div class="navbar-picture" v-if="sharedStore.session">
+        <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
+      </div>
+      <div class="navbar-item">
+        <button class="navbar-button" @click="navTo('/search')">
+          <fai icon="search"/>
+        </button>
+        <h3 class="light link-text">SEARCH</h3>
+      </div>
+
+      <div class="navbar-item">
+        <button class="navbar-button" @click="navTo('/home')">
+          <fai icon="stream"/>
+        </button>
+        <h3 class="light link-text">TIMELINE</h3>
+      </div>
+
+      <div class="navbar-item">
+        <button class="navbar-button" @click="navTo('/home/courses')">
+          <fai icon="graduation-cap"/>
+        </button>
+        <h3 class="light link-text">COURSES</h3>
+      </div>
+
+      <div class="navbar-item">
+        <button class="navbar-button" @click="toggleGlobalScratchpad()">
+          <fai icon="scroll"/>
+        </button>
+        <h3 class="light link-text">SCRATCHPAD</h3>
+      </div>
+      <div class="navbar-item">
+        <button class="navbar-button" @click="navTo('/settings')">
+          <fai icon="cog"/>
+        </button>
+        <h3 class="light link-text">SETTINGS</h3>
+      </div>
+    </nav>
+    <transition name="transition" mode="out-in">
+      <keep-alive>
+        <router-view class="view"></router-view>
+      </keep-alive>
+    </transition>
+    <!--
     <div style="display: grid; grid-template-columns: 2fr 10fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
       <div class="sidebar">
-        <div style="padding-top: 75px;"></div>
-        <h3 @click="navTo('/home')">🕐 Timeline</h3>
-        <h3 @click="navTo('/home/courses')">📚 Courses </h3>
-        <h3 @click="toggleGlobalScratchpad()">📝 Scratchpad</h3>
-        <h3 @click="navTo('/settings')">⚙  Settings </h3>
+
         
         <hr>
         <h3 @click="navTo('/changelog')">✨ What's New? </h3>
@@ -57,15 +100,10 @@
         </div>
       </div>  
       <div style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
-        <transition name="transition" mode="out-in">
-          <keep-alive>
-            <router-view></router-view>
-          </keep-alive>
-        </transition>
       </div>
-      <!-- scratchpads -->
-      <scratchpads/>
+      
     </div>
+    -->
   </div>
 </template>
 
@@ -113,22 +151,6 @@ export default {
     this.fullNamePascalCased = capitalize(this.sharedStore.session.fullname);
     this.debugData = sharedStore.eLearn.debugData();
 
-  },
-  watch: {
-    search: function(value) {
-      this.sharedStore.search = value;
-      if (this.$route.name == "Search") {
-        if (this.sharedStore.searchTimer) {
-          clearTimeout(this.sharedStore.searchTimer);
-          this.sharedStore.userDoneTypingOnSearch = false;
-          this.sharedStore.searchTimer = null;
-        }
-        this.sharedStore.searchTimer = setTimeout(() => {
-          this.sharedStore.userDoneTypingOnSearch = true;
-          this.sharedStore.searchResults = this.sharedStore.searchFunction(this.sharedStore.search); 
-        }, 500);
-      }
-    },
   },
   methods: {
     navTo(location) {

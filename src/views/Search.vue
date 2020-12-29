@@ -1,32 +1,40 @@
 <template>
   <div>
-    <transition-group name="transition" mode="out-in">
-      <loader v-if="!sharedStore.userDoneTypingOnSearch" :text="`Waiting for you to stop typing...`" :key="`loader`"/>
-      <div v-else :key="`content`" >
-        <h1 style="margin-left: 50px;">Results for {{sharedStore.search}}</h1>
-        <div class="cardlist">
-          <transition-group name="transition">
-            <card v-for="module in sharedStore.searchResults.moduleResults" :key="module.id"
-                :title="module.name"
-                :subtitle="module.modnameformatted"
-                :rightTitle="module.duedateformatted"
-                :rightSubtitle="module.duedatedistanceformatted"
-                :content="module.description"
-                :styling="module.styling"
-                :internalLink="`/modules/${module.courseid}/${module.id}`"
-              />
-          </transition-group>
-          <hr>
-          <transition-group name="transition">
-            <card v-for="section in sharedStore.searchResults.sectionResults" :key="section.id"
-              :title="section.name"
-              :content="section.summary"
-              :internalLink="`/home/courses/${section.courseid}/${section.section}`"
-              />
-          </transition-group>
-        </div>
+    <div class="header">
+      <div style="display: flex;">
+        <h1 class="light">SEARCH</h1>
+        <input ref="search" v-model="search" type="text" placeholder="TYPE HERE..." class="seamless"/>
       </div>
-    </transition-group>
+    </div>
+    <div class="content">
+      <transition-group name="transition" mode="out-in">
+        <loader v-if="!sharedStore.userDoneTypingOnSearch" :text="`Waiting for you to stop typing...`" :key="`loader`"/>
+        <div v-else :key="`content`" >
+          <div class="cardlist">
+            <transition-group name="transition">
+              <card v-for="module in sharedStore.searchResults.moduleResults" :key="module.id"
+                  :title="module.name"
+                  :subtitle="module.modnameformatted"
+                  :rightTitle="module.duedateformatted"
+                  :rightSubtitle="module.duedatedistanceformatted"
+                  :content="module.description"
+                  :styling="module.styling"
+                  :internalLink="`/modules/${module.courseid}/${module.id}`"
+                />
+            </transition-group>
+            <hr>
+            <transition-group name="transition">
+              <card v-for="section in sharedStore.searchResults.sectionResults" :key="section.id"
+                :title="section.name"
+                :content="section.summary"
+                :internalLink="`/home/courses/${section.courseid}/${section.section}`"
+                />
+            </transition-group>
+          </div>
+        </div>
+      </transition-group>
+    </div>
+
   </div>
 </template>
 
@@ -43,9 +51,31 @@ export default {
   },
   data() {
     return {
-      sharedStore
+      sharedStore,
+      search: ""
     }
   },
+  watch: {
+    search: function(value) {
+      this.sharedStore.search = value;
+      if (this.$route.name == "Search") {
+        if (this.sharedStore.searchTimer) {
+          clearTimeout(this.sharedStore.searchTimer);
+          this.sharedStore.userDoneTypingOnSearch = false;
+          this.sharedStore.searchTimer = null;
+        }
+        this.sharedStore.searchTimer = setTimeout(() => {
+          this.sharedStore.userDoneTypingOnSearch = true;
+          this.sharedStore.searchResults = this.sharedStore.searchFunction(this.sharedStore.search); 
+        }, 500);
+      }
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.$nextTick(() => {vm.$refs.search.focus()})
+    })
+  }
 }
 </script>
 
