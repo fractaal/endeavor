@@ -4,6 +4,7 @@ import { Event } from './Timeline';
 import { Discussion } from './Discussion';
 import { Page } from './Page';
 import { BookPage } from './BookPage';
+import { PagesData } from '@/elearn/objects/page-data';
 
 export interface eLearnSession {
   token: string;
@@ -33,8 +34,8 @@ export interface eLearnInterface {
   debugData(): Record<string,any>;
   getActualGrade(type: string, id: number): Promise<number>;
   getForumDiscussions(forumid: string): Promise<Discussion[]>;
-  getLessonPages(lessonid: string): Promise<Page[]>;
-  getBookPages(courseid: string, bookid: string): Promise<BookPage[]>;
+  getLessonPages(lessonid: string): Promise<PagesData>;
+  getBookPages(courseid: string, bookid: string): Promise<PagesData>;
   cache: {
     courses: Section[][];
     coursesMetadata: CourseMetadata[];
