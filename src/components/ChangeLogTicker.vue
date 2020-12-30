@@ -4,7 +4,7 @@
     <br>
     <transition name="ticker" mode="out-in">
       <div :key="title">
-        <h2 class="nospacing attention">{{title}}</h2>
+        <h2 class="nospacing attention">{{title.toUpperCase()}}</h2>
         <p class="nospacing">{{text}}</p>
       </div>
 

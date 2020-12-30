@@ -32,10 +32,10 @@
       </div>
       
       <!-- If the module is a lesson... -->
-      <LessonView v-if="module.modname =='lesson'" :lessonid="module.instance"/>
+      <LessonView v-if="module.modname =='lesson'" :course="$route.params.course" :type="'LESSON'" :id="module.instance"/>
 
       <!-- If the module is a book... -->
-      <BookView v-if="module.modname == 'book'" :bookid="module.instance" :courseid="$route.params.course"/>
+      <LessonView v-if="module.modname =='book'" :course="$route.params.course" :type="'BOOK'" :id="module.instance"/>
 
       <!-- If the module is a page... --> 
       <div v-if="module.modname == 'page'" >
@@ -80,10 +80,9 @@ import LessonView from './LessonView.vue';
 import Card from './Card.vue';
 import Loader from './Loader.vue';
 import EndeavorButton from './EndeavorButton.vue';
-
 import Grade from './Grade.vue'; 
+
 import { shell } from 'electron';
-import BookView from './BookView.vue';
 import { Bus } from '@/main';
 
 
@@ -97,7 +96,6 @@ export default {
     Discussions,
     ContentView,
     LessonView,
-    BookView,
   },
   data() {
     return {
@@ -122,6 +120,11 @@ export default {
       // Get forum discussions if this specific module is of type forum.
       if (this.module.modname == "forum") {
         this.discussions = await this.sharedStore.eLearn.getForumDiscussions(this.module.id);
+      }
+
+      // Tell LessonView / BookView to get lesson/book data if this specific module is of type lesson/book. 
+      if (this.module.modname == "book" || this.module.modname == "lesson") {
+        Bus.$emit('get-book-or-lesson');
       }
     },
     openExternalLink() {

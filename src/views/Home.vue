@@ -32,7 +32,21 @@
       <div class="navbar-picture" v-if="sharedStore.session">
         <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
       </div>
+
       <div class="navbar-item">
+        <button class="navbar-button" @click="$router.go(1)">
+          <fai icon="arrow-right"/>
+        </button>
+        <h3 class="light link-text">NEXT</h3>
+      </div>
+      <div class="navbar-item">
+        <button class="navbar-button" @click="$router.go(-1)">
+          <fai icon="arrow-left"/>
+        </button>
+        <h3 class="light link-text">BACK</h3>
+      </div>
+
+      <div class="navbar-item" style="margin-top: 50px;">
         <button class="navbar-button" @click="navTo('/search')">
           <fai icon="search"/>
         </button>
@@ -59,6 +73,14 @@
         </button>
         <h3 class="light link-text">SCRATCHPAD</h3>
       </div>
+
+      <div class="navbar-item">
+        <button class="navbar-button" @click="navTo('/changelog')">
+          <fai icon="flag"/>
+        </button>
+        <h3 class="light link-text">CHANGELOG</h3>
+      </div>
+
       <div class="navbar-item">
         <button class="navbar-button" @click="navTo('/settings')">
           <fai icon="cog"/>
