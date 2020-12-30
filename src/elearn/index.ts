@@ -26,6 +26,9 @@ import { Discussion } from '@/interfaces/Discussion';
 import { Page } from '@/interfaces/Page';
 import { BookPage } from '@/interfaces/BookPage';
 
+// Types
+import { PagesData as PagesData } from './objects/page-data';
+
 // Enums
 enum Urgency {
   SAFE = "safe",
@@ -535,20 +538,32 @@ export class ELearn implements eLearnInterface {
     }
   }
 
-  async getLessonPages(lessonid: string): Promise<Page[]> {
-    let finalPageData: Page[];
+  async getLessonPages(lessonid: string, updateFunction = (msg: string) => console.log(msg)): Promise<PagesData> {
+    const finalPageData: PagesData = [];
     try {
+      // Get raw Moodle response and then filter only the content pages (ones with HTML on them)
+      updateFunction('Retrieving page metadata...');
       const pageMetadata: Page[] = (await this.wsFunction('mod_lesson_get_pages', {lessonid})).pages;
       const usablePageMetadata = pageMetadata.filter(page => page.page.typestring == "Content");
-      finalPageData = await Promise.all(usablePageMetadata.map(async pageMetadata => {
+
+      // Get page data and then format this data onto the PageData array
+      await Promise.all(usablePageMetadata.map(async (pageMetadata, idx) => {
+        updateFunction(`Retrieving page data (${idx+1} of ${usablePageMetadata.length})`)
         const data = await this.wsFunction("mod_lesson_get_page_data", {lessonid, pageid: pageMetadata.page.id});
+        finalPageData[idx] = {
+          content: transformHtml(data.page.contents, session.token, true),
+          title: data.page.title,
+        };
+        /*
         pageMetadata.page.contents = transformHtml(data.page.contents, session.token, true);
         pageMetadata.page.title = data.page.title;
         return pageMetadata;
+        */
       }))
+
     } catch(err) {
       console.warn(`[elearn-api] Failed to get lesson pages for ID ${lessonid} reason: ${err}`);
-      finalPageData = null;
+      return;
     }
     return finalPageData;
   }
@@ -560,7 +575,7 @@ export class ELearn implements eLearnInterface {
    * @param courseid Course ID. We need this to save a teeny tiny bit of performance.
    * @param bookid Book ID to retrieve.
    */
-  async getBookPages(courseid: string, bookid: string): Promise<BookPage[]> {
+  async getBookPages(courseid: string, bookid: string, updateFunction = (msg: string) => console.log(msg)): Promise<PagesData> {
     const flattenedStructure: BookPage[] = [];
 
     // Function that recursively flattens structure hierarchy. 
@@ -575,6 +590,7 @@ export class ELearn implements eLearnInterface {
 
     // Function that can be called recursively in order to construct the book.
     const parseStructureNode = async (raw, item: BookPage): Promise<BookPage> => {
+      updateFunction(`Getting ${item.title} data...`)
       let data;
       for (const element of raw.contents) {
         try {
@@ -587,14 +603,18 @@ export class ELearn implements eLearnInterface {
           }
         } catch(err) {}
       }
+
       const modified = Object.assign({}, item);
       modified.url = transformUrlWithoutChangingBaseURL(data.fileurl, session.token);
       let res;
+
       [res, modified.subitems] = await Promise.all([
         client(modified.url),
         Promise.all(modified.subitems.map(item => parseStructureNode(raw, item)))
       ])
+
       modified.content = transformHtml(res.body, session.token, true);
+
       return modified;
     }
 
@@ -602,6 +622,7 @@ export class ELearn implements eLearnInterface {
     if (course) {
       let structure: BookPage[];
       let found; 
+      updateFunction(`Parsing book metadata...`);
       try {
         for (const section of course.sections) {
           found = findInArray(section.modules, bookid as unknown as number);
@@ -615,7 +636,16 @@ export class ELearn implements eLearnInterface {
           // Call recursive function parseStructureNode to add content into book structure.
           structure = await Promise.all(structure.map(item => parseStructureNode(found, item)));
           
-          return flattenStructure(structure);
+          const flattened = flattenStructure(structure);
+
+          // Transform structure to generalized PageData then return
+          return flattened.map(bookPage => {
+            return {
+              content: bookPage.content,
+              title: bookPage.title,
+            }
+          });
+
         } else {
           console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - Book not found in course`);
           return null;
