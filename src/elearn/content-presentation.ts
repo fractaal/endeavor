@@ -12,10 +12,24 @@ import updateQueryString from './update-query-string';
 export function transformHtml(html: string, token: string, changeBaseUrl?: boolean) {
   const $ = cheerio.load(html);
 
-  // Overwrite all classes and styles
+  
   $('*').each(function() {
+    // Overwrite all classes and styles
     $(this).attr("class", "");
     $(this).attr("style", "")
+
+    // Check for video tags and set them up properly
+    const data = $(this).data("setup-lazy");
+    if (data) {
+      if (data.techOrder && data.techOrder.indexOf('youtube') !== -1) {
+        $(this).replaceWith(`
+          <iframe width="953" height="536" src="https://www.youtube.com/embed/${data.sources[0].src.split("/").pop()}" frameborder="0"/>
+        `)
+      }
+    }
+    /*
+    <iframe width="953" height="536" src="https://www.youtube.com/embed/r7jVkDfuTRY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    */
   });
 
   $('img').each(function() {
