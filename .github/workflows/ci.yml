@@ -28,4 +28,6 @@ jobs:
           architecture: x64  
       - run: yarn install
       - run: yarn electron:build
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       - run: echo COMPLETE-IS-SUCCESS
