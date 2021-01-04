@@ -1,6 +1,6 @@
 <template>
   <div :class="styling">
-    <div class="cardUpper" style="border-radius: 5px 5px 0px 0px; margin-bottom: 0;">
+    <div class="cardUpper" style="border-radius: 2px 2px 0px 0px; margin-bottom: 0;">
       <div style="display: flex; justify-content: space-between;">
         <div style="display: flex; justify-content: center; align-items: center;">
           <div v-if="pictureurl" style="margin-right: 10px;">
@@ -36,7 +36,7 @@
     <div class="bar" v-if="progress">
       <div class="load" :style="'width:'+progress+'%;'"></div>
     </div>
-    <div class="cardLower" style="border-radius: 0px 0px 5px 5px; margin-top: 0;">
+    <div class="cardLower" style="border-radius: 0px 0px 2px 2px; margin-top: 0;">
       <div style="display: flex; justify-content: space-between;">
         <div style="display: flex;">
           <p style="margin: 0;" v-html="content"></p>

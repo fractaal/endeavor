@@ -268,7 +268,7 @@ body {
 }
 
 .level {
-  border-radius: 10px;
+  border-radius: 2px;
   padding: 10px 25px 10px 25px;
   background-color: var(--highlight-lighter);
   display: flex;
@@ -290,7 +290,7 @@ body {
   box-sizing: border-box;
   outline: none;
   border: 0px solid var(--card);
-  border-radius: 3px;
+  border-radius: 2px;
   font-size: 16px;
   padding: 15px;
   margin: 10px;
@@ -553,7 +553,6 @@ input[type="text"].seamless {
 }
 .transition-leave-active {
   transition: all .125s cubic-bezier(1, 0, 0, 1);
-  position: absolute;
 }
 .transition-enter {
   transform: scale(1) translateY(-200px);
@@ -806,6 +805,8 @@ input[type="text"].seamless {
   max-height: 100vh;
   overflow-y: auto;
   margin-left: var(--nav-bar-size);
+  min-width: calc(100vw - var(--nav-bar-size) - 80px);
+  max-width: calc(100vw - var(--nav-bar-size) - 80px);
   padding: 0px 40px 0px 40px;
 }
 
@@ -815,24 +816,25 @@ input[type="text"].seamless {
   justify-content: space-between;
   z-index: 9;
   position: fixed;
-  height: 70px;
-  width: calc(100vw);
+  height: 60px;
+  width: calc(100vw - var(--nav-bar-size) - 80px);
   left: var(--nav-bar-size);
   background-color: var(--background);
   box-shadow: 0px 0px 10px 10px var(--background);
-  padding: 30px 40px;
+  padding: 50px 40px 0px;
+}
+
+/* Fix weird transforms */
+.transition-enter-active .header, .transition-leave-active .header {
+  left: 0;
 }
 
 .header>*:not(:first-child) {
   margin: 0 20px;
 }
 
-.header>*:last-child {
-  margin-right: 17.5rem;
-}
-
 .content {
-  padding-top: 130px;
+  padding-top: 135px;
 }
 
 .light {
