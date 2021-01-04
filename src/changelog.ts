@@ -12,7 +12,7 @@ export default [
     text: "Various problems with lessons and books. Lessons/books will not hang on the first lesson/book viewed anymore, and their UI has been greatly improved."
   },
   {
-    title: "📷 Pixelated icons fix?",
-    text: "For a long time now, Endeavor's icon (on Windows, at least) looks pixelated on the taskbar. This patch tries to fix that.",
+    title: "✨ Animations Fix",
+    text: "After the new UI update, some animations were a little wonky. They've been fixed!",
   }
 ]
