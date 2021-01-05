@@ -8,24 +8,21 @@
     <Loader v-else-if="pageData.length == 0" :text="loadText"/>
     <div v-else class="lesson-or-book-view">
       <div>
-        <div style="display: flex; align-items: center;">
-          <div class="nospacing" style="font-size: 1.2em; margin-right: 20px;">
-            <h1 style="display: inline-block;">{{activePageNum+1}}</h1>
-            <h3 style="font-weight: 300; display: inline-block;">/{{pageData.length}}</h3>
-          </div>
-          <h2 style="display: inline-block; font-weight: 400;">{{activePage.title.toUpperCase()}}</h2> 
-        </div>
-        <div :key="activePage.title">
-          <p v-html="activePage.content"></p>
-        </div>
-        <br>
-        <div style="position: fixed; bottom: 0;">
-          <div style="display: flex;">
-            <div style="padding: 20px;">
-              <button class="roundButton floating" @click="navigate(-1, true)"><fai icon="arrow-left"/></button>
-              <button style="margin-left: 10px;" class="roundButton floating" @click="navigate(1, true)"><fai icon="arrow-right"/></button>
+        <div class="lesson-view-header">
+          <div>
+            <div class="nospacing" style="font-size: 1.2em; margin-right: 20px;">
+              <h1 style="display: inline-block;">{{activePageNum+1}}</h1>
+              <h3 style="font-weight: 300; display: inline-block;">/{{pageData.length}}</h3>
             </div>
+            <h2 style="display: inline-block; font-weight: 400;">{{activePage.title.toUpperCase()}}</h2> 
           </div>
+          <div>
+            <button class="roundButton floating" @click="navigate(-1, true)"><fai icon="arrow-left"/></button>
+            <button style="margin-left: 10px;" class="roundButton floating" @click="navigate(1, true)"><fai icon="arrow-right"/></button>
+          </div>
+        </div>
+        <div class="lesson-view-content" :key="activePage.title">
+          <p v-html="activePage.content"></p>
         </div>
       </div>
       <TableOfContents :list="navigationList" :activeitem="activePageNum" @navigation="navigate"/>
