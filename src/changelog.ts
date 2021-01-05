@@ -1,18 +1,26 @@
 export default [
   {
-    title: "✨ User Interface Overhaul",
+    title: "🔥 User Interface Overhaul",
     text: "Sleeker, cleaner, and faster!",
   },
   {
-    title: "📹 Videos work!",
-    text: "Videos now work in the lesson/book views!"
+    title: "📃 Context menus!",
+    text: "Context menus now available! Copy, paste and search on Google!"
   },
   {
-    title: "🔧 Fix lesson/book view bugs",
-    text: "Various problems with lessons and books. Lessons/books will not hang on the first lesson/book viewed anymore, and their UI has been greatly improved."
+    title: "🔎 Find text in page via Ctrl+F",
+    text: "Pressing Ctrl+F yields you a find menu that searches in the window!"
   },
   {
     title: "✨ Animations Fix",
     text: "After the new UI update, some animations were a little wonky. They've been fixed!",
+  },
+  {
+    title: "🧭 Navigation bar overflow",
+    text: "The navigation bar on the left now overflows if the buttons go off the screen.",
+  },
+  {
+    title: "📱 UI layout tweaks",
+    text: "Small user interface tweaks!"
   }
 ]
