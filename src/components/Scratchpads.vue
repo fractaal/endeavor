@@ -1,5 +1,5 @@
 <template>
-  <div style="position: fixed; pointer-events: none; width: 100vw; height: 100vh; z-index: 100;">
+  <div class="daemon">
     <transition-group name="modal">
       <floating-editor v-for="scratchpad in scratchpads" :key="scratchpad.id"
         :show="true"
