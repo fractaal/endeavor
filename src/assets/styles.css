@@ -110,12 +110,6 @@ body {
   align-items: center;
 }
 
-.userpicture {
-  margin: 50px 0 20px 0;
-  width: calc(var(--nav-bar-size)/1.5);
-  border-radius: 50%;
-}
-
 .cardlist {
 
 }
@@ -707,10 +701,31 @@ input[type="text"].seamless {
   border-radius: 40px;
 }
 
+.userpicture {
+  transition: all 200ms cubic-bezier(0.19, 1, 0.22, 1);
+  margin: 50px 0 calc((var(--nav-bar-size) * 2) - (var(--nav-bar-size)/1.5)) 0;
+  width: calc(var(--nav-bar-size)/1.5);
+  border-radius: 50%;
+}
+
+.navbar:hover .userpicture {
+  width: calc(var(--nav-bar-size) * 2);
+  margin: 50px 0 0 0;
+}
+
 .navbar-picture {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-bottom: 50px;
+}
+
+.navbar-name { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar ul {
@@ -720,7 +735,7 @@ input[type="text"].seamless {
 }
 
 .navbar {
-  transition: width 150ms ease;
+  transition: width 200ms cubic-bezier(0.19, 1, 0.22, 1);
   top: 0;
   z-index: 10;
   position: fixed;
@@ -893,6 +908,22 @@ input[type="text"].seamless {
   max-width: 15vw;
 }
 
+.lesson-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(85vw - var(--nav-bar-size) - 7.5rem);
+}
+
+.lesson-view-header>* {
+  display: flex;
+  align-items: center;
+}
+
+.lesson-view-header>*:last-child {
+  margin-right: 10px;
+}
+
 .table-of-contents {
   width: 20rem;
   position: fixed;
@@ -902,6 +933,27 @@ input[type="text"].seamless {
 .fill-row {
   width: 100%;
   box-sizing: border-box;
+}
+
+/* Scratchpad-Finder common styles */
+.daemon {
+  transition: all 200ms;
+  position: fixed; 
+  pointer-events: none; 
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}
+
+/* Finder styles */
+.finder-mask-hidden {
+  display: none;
+  pointer-events: none;
+}
+
+.finder-mask-open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
 }
 
 @keyframes bobbing {
