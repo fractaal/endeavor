@@ -5,7 +5,7 @@
 }
 
 .floating {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.45);
 }
 
 .changelog-view {
@@ -110,18 +110,13 @@ body {
   align-items: center;
 }
 
-.userpicture {
-  margin: 50px 0 20px 0;
-  width: calc(var(--nav-bar-size)/1.5);
-  border-radius: 50%;
-}
-
 .cardlist {
 
 }
 
 .compactcardlist {
   display: grid;
+  column-gap: 1em;
   grid-template-columns: 1fr 1fr;
 }
 
@@ -182,7 +177,7 @@ body {
 
 .bar {
 	background: rgba(255,255,255,0.025);
-  margin: 0px 10px; 
+  margin: 0px 0px; 
   padding: 0;
 }
 
@@ -258,13 +253,13 @@ body {
 .cardUpper {
   background-color: var(--card);
   padding: 15px 20px 15px 20px;
-  margin: 20px 10px; 
+  margin: 20px 0px; 
 }
 
 .cardLower {
   background-color: var(--cardDarker);
   padding: 15px 20px 15px 20px;
-  margin: 20px 10px; 
+  margin: 20px 0px; 
 }
 
 .level {
@@ -555,13 +550,13 @@ input[type="text"].seamless {
   transition: all .125s cubic-bezier(1, 0, 0, 1);
 }
 .transition-enter {
-  transform: scale(1) translateY(-200px);
+  transform: translateY(-100px);
   opacity: 0;
 }
 
 .transition-leave-to
 /* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: scale(1) translateY(200px);
+  transform: translateY(100px);
   opacity: 0;
 }
 
@@ -626,6 +621,7 @@ input[type="text"].seamless {
 .dark-theme ::-webkit-scrollbar-thumb {
   background-color: rgba(255,255,255,0.5);
 }
+
 ::-webkit-scrollbar-button {
   width: 0;
   height: 0;
@@ -705,10 +701,31 @@ input[type="text"].seamless {
   border-radius: 40px;
 }
 
+.userpicture {
+  transition: all 200ms cubic-bezier(0.19, 1, 0.22, 1);
+  margin: 50px 0 calc((var(--nav-bar-size) * 2) - (var(--nav-bar-size)/1.5)) 0;
+  width: calc(var(--nav-bar-size)/1.5);
+  border-radius: 50%;
+}
+
+.navbar:hover .userpicture {
+  width: calc(var(--nav-bar-size) * 2);
+  margin: 50px 0 0 0;
+}
+
 .navbar-picture {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-bottom: 50px;
+}
+
+.navbar-name { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar ul {
@@ -718,17 +735,18 @@ input[type="text"].seamless {
 }
 
 .navbar {
-  transition: width 150ms ease;
+  transition: width 200ms cubic-bezier(0.19, 1, 0.22, 1);
   top: 0;
   z-index: 10;
   position: fixed;
   background: var(--topbar-color);
   width: var(--nav-bar-size);
+  max-height: 100vh;
   height: 100vh;
 
   display: flex;
   flex-direction: column;
-
+  overflow-y: hidden;
 }
 
 .navbar-extra-info {
@@ -737,6 +755,7 @@ input[type="text"].seamless {
 
 .navbar:hover {
   width: calc(var(--nav-bar-size) * 4);
+  overflow-y: overlay;
 }
 
 .navbar:hover .navbar-item {
@@ -817,11 +836,11 @@ input[type="text"].seamless {
   z-index: 9;
   position: fixed;
   height: 60px;
-  width: calc(100vw - var(--nav-bar-size) - 80px);
+  width: calc(100vw - var(--nav-bar-size) - 40px);
   left: var(--nav-bar-size);
   background-color: var(--background);
-  box-shadow: 0px 0px 10px 10px var(--background);
-  padding: 50px 40px 0px;
+  box-shadow: 0px 0px 20px 20px var(--background);
+  padding: 40px 40px 10px;
 }
 
 /* Fix weird transforms */
@@ -889,10 +908,52 @@ input[type="text"].seamless {
   max-width: 15vw;
 }
 
+.lesson-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(85vw - var(--nav-bar-size) - 7.5rem);
+}
+
+.lesson-view-header>* {
+  display: flex;
+  align-items: center;
+}
+
+.lesson-view-header>*:last-child {
+  margin-right: 10px;
+}
+
 .table-of-contents {
   width: 20rem;
   position: fixed;
   right: 50px;
+}
+
+.fill-row {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Scratchpad-Finder common styles */
+.daemon {
+  transition: all 200ms;
+  position: fixed; 
+  pointer-events: none; 
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}
+
+/* Finder styles */
+.finder-mask-hidden {
+  display: none;
+  pointer-events: none;
+}
+
+.finder-mask-open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
 }
 
 @keyframes bobbing {

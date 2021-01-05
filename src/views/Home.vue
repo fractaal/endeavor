@@ -6,31 +6,14 @@
       <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
       <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
     </div>
-    <!--
-    <div class="topbar">
 
-      <div class="topbarelements">
-
-
-        <div style="display: flex; flex-direction: column; margin: 0 50px 0 0;">
-          <h3 style="margin: 0;">{{fullNamePascalCased}}</h3>
-          <p style="margin: 0;">Endeavor <b class="attention">BETA</b> {{require('electron').remote.app.getVersion()}}</p>
-        </div>
-
-        <button class="roundButton" @click="$router.go(-1)"><fai icon="arrow-left"/></button>
-        <button style="margin-left: 10px; margin-right: 20px;" class="roundButton" @click="$router.go(1)"><fai icon="arrow-right"/></button>
-
-        <form @submit="startSearch" class="searchbar">
-          <input type="text" v-model="search" placeholder="Search your courses..." style="width: 30vw;"/>
-          <fai class="searchicon" icon="search"/>
-        </form>
-      </div>
-    </div>
-
-    -->
     <nav class="navbar">
       <div class="navbar-picture" v-if="sharedStore.session">
         <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
+      </div>
+
+      <div class="navbar-item navbar-name">
+        <h3 class="light link-text" style="margin: 0; position: absolute; top: 215px;">{{fullNamePascalCased.toUpperCase()}}</h3>
       </div>
 
       <div class="navbar-item">
@@ -93,39 +76,7 @@
         <router-view class="view"></router-view>
       </keep-alive>
     </transition>
-    <!--
-    <div style="display: grid; grid-template-columns: 2fr 10fr; min-height: calc(100vh - 100px); max-height: calc(100vh - 100px);">
-      <div class="sidebar">
 
-        
-        <hr>
-        <h3 @click="navTo('/changelog')">✨ What's New? </h3>
-        <div class="nospacing" style="padding: 0px 20px 0px 20px;" v-if="sharedStore.settings.showDebugInfo">
-          <p style="font-weight: 200;">ROUTE PATH</p>
-          <h4>{{$route.path}}</h4>
-          <br>
-          <p style="font-weight: 200;">ROUTE PARAMETERS</p>
-          <h4>{{$route.params}}</h4>
-          <br>
-          <p style="font-weight: 200;">UNIVERSAL SEARCH CACHE</p>
-          <hr>
-          <p style="font-weight: 200;">BUILD TIME <b>{{debugData.buildtime}}ms</b></p>
-          <p style="font-weight: 200;"><b>{{debugData.loadedcourses}} </b>COURSES</p>
-          <p style="font-weight: 200;"><b>{{debugData.loadedsections}} </b>SECTIONS</p>
-          <p style="font-weight: 200;"><b>{{debugData.loadedmodules}} </b>MODULES</p>
-          <hr>
-          <p style="font-weight: 200;"><b>{{debugData.loadedmoduleswithdata}} </b>MODULES W/ DATA</p>
-          <p style="font-weight: 200;"><b>{{debugData.loadedmodules - debugData.loadedmoduleswithdata}} </b>MODULES W/O DATA</p>
-        </div>
-        <div class="sidebarfooter nospacing" style="padding: 0px 20px 0px 20px;">
-          <p v-if="sharedStore.updateAvailable" style="font-size: 14px; font-weight: 200;" class="attention">UPDATE AVAILABLE</p>
-        </div>
-      </div>  
-      <div style="overflow: scroll; overflow-x: hidden; flex: 1 1 auto;">
-      </div>
-      
-    </div>
-    -->
   </div>
 </template>
 
@@ -134,13 +85,18 @@ import { Bus } from '../main';
 import fs from 'fs';
 import path from 'path';
 import sharedStore from '../store';
-
 import Scratchpads from '../components/Scratchpads.vue';
-
-import { remote } from 'electron';
 import capitalize from '../util/capitalize';
+import { remote } from 'electron';
+import Mousetrap from 'mousetrap';
+import { FindInPage } from 'electron-find';
 
-const {BrowserWindow} = remote;
+const findInPage = new FindInPage(remote.getCurrentWebContents(), {
+  offsetTop: 100,
+  offsetRight: 30,
+});
+
+const { BrowserWindow } = remote;
 const data = remote.app.getPath("userData");
 
 export default {
@@ -156,9 +112,14 @@ export default {
     };
   },
   components: {
-    Scratchpads
+    Scratchpads,
   },
   async created() {
+    // Bind to Ctrl+F
+    Mousetrap.bind("ctrl+f", () => {
+      findInPage.openFindWindow();
+    })
+
     // Check if version in settings is the same as current version. If not, display changelog
     if (!(this.sharedStore.settings.version == remote.app.getVersion())) {
       console.log("!!!")
