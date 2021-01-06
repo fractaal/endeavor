@@ -5,7 +5,7 @@
       <h1 class="light shimmer">{{sharedStore.fullPageLoadText}}</h1>
       <div style="max-height: 125px; overflow: hidden;">
         <transition-group name="transition" mode="out-in">
-          <p v-for="logItem in reverseLog" :key="logItem" style="text-align: center;">{{logItem}}</p>
+          <p v-for="logItem in reverseLog" :key="logItem.time" style="text-align: center;">{{logItem.text}}</p>
         </transition-group>
       </div>
     </div>
