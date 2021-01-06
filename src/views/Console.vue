@@ -1,8 +1,12 @@
 <template>
-  <div style="margin: 50px 50px;">
-    <h2 style="font-weight: 300;">INTERNAL DEBUG CONSOLE</h2>
-    <div class="level" style="display: block; max-height: 70vh; overflow-y: auto;">
-      <pre v-for="(text) in trunctatedLog" :key="text">⚪ {{text}}</pre>
+  <div>
+    <div class="header">
+      <h1 class="light">INTERNAL DEBUG CONSOLE</h1>
+    </div>
+    <div class="content">
+      <div class="level" style="display: block; max-height: 70vh; overflow-y: auto;">
+        <pre v-for="(text) in trunctatedLog" :key="text">⚪ {{text}}</pre>
+      </div>
     </div>
     
   </div>

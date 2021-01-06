@@ -117,7 +117,7 @@ export default {
         this.sharedStore.fullPageLoadText = "LOGGING YOU IN"
 
         loginResult = await this.sharedStore.eLearn.login(username, password, log => {
-          this.sharedStore.fullPageLoadLog.push(log);
+          this.sharedStore.fullPageLoadLog.push({text: log, time: Date.now()});
         });
       } catch(err) {
         this.sharedStore.fullPageLoadText = "❌ Login failed!"
