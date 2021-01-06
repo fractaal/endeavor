@@ -10,6 +10,7 @@ import {transformHtml, transformUrl, transformUrlWithoutChangingBaseURL} from '.
 import { getPageHtml } from './page-module';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
+import promiseTimeout from '../util/promise-timeout';
 import updateQueryString from './update-query-string';
 import {getCourseVisibility} from '../course-presentation';
 import sharedStore from '../store';
@@ -28,6 +29,7 @@ import { BookPage } from '@/interfaces/BookPage';
 
 // Types
 import { PagesData as PagesData } from './objects/page-data';
+import { faBalanceScaleLeft } from '@fortawesome/free-solid-svg-icons';
 
 // Enums
 enum Urgency {
@@ -92,6 +94,30 @@ export class ELearn implements eLearnInterface {
    * @param password Password to pass to eLearn.
    */
   async login(username: string, password: string, update: Function): Promise<boolean> {
+    const maxRetries = 5;
+    let result; 
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        result = await promiseTimeout(7500, this._login(username, password, update));
+      } catch(err) {
+        if (err !== "TIMEOUT") {
+          console.warn(`[elearn-api] Failed to login - ${err}`)
+          update(`❌ Login failed!`);
+          return false;
+        } else {
+          console.warn(`[elearn-api] Login attempt ${i+1} failed - ${err} - retrying`);
+          update(`⚠ Timed out, retrying (${i+1} of ${maxRetries} retries)`);
+        }
+      }
+
+      if (result === true) {
+        return true;
+      }
+    }
+  }
+  
+  // The actual login method. This method is contained in a wrapper method that does timeout logic. 
+  private async _login(username: string, password: string, update: Function): Promise<boolean> {
     try {
       // To obtain a cookie
       await client(`http://elearn.xu.edu.ph/lib/ajax/service.php?info=tool_mobile_get_public_config`);
