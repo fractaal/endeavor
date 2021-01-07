@@ -5,6 +5,8 @@ import { Discussion } from './Discussion';
 import { Page } from './Page';
 import { BookPage } from './BookPage';
 import { PagesData } from '@/elearn/objects/page-data';
+import { ELearn } from '@/elearn';
+import Notification from './Notification';
 
 export interface eLearnSession {
   token: string;
@@ -26,18 +28,19 @@ export interface eLearnInterface {
   wsFunction(name: string, args: Record<string, any>, token?: string): Promise<any>;
   getSession(): Promise<eLearnSession>;
   getCourses(): Promise<CourseMetadata[]>;
-  getCourseInfo(courseid: number, update: Function): Promise<Section[]>;
+  getCourseInfo(courseid: number, overwrite: boolean): Promise<Section[]>;
   getSection(courseid: number, sectionNumber: number): Promise<Section>;
   getModule(courseid: number, instance: number): Promise<Module>;
   getTimeline(): Promise<Event[]>;
-  buildCache(update: Function): Promise<void>; 
+  buildCache(update: Function): Promise<ELearn['cache']>;
   debugData(): Record<string,any>;
   getActualGrade(type: string, id: number): Promise<number>;
   getForumDiscussions(forumid: string): Promise<Discussion[]>;
   getLessonPages(lessonid: string): Promise<PagesData>;
   getBookPages(courseid: string, bookid: string): Promise<PagesData>;
   cache: {
-    courses: Section[][];
     coursesMetadata: CourseMetadata[];
+    buildTime: number;
   };
+  notifications: Notification[];
 }
