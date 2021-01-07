@@ -2,9 +2,14 @@
   <div>
     <scratchpads/>
     <div class="windowbuttons">
-      <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
-      <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
-      <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+      <div style="display: flex;">
+        <!-- Nav buttons were supposed to be here. They look horrible. -->
+      </div>
+      <div style="display: flex;">
+        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
+        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
+        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+      </div>
     </div>
 
     <nav class="navbar">
@@ -30,7 +35,7 @@
       </div>
 
       <div class="navbar-item" style="margin-top: 50px;">
-        <button class="navbar-button" @click="navTo('/notifications')">
+        <button :class="!navigatedToNotifications && sharedStore.eLearn.notifications.length !== 0 ? 'notify' : ''" class="navbar-button" @click="navTo('/notifications')">
           <fai icon="bell"/>
         </button>
         <h3 class="light link-text">NOTIFICATIONS</h3>
@@ -116,6 +121,7 @@ export default {
       codeName: "Performant",
       search: "",
       debugData: {},
+      navigatedToNotifications: false,
     };
   },
   components: {
@@ -128,7 +134,6 @@ export default {
     } else {
       console.log(`Not auto-updating, setting is false`);
     }
-    
     
     // Bind to Ctrl+F
     Mousetrap.bind("ctrl+f", () => {
@@ -155,6 +160,9 @@ export default {
       const resolve = this.$router.resolve(location);
       console.log(resolve)
       if (resolve.route.name) {
+        if (resolve.route.name == "Notifications") {
+          this.navigatedToNotifications = true;
+        }
         this.$router.push(location);
       } else {
         remote.dialog.showMessageBox({message: "This route hasn't been created yet. 😢"})
