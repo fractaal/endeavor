@@ -58,8 +58,12 @@
   -webkit-app-region: drag;
   -webkit-user-select: none;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin: 0px 0px -40px 0px;
+}
+
+.windowbuttons > *:first-child {
+  margin-left: calc(var(--nav-bar-size) + 40px);
 }
 
 .windowbutton {
@@ -153,7 +157,7 @@ body {
   --gradient2: #F05661;
   --highlight: #e7e7e7;
   --highlight-lighter: #d6d6d6;
-  --topbar-color: linear-gradient(180deg, rgb(68, 0, 102) 0%, rgb(92, 90, 191) 100%);
+  --topbar-color: linear-gradient(180deg, rgba(68, 0, 102, 0.75) 0%, rgba(92, 90, 191, 0.75) 100%);
   --scratchpad-background: #fdfdfd;
 }
 
@@ -167,7 +171,7 @@ body {
   --gradient2: #F05661;
   --highlight: #102336;
   --highlight-lighter: #0e1d2e;
-  --topbar-color: linear-gradient(180deg, rgba(104,0,84,1) 0%, rgba(240,86,97,1) 100%);
+  --topbar-color: linear-gradient(180deg, rgba(104, 0, 83, 0.75) 0%, rgba(240, 86, 96, 0.75) 100%);
   --scratchpad-background: #1b3755;
 }
 
@@ -752,7 +756,7 @@ input[type="text"].seamless {
   width: var(--nav-bar-size);
   max-height: 100vh;
   height: 100vh;
-
+  backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
@@ -811,6 +815,10 @@ input[type="text"].seamless {
 
   outline: none;
   border: none;
+}
+
+.navbar-button.notify {
+  animation: navbar-button-notify 1.5s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
 }
 
 .navbar-button * {
@@ -975,6 +983,32 @@ input[type="text"].seamless {
   pointer-events: all;
 }
 
+/* Separator */
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.separator::before, .separator::after {
+  content: '';
+  flex: 1;
+}
+
+.dark-theme .separator::before, .dark-theme .separator::after {
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+.light-theme .separator::before, .light-theme .separator::after {
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.separator::before {
+  margin-right: .25em;
+}
+.separator::after {
+  margin-left: .25em;
+}
+
 @keyframes bobbing {
   0% {
     transform: scale(0.95);
@@ -992,5 +1026,19 @@ input[type="text"].seamless {
 
   100% {
     transform: scale(0.95);
+  }
+}
+
+@keyframes navbar-button-notify {
+  0% {
+    background-color: rgba(255,255,255,0.65);
+    color: var(--foreground);
+  }
+  50% {
+    background-color: rgba(0,0,0,0);
+  }
+  100% {
+    background-color: rgba(255,255,255,0.65);
+    color: var(--foreground);
   }
 }
