@@ -1,19 +1,19 @@
 /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
 
 // Required libraries
+import Store from 'electron-store';
 import path from 'path';
 import got from 'got';
 import {CookieJar} from 'tough-cookie';
 import {remote} from 'electron';
 import {format, formatDistanceStrict} from 'date-fns'
 import {transformHtml, transformUrl, transformUrlWithoutChangingBaseURL} from './content-presentation';
-import { getPageHtml } from './page-module';
 import capitalize from '../util/capitalize';
 import findInArray from '../util/find-in-array';
 import promiseTimeout from '../util/promise-timeout';
-import updateQueryString from './update-query-string';
 import {getCourseVisibility} from '../course-presentation';
 import sharedStore from '../store';
+import { diff } from './diff';
 
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
@@ -29,7 +29,7 @@ import { BookPage } from '@/interfaces/BookPage';
 
 // Types
 import { PagesData as PagesData } from './objects/page-data';
-import { faBalanceScaleLeft } from '@fortawesome/free-solid-svg-icons';
+import Notification from '@/interfaces/Notification';
 
 // Enums
 enum Urgency {
@@ -80,11 +80,43 @@ function urgency(date: Date): Urgency {
 }
 
 export class ELearn implements eLearnInterface {
-  public cache = {
-    courses: [],
-    coursesMetadata: [],
-    buildTime: 0,
+  
+  public cache: {
+    coursesMetadata: CourseMetadata[];
+    buildTime: number;
   };
+
+  public notifications: Notification[] = [];
+  public notificationsArchive: Notification[] = [];
+  public notificationsStatus = {
+    isLoading: false,
+    isFailed: false,
+  }
+
+  private cacheStore: Store<{
+      coursesMetadata: CourseMetadata[];
+      buildTime: number;
+  }>;
+  
+  private notificationsStore: Store<{
+    notifications: Notification[];
+  }>
+
+  // Loads an existing cache from disk
+  constructor() {
+    
+    this.notificationsStore = new Store({name: "notifications", defaults: {
+      notifications: [] as Notification[],
+    }});
+
+    this.notificationsArchive = this.notificationsStore.store.notifications;
+
+    this.cacheStore = new Store({name: "cache", defaults: {
+      coursesMetadata: [] as CourseMetadata[],
+      buildTime: 0,
+    }});
+    this.cache = this.cacheStore.store;
+  }
   
   /**
    * Logs in a user to the eLearn website. eLearn also
@@ -152,7 +184,7 @@ export class ELearn implements eLearnInterface {
       
       session.token = token;
       update("Building search cache");
-      await this.buildCache(update);
+      await this.initialize(update);
       return true;
 
     } catch(err) {
@@ -272,10 +304,10 @@ export class ELearn implements eLearnInterface {
     return findInArray(await this.getCourses(), id);
   }
 
-  async getCourseInfo(courseid: number): Promise<Section[]> {
+  async getCourseInfo(courseid: number, overwrite = false): Promise<Section[]> {
     const alreadyExisting: CourseMetadata = this.findInCache(courseid);
 
-    if (alreadyExisting) {
+    if (alreadyExisting && !overwrite) {
       return alreadyExisting.sections;
     }
 
@@ -468,18 +500,73 @@ export class ELearn implements eLearnInterface {
     return events;
   }
 
-  async buildCache(update: Function): Promise<void> {
+  async initialize(update: Function): Promise<void> {
+    if (this.cacheExists()) {
+      console.log(`[elearn-api] Skipping initial cache build step - cache already exists!`);
+      update("💖 Complete!");
+      return;
+    } else {
+      console.log(`[elearn-api] Performing first-time cache build...`);
+    }
+    this.cache = await this.buildCache(update);
+    this.saveCacheToDisk();
+  }
+
+  /**
+   * Updates the local eLearn cache and returns a notifications array,
+   * listing changes between the newest cache and the disk cache.
+   */
+  async updateCacheAndNotify() {
+    let newCache: {
+      coursesMetadata: CourseMetadata[];
+      buildTime: number;
+    } | "TIMEOUT";
+
+    this.notificationsStatus.isLoading = true;
+    this.notificationsStatus.isFailed = false;
+
+    // Retrieve new cache
+    try {
+      newCache = await promiseTimeout(10000, this.buildCache());
+    } catch(err) {
+      console.warn(`[elearn-api] Update failed - ${err}`);
+      this.notificationsStatus.isLoading = false;
+      this.notificationsStatus.isFailed = true;
+      return;
+    }
+
+    this.notifications = diff(this.cache, newCache);
+    this.cache = newCache as ELearn['cache'];
+
+    this.saveCacheToDisk();
+    this.saveNotificationsToArchive();
+
+    this.notificationsStatus.isFailed = false;
+    this.notificationsStatus.isLoading = false;
+
+    return;
+  }
+
+  saveNotificationsToArchive() {
+    this.notificationsStore.set({
+      notifications: [
+        ...this.notifications,
+        ...this.notificationsStore.store.notifications,
+      ]
+    })
+  }
+
+  async buildCache(update: Function = (msg) => console.log(msg)): Promise<ELearn['cache']> {
     const startTime = Date.now();
-    console.log("[elearn-api] 📃 Building search cache")
-    console.time("search cache build time");
+
     update("⌛ Getting course metadata...");
     let coursesMetadata = await this.getCourses();
-    update("⌛ Getting course sections & modules...")
-    // const courses = await Promise.all(coursesMetadata.map(course => this.getCourseInfo(course.id)));
+
+    update("⌛ Getting course sections & modules...");
     const courses: any = await Promise.all(coursesMetadata.map(course => {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         if (getCourseVisibility(course.id) || sharedStore.settings.loadHiddenCourseData) {
-          this.getCourseInfo(course.id).then(courseinfo => {
+          this.getCourseInfo(course.id, true).then(courseinfo => {
             update("✅ Loaded " + course.shortname);
             resolve(courseinfo);
           })
@@ -498,12 +585,12 @@ export class ELearn implements eLearnInterface {
       }
     })
 
-    this.cache.courses = courses;
-    this.cache.coursesMetadata = coursesMetadata;
-    console.log("[elearn-api] 📃 Search cache build complete");
-    console.timeEnd("search cache build time");
     update("💖 Complete!");
-    this.cache.buildTime = Date.now() - startTime;
+
+    return {
+      coursesMetadata,
+      buildTime: Date.now() - startTime,
+    }
   }
 
   findInCache(courseid: number): CourseMetadata {
@@ -684,6 +771,16 @@ export class ELearn implements eLearnInterface {
       console.warn(`[elearn-api] Failed to get book pages for ID ${bookid} - course not found`);
       return null;
     }
+  }
+
+  cacheExists() {
+    return  this.cache.buildTime !== undefined &&
+            this.cache.coursesMetadata !== undefined &&
+            this.cache.coursesMetadata.length !== 0;
+  }
+
+  saveCacheToDisk() {
+    this.cacheStore.set(this.cache);
   }
 }
 

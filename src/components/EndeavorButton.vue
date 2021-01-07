@@ -5,7 +5,12 @@
 <script>
 export default {
   name: "EndeavorButton",
-  props: ['styling'],
+  props: {
+    styling: {
+      type: String,
+      required: false,
+    }
+  },
   methods: {
     callback(e) {
       this.$emit("click", e);

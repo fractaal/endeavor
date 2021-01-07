@@ -69,6 +69,11 @@ const routes: Array<RouteConfig> = [
         path: "/console",
         name: "Console",
         component: () => import("../views/Console.vue"),
+      },
+      {
+        path: "/notifications",
+        name: "Notifications",
+        component: () => import("../views/Notifications.vue"),
       }
     ]
   },

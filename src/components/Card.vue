@@ -1,6 +1,9 @@
 <template>
   <div :class="styling">
     <div class="cardUpper" style="border-radius: 2px 2px 0px 0px; margin-bottom: 0;">
+      <slot name="header">
+      </slot>
+      
       <div style="display: flex; justify-content: space-between;">
         <div style="display: flex; justify-content: center; align-items: center;">
           <div v-if="pictureurl" style="margin-right: 10px;">
@@ -30,6 +33,8 @@
           <div v-if="internalLink">
             <EndeavorButton @click="$router.push(internalLink)">🔍 Open</EndeavorButton>
           </div>
+          <slot name="buttons">
+          </slot>
         </div>
       </div>
     </div>
@@ -38,6 +43,7 @@
     </div>
     <div class="cardLower" style="border-radius: 0px 0px 2px 2px; margin-top: 0;">
       <div style="display: flex; justify-content: space-between;">
+        <slot name="content"/>
         <div style="display: flex;">
           <p style="margin: 0;" v-html="content"></p>
         </div>
@@ -64,18 +70,52 @@ export default {
     EndeavorButton
   },
   props: {
-    title: String,
-    subtitle: String,
-    rightTitle: String,
-    rightSubtitle: String,
-    buttons: Array,
-    pictureurl: String,
-    id: [String, Number],
-    content: String,
-    externalLink: String,
-    internalLink: String,
-    styling: String,
+    title: {
+      type: String,
+      required: false,
+    },
+    subtitle: {
+      type: String,
+      required: false,
+    },
+    rightTitle: {
+      type: String,
+      required: false,
+    },
+    rightSubtitle: {
+      type: String,
+      required: false,
+    },
+    buttons: {
+      type: Array,
+      required: false,
+    },
+    pictureurl: {
+      type: String,
+      required: false,
+    },
+    id: {
+      type: [String, Number],
+      required: false,
+    },
+    content: {
+      type: String,
+      required: false,
+    },
+    externalLink: {
+      type: String,
+      required: false,
+    },
+    internalLink: {
+      type: String,
+      required: false,
+    },
+    styling: {
+      type: String,
+      required: false,
+    },
     progress: {
+      required: false,
       validator: function(value) {
         return !!(typeof value == "number" || typeof value == "string");
       }

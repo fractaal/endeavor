@@ -25,12 +25,26 @@
       <hr>
       <div style="display: flex; align-items: center;">
         <div class="toggle">
+          <input type="checkbox" class="check" v-model="sharedStore.settings.autoUpdateData">
+          <b class="b switch"></b>
+          <b class="b track"></b>
+        </div>
+        <div style="margin-left: 25px;">
+          <h2 class="nospacing" style="font-weight: 400;">AUTOMAGICALLY UPDATE COURSE DATA</h2>
+          <p class="nospacing">
+            Automatically update eLearn data every time Endeavor starts.<br><br>
+            <i>If you disable this, new courses or modules will not pop up in eLearn unless you manually click "<b>Refresh</b>" in <router-link to="/notifications">Notifications.</router-link></i>
+          </p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div class="toggle">
           <input type="checkbox" class="check" v-model="sharedStore.settings.saveLogin">
           <b class="b switch"></b>
           <b class="b track"></b>
         </div>
         <div style="margin-left: 25px;">
-          <h2 class="nospacing" style="font-weight: 400;">AUTOMATIC LOGIN</h2>
+          <h2 class="nospacing" style="font-weight: 400;">AUTOMAGIC LOGIN</h2>
           <p class="nospacing">Saves your login details and automatically logs you in on any future Endeavor session.</p>
         </div>
       </div>

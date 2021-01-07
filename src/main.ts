@@ -6,7 +6,7 @@ import movable from "v-movable";
 import sharedStore from './store';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo, faStream, faGraduationCap, faCog, faScroll, faFlag} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo, faStream, faGraduationCap, faCog, faScroll, faFlag, faBell, faPlus, faRedoAlt, faMinusCircle, faPlusCircle, faDotCircle} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(
@@ -33,13 +33,17 @@ library.add(
   faRulerHorizontal, 
   faUndo, 
   faRedo, 
-  faTimes,
   faStream,
   faGraduationCap,
   faScroll,
   faCog,
   faSearch,
   faFlag,
+  faBell,
+  faPlusCircle,
+  faDotCircle,
+  faRedoAlt,
+  faMinusCircle,
   );
 Vue.component('fai', FontAwesomeIcon);
 Vue.config.productionTip = false

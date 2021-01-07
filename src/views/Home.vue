@@ -30,6 +30,13 @@
       </div>
 
       <div class="navbar-item" style="margin-top: 50px;">
+        <button class="navbar-button" @click="navTo('/notifications')">
+          <fai icon="bell"/>
+        </button>
+        <h3 class="light link-text">NOTIFICATIONS</h3>
+      </div>
+
+      <div class="navbar-item">
         <button class="navbar-button" @click="navTo('/search')">
           <fai icon="search"/>
         </button>
@@ -115,6 +122,14 @@ export default {
     Scratchpads,
   },
   async created() {
+    // Get changes for notifications
+    if (this.sharedStore.settings.autoUpdateData) {
+      this.sharedStore.eLearn.updateCacheAndNotify();
+    } else {
+      console.log(`Not auto-updating, setting is false`);
+    }
+    
+    
     // Bind to Ctrl+F
     Mousetrap.bind("ctrl+f", () => {
       findInPage.openFindWindow();

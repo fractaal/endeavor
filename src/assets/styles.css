@@ -291,6 +291,10 @@ body {
   margin: 10px;
 }
 
+.buttonwithlabel * {
+  transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
 .buttonwithlabel.active {
   background-color: var(--foreground);
   color: var(--background);
@@ -298,6 +302,11 @@ body {
 
 .buttonwithlabel:hover {
   transform: scale(1.1);
+  background-color: var(--foreground);
+  color: var(--background);
+}
+
+.buttonwithlabel:hover * {
   background-color: var(--foreground);
   color: var(--background);
 }
@@ -933,6 +942,16 @@ input[type="text"].seamless {
 .fill-row {
   width: 100%;
   box-sizing: border-box;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+.flex-row > *:not(:first-child) {
+  padding: 0 10px;
 }
 
 /* Scratchpad-Finder common styles */
