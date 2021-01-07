@@ -24,3 +24,7 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
+
+# Test files for diffing
+/src/elearn/cache.json
+/src/elearn/cache2.json
