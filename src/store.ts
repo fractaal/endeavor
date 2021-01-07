@@ -10,6 +10,7 @@ interface Store {
     saveLogin: boolean;
     theme: string;
     loadHiddenCourseData: boolean;
+    autoUpdateData: boolean;
   };
   searchFunction: Function;
   searchTimer: any;
@@ -30,6 +31,7 @@ const store: Store = {
     saveLogin: false,
     theme: "light-theme",
     loadHiddenCourseData: false,
+    autoUpdateData: true,
   },
   searchFunction: fuseSearch,
   searchTimer: null,
