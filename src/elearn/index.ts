@@ -364,7 +364,7 @@ export class ELearn implements eLearnInterface {
     info.forum = JSON.parse(forums.responses[0].data);
 
     // Section-level parsing. (Top-level objects are sections!)
-    for (const section of entries) {
+    for (const section of entries as Section[]) {
 
       if (section.summary) {
         section.summary = transformHtml(section.summary, (await this.getSession()).token);
@@ -403,6 +403,14 @@ export class ELearn implements eLearnInterface {
           if (data) {
             // Mark this module as having additional data (for debug purposes)
             module.hasextradata = true;
+
+            /**
+             * Transform URLs of the intro attachments to something that eLearn accepts
+             */
+            if (data.introattachments) {
+              for (const content of data.introattachments)
+                content.fileurl = transformUrlWithoutChangingBaseURL(content.fileurl, session.token);
+            }
 
             if (data.intro) {
               data.intro = transformHtml(data.intro, (await this.getSession()).token);
