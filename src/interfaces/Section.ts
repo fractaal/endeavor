@@ -10,6 +10,7 @@ export interface Section {
   modules:             Module[];
   courseid:            number;
   url:                 string;
+  [customprop: string]:any;
 }
 
 export interface Module {
@@ -37,6 +38,7 @@ export interface Module {
   courseid:            number;
   section:             number;
   hasextradata:        boolean;
+  [customprop: string]:any;
 }
 
 export interface Completiondata {
