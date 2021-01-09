@@ -55,7 +55,11 @@
         <card v-for="content in module.introattachments" :key="content.filename" 
         :title="content.filename"
         :subtitle="content.type"
-        />
+        >
+          <template v-slot:buttons>
+            <endeavor-button @click="openLink(content.fileurl)">🔻 Download</endeavor-button>
+          </template>
+        </card>
       </div>
       
       <div class="level" v-if="sharedStore.settings.showDebugInfo">
@@ -129,6 +133,10 @@ export default {
     },
     openExternalLink() {
       shell.openExternal(this.module.url);
+    },
+    openLink(url) {
+      console.log(`Opening ${url}`);
+      shell.openExternal(url);
     },
     openScratchpad() {
       Bus.$emit("open-scratchpad", this.module.id, this.module.name);
