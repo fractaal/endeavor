@@ -12,6 +12,19 @@
       </div>
     </div>
 
+    <div class="navbuttons">
+      <div class="navbar-item">
+        <button class="navbar-button" @click="$router.go(-1)">
+          <fai icon="arrow-left"/>
+        </button>
+      </div>
+      <div class="navbar-item">
+        <button class="navbar-button" @click="$router.go(1)">
+          <fai icon="arrow-right"/>
+        </button>
+      </div>
+    </div>
+
     <nav class="navbar">
       <div class="navbar-picture" v-if="sharedStore.session">
         <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
@@ -22,19 +35,6 @@
       </div>
 
       <div class="navbar-item">
-        <button class="navbar-button" @click="$router.go(1)">
-          <fai icon="arrow-right"/>
-        </button>
-        <h3 class="light link-text">NEXT</h3>
-      </div>
-      <div class="navbar-item">
-        <button class="navbar-button" @click="$router.go(-1)">
-          <fai icon="arrow-left"/>
-        </button>
-        <h3 class="light link-text">BACK</h3>
-      </div>
-
-      <div class="navbar-item" style="margin-top: 50px;">
         <button :class="!navigatedToNotifications && sharedStore.eLearn.notifications.length !== 0 ? 'notify' : ''" class="navbar-button" @click="navTo('/notifications')">
           <fai icon="bell"/>
         </button>
