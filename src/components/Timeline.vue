@@ -12,16 +12,26 @@
         </div>
       </transition>
       <transition-group name="transition" mode="out-in">
-        <card v-for="event in timeline" :key="event.instance"
-        :title="event.name" 
-        :subtitle="event.course.fullnamedisplay" 
-        :rightTitle="event.formatteddistance" 
-        :rightSubtitle="event.formattedtime"
-        :content="event.description"
-        :internalLink="`/modules/${event.course.id}/${event.instance}`"
-        :externalLink="event.url"
-        :styling="event.styling"
-        />
+        <div v-for="event in timeline" :key="event.instance">
+          <card v-if="event.course"
+          :title="event.name" 
+          :subtitle="event.course.fullnamedisplay" 
+          :rightTitle="event.formatteddistance" 
+          :rightSubtitle="event.formattedtime"
+          :content="event.description"
+          :internalLink="`/modules/${event.course.id}/${event.instance}`"
+          :externalLink="event.url"
+          :styling="event.styling"
+          />
+          <card v-else
+          :title="event.name" 
+          :rightTitle="event.formatteddistance" 
+          :rightSubtitle="event.formattedtime"
+          :content="event.description"
+          :externalLink="event.url"
+          :styling="event.styling"
+          />
+        </div>
       </transition-group>
       <Loader v-if="isLoading"/>
     </div>
@@ -53,16 +63,9 @@ export default {
   beforeRouteEnter(to, from, next) {
     next(vm => {
       vm.getTimeline();
-      vm.getDayOfTheWeek();
     })
   },
   methods: {
-    async getDayOfTheWeek() {
-      this.dayOfTheWeek = format(new Date(), 'EEEE');
-      if (this.dayOfTheWeek === "Sunday") {
-        this.dayOfTheWeekStyling = "attention";
-      }
-    },
     async getTimeline() {
       this.isLoading = true;
       this.timeline = await this.sharedStore.eLearn.getTimeline()

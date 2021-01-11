@@ -503,6 +503,7 @@ export class ELearn implements eLearnInterface {
       event.styling = urgency(event.timesort as Date)
       event.formatteddistance = formatDistanceStrict(event.timesort, Date.now(), {addSuffix: true});
       event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");
+      event.description = transformHtml(event.description, session.token, true);
     }
 
     return events;
