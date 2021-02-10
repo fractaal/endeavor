@@ -16,7 +16,7 @@
           <card v-if="event.course"
           :title="event.name" 
           :subtitle="event.course.fullnamedisplay" 
-          :rightTitle="event.formatteddistance" 
+          :rightTitle="event.date" 
           :rightSubtitle="event.formattedtime"
           :content="event.description"
           :internalLink="`/modules/${event.course.id}/${event.instance}`"
@@ -25,7 +25,7 @@
           />
           <card v-else
           :title="event.name" 
-          :rightTitle="event.formatteddistance" 
+          :rightTitle="event.date" 
           :rightSubtitle="event.formattedtime"
           :content="event.description"
           :externalLink="event.url"

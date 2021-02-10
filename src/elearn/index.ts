@@ -449,7 +449,10 @@ export class ELearn implements eLearnInterface {
               const styling = urgency(module[key] as Date);
               module.styling = styling;
               module.duedateformatted = format(module[key], "hh:mma, MMMM dd, yyyy");
-              module.duedatedistanceformatted = formatDistanceStrict(module[key], Date.now(), {addSuffix: true});
+              /**
+               * VVVV Line commented out because we're using reactive time components instead.
+               */
+              // module.duedatedistanceformatted = formatDistanceStrict(module[key], Date.now(), {addSuffix: true});
             }
 
             // Styling & formatting pass
@@ -501,7 +504,7 @@ export class ELearn implements eLearnInterface {
     for (let event of events) {
       event = convertRawTimeValuesToDate(event);
       event.styling = urgency(event.timesort as Date)
-      event.formatteddistance = formatDistanceStrict(event.timesort, Date.now(), {addSuffix: true});
+      event.date = new Date(event.timesort);
       event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");
       event.description = transformHtml(event.description, session.token, true);
     }

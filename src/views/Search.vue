@@ -8,8 +8,7 @@
     </div>
     <div class="content">
       <transition-group name="transition" mode="out-in">
-        <loader v-if="!sharedStore.userDoneTypingOnSearch" :text="`Waiting for you to stop typing...`" :key="`loader`"/>
-        <div v-else :key="`content`" >
+        <div v-if="sharedStore.userDoneTypingOnSearch" :key="`content`" >
           <div class="cardlist">
             <transition-group name="transition">
               <card v-for="module in sharedStore.searchResults.moduleResults" :key="module.id"
@@ -32,6 +31,7 @@
             </transition-group>
           </div>
         </div>
+        <loader v-else :text="`WAITING FOR YOU...`" :key="`loader`"/>
       </transition-group>
     </div>
 
