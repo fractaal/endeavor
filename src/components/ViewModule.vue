@@ -4,8 +4,9 @@
     <div v-else>
       <div class="header">
         <div style="max-width: 50%;">
-          <h1 class="light nospacing no-overflow">{{module.name.toUpperCase()}}</h1> 
-          <p class="light nospacing">{{module['modnameformatted'].toUpperCase()}}</p>
+          
+          <h1 v-if="module.name" class="light nospacing no-overflow">{{module.name.toUpperCase()}}</h1> 
+          <p v-if="module.modnameformatted" class="light nospacing">{{module.modnameformatted.toUpperCase()}}</p>
         </div>
         <div style="display: flex;">
           <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
