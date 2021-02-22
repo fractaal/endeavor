@@ -128,7 +128,7 @@ export class ELearn implements eLearnInterface {
   async login(username: string, password: string, update: Function): Promise<boolean> {
     const maxRetries = 5;
     let result; 
-    for (let i = 0; i < maxRetries; i++) {
+    for (let i = 0; i <= maxRetries; i++) {
       try {
         result = await promiseTimeout(7500, this._login(username, password, update));
       } catch(err) {
