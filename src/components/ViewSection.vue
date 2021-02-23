@@ -5,7 +5,7 @@
       <div class="header">
         <div>
           <EndeavorButton @click="openExternalLink">🔍 Open in eLearn</EndeavorButton>
-          <EndeavorButton @click="$router.push('/home/courses/'+section.courseid)">📚 See course</EndeavorButton>
+          <EndeavorButton @click="$router.push('/courses/'+section.courseid)">📚 See course</EndeavorButton>
         </div>
 
       </div>
