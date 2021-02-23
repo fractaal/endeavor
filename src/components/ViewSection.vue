@@ -3,14 +3,13 @@
     <Loader v-if="!section"/>
     <div v-else>
       <div class="header">
-        <h1 class="light">{{section.name.toUpperCase()}}</h1> 
         <div>
           <EndeavorButton @click="openExternalLink">🔍 Open in eLearn</EndeavorButton>
           <EndeavorButton @click="$router.push('/home/courses/'+section.courseid)">📚 See course</EndeavorButton>
         </div>
 
       </div>
-      <div class="content">
+      <div class="content padded">
         <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
           <card v-for="module in section.modules" :key="module.id"
             :title="module.name"
@@ -18,7 +17,7 @@
             :rightTitle="module.duedate"
             :rightSubtitle="module.duedateformatted"
             :content="module.intro"
-            :internalLink="`/modules/${$route.params.id}/${module.instance}`"
+            :internalLink="`/courses/${$route.params.id}/${$route.params.section}/${module.instance}`"
             :externalLink="module.url"
             :styling="module.styling"
             />

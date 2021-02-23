@@ -1,4 +1,5 @@
 import {eLearnInterface, eLearnSession} from './interfaces/eLearn';
+import { PathData } from '@/elearn/path-resolution';
 import fuseSearch from './search';
 
 interface Store {
@@ -19,6 +20,7 @@ interface Store {
   fullPageLoadLog: string[];
   updateAvailable: boolean;
   debugLog: string[];
+  pathData: PathData[];
   session: eLearnSession;
 }
 
@@ -40,6 +42,7 @@ const store: Store = {
   fullPageLoadText: "",
   updateAvailable: false,
   debugLog: [],
+  pathData: [],
   session: {} as eLearnSession,
 };
 

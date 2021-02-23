@@ -1,11 +1,10 @@
 <template>
   <div>
     <div class="header">
-      <h1 class="light">{{hiddenCoursesView ? 'COURSES - HIDDEN': 'COURSES'}}</h1> 
       <EndeavorButton @click="toggleHiddenCoursesView">{{hiddenCoursesView ? '👓 Back to normal' : '🕶 Show hidden'}}</EndeavorButton>
     </div>
-    <div class="content">
-      <transition-group name="transition" class="compactcardlist">
+    <div class="content padded">
+      <transition-group name="transition">
         <card v-for="course in courses" :key="course.id"
             :title="course.displayname"
             :subtitle="`Last accessed ${course.lastaccessFormatted}`"
@@ -13,7 +12,7 @@
             :progress="course.progress"
             :id="course.id"
             :buttons="[{name: hideButtonLabel, icon: hideButtonEmoji, event: 'hideToggle'}]"
-            :internalLink="'/home/courses/'+course.id"
+            :internalLink="'/courses/'+course.id"
             :styling="course.styling"
             />
       </transition-group>

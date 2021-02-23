@@ -16,7 +16,7 @@
 
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div style="display: flex; flex-direction: column;">
-            <timeago v-if="rightTitle" style="font-weight: 800;" :datetime="rightTitle" :auto-update="60"></timeago>
+            <timeago v-if="rightTitleProcessed" style="font-weight: 800;" :datetime="rightTitleProcessed" :auto-update="60"></timeago>
             <!--<p style="font-weight: 800; margin: 0;">{{rightTitle}}</p>-->
             <p style="margin:0; font-weight: 400;">{{rightSubtitle}}</p>
           </div>
@@ -64,7 +64,14 @@ export default {
   data() {
     return {
       Bus,
+      rightTitleProcessed: null,
     }
+  },
+  created() {
+    if (typeof this.rightTitle == "string")
+      this.rightTitleProcessed = Date.parse(this.rightTitle);
+    else
+      this.rightTitleProcessed = this.rightTitle
   },
   components: {
     EndeavorButton
@@ -79,7 +86,7 @@ export default {
       required: false,
     },
     rightTitle: {
-      type: Date,
+      type: [Date, String],
       required: false,
     },
     rightSubtitle: {

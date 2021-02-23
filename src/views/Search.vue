@@ -1,12 +1,11 @@
 <template>
   <div>
     <div class="header">
-      <div style="display: flex;">
-        <h1 class="light">SEARCH</h1>
+      <div style="display: flex; width: 100%;">
         <input ref="search" v-model="search" type="text" placeholder="TYPE HERE..." class="seamless"/>
       </div>
     </div>
-    <div class="content">
+    <div class="content padded">
       <transition-group name="transition" mode="out-in">
         <div v-if="sharedStore.userDoneTypingOnSearch" :key="`content`" >
           <div class="cardlist">
@@ -18,7 +17,7 @@
                   :rightSubtitle="module.duedatedistanceformatted"
                   :content="module.description"
                   :styling="module.styling"
-                  :internalLink="`/modules/${module.courseid}/${module.id}`"
+                  :internalLink="`/courses/${module.courseid}/${module.section}/${module.id}`"
                 />
             </transition-group>
             <hr>
@@ -26,7 +25,7 @@
               <card v-for="section in sharedStore.searchResults.sectionResults" :key="section.id"
                 :title="section.name"
                 :content="section.summary"
-                :internalLink="`/home/courses/${section.courseid}/${section.section}`"
+                :internalLink="`/courses/${section.courseid}/${section.section}`"
                 />
             </transition-group>
           </div>

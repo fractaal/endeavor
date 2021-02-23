@@ -1,9 +1,14 @@
 <template>
   <div class="loginBackground">
     <div class="windowbuttons">
-      <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
-      <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
-      <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+      <div style="display: flex;">
+
+      </div>
+      <div style="display: flex;">
+        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
+        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
+        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
+      </div>
     </div>
     <div style="height: 10vh;"></div> <!-- To knock the entire form downards. -->
     <div style="display: flex; justify-content: center; align-items: center;">

@@ -1,9 +1,6 @@
 <template>
   <div>
-    <div class="header">
-      <h1 class="light">INTERNAL DEBUG CONSOLE</h1>
-    </div>
-    <div class="content">
+    <div class="content padded">
       <div class="level" style="display: block; max-height: 70vh; overflow-y: auto;">
         <pre v-for="(text) in trunctatedLog" :key="text">⚪ {{text}}</pre>
       </div>

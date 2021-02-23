@@ -12,19 +12,6 @@
       </div>
     </div>
 
-    <div class="navbuttons">
-      <div class="navbar-item">
-        <button class="navbar-button" @click="$router.go(-1)">
-          <fai icon="arrow-left"/>
-        </button>
-      </div>
-      <div class="navbar-item">
-        <button class="navbar-button" @click="$router.go(1)">
-          <fai icon="arrow-right"/>
-        </button>
-      </div>
-    </div>
-
     <nav class="navbar">
       <div class="navbar-picture" v-if="sharedStore.session">
         <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
@@ -49,14 +36,14 @@
       </div>
 
       <div class="navbar-item">
-        <button class="navbar-button" @click="navTo('/home')">
+        <button class="navbar-button" @click="navTo('/timeline')">
           <fai icon="stream"/>
         </button>
         <h3 class="light link-text">TIMELINE</h3>
       </div>
 
       <div class="navbar-item">
-        <button class="navbar-button" @click="navTo('/home/courses')">
+        <button class="navbar-button" @click="navTo('/courses')">
           <fai icon="graduation-cap"/>
         </button>
         <h3 class="light link-text">COURSES</h3>
@@ -83,6 +70,9 @@
         <h3 class="light link-text">SETTINGS</h3>
       </div>
     </nav>
+
+    <top-bar/>
+
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view class="view"></router-view>
@@ -98,6 +88,8 @@ import fs from 'fs';
 import path from 'path';
 import sharedStore from '../store';
 import Scratchpads from '../components/Scratchpads.vue';
+import TopBar from '../components/TopBar.vue';
+
 import capitalize from '../util/capitalize';
 import { remote } from 'electron';
 import Mousetrap from 'mousetrap';
@@ -126,6 +118,7 @@ export default {
   },
   components: {
     Scratchpads,
+    TopBar
   },
   async created() {
     // Get changes for notifications

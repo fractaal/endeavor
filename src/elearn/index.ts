@@ -128,7 +128,7 @@ export class ELearn implements eLearnInterface {
   async login(username: string, password: string, update: Function): Promise<boolean> {
     const maxRetries = 5;
     let result; 
-    for (let i = 0; i < maxRetries; i++) {
+    for (let i = 0; i <= maxRetries; i++) {
       try {
         result = await promiseTimeout(7500, this._login(username, password, update));
       } catch(err) {
@@ -503,6 +503,10 @@ export class ELearn implements eLearnInterface {
 
     for (let event of events) {
       event = convertRawTimeValuesToDate(event);
+      const correspondingModule = await this.getModule(event.course.id, event.instance);
+
+      if (correspondingModule) event.section = correspondingModule.section;
+      
       event.styling = urgency(event.timesort as Date)
       event.date = new Date(event.timesort);
       event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");

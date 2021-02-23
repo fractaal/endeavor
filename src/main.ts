@@ -53,17 +53,19 @@ Vue.use(VueTimeago, {
   locale: 'en',
 });
 
-/**
-  Vue.config.errorHandler = function(err, vm, info) {
-    sharedStore.debugLog.push(`[${Date.now()/1000}] - VUE ERROR | ERROR: ${err} | INFO: ${info}`);
-  }
-  Vue.config.warnHandler = function(msg, vm, trace) {
-    sharedStore.debugLog.push(`[${Date.now()/1000}] - VUE WARN | MSG: ${msg} | TRACE: ${trace}`);
-  }
-  window.onerror = function(msg, source, line, col, err) {
-    sharedStore.debugLog.push(`[${Date.now()/1000}] - MSG: ${msg} | SOURCE ${source} | LINE ${line} COLUMN ${col} | ERROR: ${err}`);
-  }
-*/
+
+Vue.config.errorHandler = function(err, vm, info) {
+  console.error(`[${new Date()}] - VUE ERROR | ERROR: ${err} | INFO: ${info}`);
+  sharedStore.debugLog.push(`[${new Date()}] - VUE ERROR | ERROR: ${err} | INFO: ${info}`);
+}
+Vue.config.warnHandler = function(msg, vm, trace) {
+  console.warn(`[${new Date()}] - VUE WARN | MSG: ${msg} | TRACE: ${trace}`)
+  sharedStore.debugLog.push(`[${new Date()}] - VUE WARN | MSG: ${msg} | TRACE: ${trace}`);
+}
+window.onerror = function(msg, source, line, col, err) {
+  console.error(`[${new Date()}] - MSG: ${msg} | SOURCE ${source} | LINE ${line} COLUMN ${col} | ERROR: ${err}`)
+  sharedStore.debugLog.push(`[${new Date()}] - MSG: ${msg} | SOURCE ${source} | LINE ${line} COLUMN ${col} | ERROR: ${err}`);
+}
 
 export const Bus = new Vue();
 

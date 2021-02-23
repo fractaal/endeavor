@@ -9,6 +9,7 @@ export interface Event {
   name:                    string;
   description:             string;
   descriptionformat:       number;
+  section:                 number;
   date:                    Date;
   location:                string;
   categoryid:              null;

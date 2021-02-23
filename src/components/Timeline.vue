@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="header">
-      <h1 class="light">TIMELINE</h1>
-    </div>
     <div class="content">
       <transition name="transition">
         <div class="nospacing emptylistplaceholder" v-if="timeline.length == 0 && !isLoading">
@@ -19,7 +16,7 @@
           :rightTitle="event.date" 
           :rightSubtitle="event.formattedtime"
           :content="event.description"
-          :internalLink="`/modules/${event.course.id}/${event.instance}`"
+          :internalLink="`/courses/${event.course.id}/${event.section}/${event.instance}`"
           :externalLink="event.url"
           :styling="event.styling"
           />

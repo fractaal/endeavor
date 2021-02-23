@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="header">
-      <h1 class="light">SETTINGS</h1>
-    </div>
     <div class="content settingsHighlight">
       <div class="centered">
         <img src="@/assets/icon_bw.png" class="logo"/>
