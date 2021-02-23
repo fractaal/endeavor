@@ -1,5 +1,9 @@
 export default [
   {
+    title: "🔥 Hotfix",
+    text: "Version 3.6.1's navigation overhaul broke a couple of things (See course button in section view leads to blank page & Books don't load), they should now be fixed!"
+  },
+  {
     title: "🧭 Navigation Overhaul",
     text: "Knowing where you are was a bit difficult to do in Endeavor compared to eLearn. Not anymore!"
   },
