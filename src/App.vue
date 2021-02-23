@@ -99,6 +99,8 @@ export default {
       this.$router.push('/login');
     }
 
+    this.sharedStore.fullPageLoadText = ""
+
     // If the login component wants to log in
     this.$on("login", async (username, password) => {
       if (await this.login(username, password)) {
