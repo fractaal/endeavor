@@ -503,6 +503,10 @@ export class ELearn implements eLearnInterface {
 
     for (let event of events) {
       event = convertRawTimeValuesToDate(event);
+      const correspondingModule = await this.getModule(event.course.id, event.instance);
+
+      if (correspondingModule) event.section = correspondingModule.section;
+      
       event.styling = urgency(event.timesort as Date)
       event.date = new Date(event.timesort);
       event.formattedtime = format(event.timesort, "🕘 hh:mma, MMMM dd, yyyy");
