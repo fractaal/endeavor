@@ -12,6 +12,10 @@ export default [
     text: "Some backend bug fixes were made. I probably made them worse, though. Sorry in advance."
   },
   {
+    title: "🔧 UI Fixes",
+    text: "Weird window button placement on the login screen is now fixed!",
+  },
+  {
     title: "🔺 High CPU usage temporary fix",
     text: "The overdue animation (pulsing white border) caused high CPU usage, and is disabled. I'm thinking of an alternative panic animation, but for now, it's gone."
   }
