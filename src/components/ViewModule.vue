@@ -3,19 +3,18 @@
     <loader v-if="!module" :text="`Loading module`"/>
     <div v-else>
       <div class="header">
-        <div style="max-width: 50%;">
-          
+          <!--
           <h1 v-if="module.name" class="light nospacing no-overflow">{{module.name.toUpperCase()}}</h1> 
           <p v-if="module.modnameformatted" class="light nospacing">{{module.modnameformatted.toUpperCase()}}</p>
-        </div>
+          -->
         <div style="display: flex;">
           <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
           <EndeavorButton @click="openExternalLink">🔎 Open in eLearn</EndeavorButton>
-          <EndeavorButton @click="$router.push('/home/courses/'+module.courseid)">📚 See course</EndeavorButton>
-          <EndeavorButton @click="$router.push('/home/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
+          <EndeavorButton @click="$router.push('/courses/'+module.courseid)">📚 See course</EndeavorButton>
+          <EndeavorButton @click="$router.push('/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
         </div>
       </div>
-      <div class="content">
+      <div class="content padded">
         <div>
           <div :class="module.styling" class="badge" v-if="module.duedateformatted">Due by {{module.duedateformatted}}</div>
           <div class="badge" v-if="module.timelimitformatted">{{module.timelimitformatted}}</div>
@@ -119,7 +118,7 @@ export default {
   methods: {
     async getModule() {
       this.module = {};
-      this.module = await this.sharedStore.eLearn.getModule(this.$route.params.course, this.$route.params.instance);
+      this.module = await this.sharedStore.eLearn.getModule(this.$route.params.id, this.$route.params.instance);
       this.actualGrade = Number((await this.sharedStore.eLearn.getActualGrade(this.module.modname, this.module.id)));
 
       // Get forum discussions if this specific module is of type forum.
