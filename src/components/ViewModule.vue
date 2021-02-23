@@ -8,10 +8,10 @@
           <p v-if="module.modnameformatted" class="light nospacing">{{module.modnameformatted.toUpperCase()}}</p>
           -->
         <div style="display: flex;">
-          <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
           <EndeavorButton @click="openExternalLink">🔎 Open in eLearn</EndeavorButton>
           <EndeavorButton @click="$router.push('/courses/'+module.courseid)">📚 See course</EndeavorButton>
           <EndeavorButton @click="$router.push('/courses/'+module.courseid+'/'+module.section)">📄 See section</EndeavorButton>
+          <EndeavorButton @click="openScratchpad">📒 Open scratchpad</EndeavorButton>
         </div>
       </div>
       <div class="content padded">
@@ -35,7 +35,7 @@
       <LessonView v-if="module.modname =='lesson'" :course="$route.params.course" :type="'LESSON'" :id="module.instance"/>
 
       <!-- If the module is a book... -->
-      <LessonView v-if="module.modname =='book'" :course="$route.params.course" :type="'BOOK'" :id="module.instance"/>
+      <LessonView v-if="module.modname =='book'" :course="$route.params.id" :type="'BOOK'" :id="module.instance"/>
 
       <!-- If the module is a page... --> 
       <div v-if="module.modname == 'page'" >
