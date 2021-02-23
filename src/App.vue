@@ -80,7 +80,7 @@ export default {
           loginResult = await this.login(credential.account, credential.password);
 
           if (loginResult) {
-            this.$router.push('/home');
+            this.$router.push('/timeline');
           } else {
             this.$router.push('/login');
           }
@@ -102,7 +102,7 @@ export default {
     // If the login component wants to log in
     this.$on("login", async (username, password) => {
       if (await this.login(username, password)) {
-        this.$router.push('/home');
+        this.$router.push('/timeline');
       } else {
         this.$router.push('/login');
       }
