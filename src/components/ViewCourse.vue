@@ -1,15 +1,14 @@
 <template>
   <div>
     <div class="header">
-      <h1 class="light">{{course.displayname}}</h1> 
       <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
     </div>
-    <div class="content">
+    <div class="content padded">
       <transition-group name="transition">
         <card v-for="section in sections" :key="section.section"
           :title="section.name"
           :content="section.summary"
-          :internalLink="`${course.id}/${section.section}`"
+          :internalLink="`/courses/${course.id}/${section.section}`"
         />
       </transition-group>
       <Loader v-if="isLoading"/>
