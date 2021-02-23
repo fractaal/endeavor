@@ -2,9 +2,10 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import sharedStore from '../store';
 
+import { resolve } from '@/elearn/path-resolution';
+
 // Views
 import Login from '../views/Login.vue'
-
 import FullPageLoad from '../views/FullPageLoad.vue';
 
 Vue.use(VueRouter)
@@ -21,7 +22,7 @@ const routes: Array<RouteConfig> = [
     component: Login
   },
   {
-    path: '/home',
+    path: '/timeline',
     component: () => import('../views/Home.vue'),
     children: [
       {
@@ -31,23 +32,23 @@ const routes: Array<RouteConfig> = [
       },
       {
         // Courses will be rendered inside home router view if /courses is matched
-        path: 'courses',
+        path: '/courses',
         name: 'Courses',
         component: () => import('../components/ViewCourses.vue'),
       },
       {
-        path: 'courses/:id',
-        name: "Course",
+        path: '/courses/:id',
+        name: "Courses",
         component: () => import('../components/ViewCourse.vue'),
       },
       {
-        path: 'courses/:id/:section',
-        name: "Section",
+        path: '/courses/:id/:section',
+        name: "Courses",
         component: () => import('../components/ViewSection.vue'),
       },
       {
-        path: '/modules/:course/:instance',
-        name: "Module",
+        path: '/courses/:id/:section/:instance',
+        name: "Courses",
         component: () => import('../components/ViewModule.vue'),
       },
       {
@@ -92,8 +93,16 @@ const router = new VueRouter({
   routes
 })
 
-/*
+
 router.beforeEach(async (to, from, next) => {
+  try {
+    sharedStore.pathData = resolve(to.fullPath, sharedStore.eLearn.cache);
+  } catch(err) {
+    console.warn("Pathdata failed - " + err);
+  }
+  
+
+  /*
   if (to.name == "Login" && await sharedStore.eLearn.getSession()) {
     console.warn("Preventing unwanted navigation back to login screen");
     next('/home');
@@ -101,7 +110,9 @@ router.beforeEach(async (to, from, next) => {
     sharedStore.search = "";
     next();
   }
+  */
+  next();
 })
-*/
+
 
 export default router
