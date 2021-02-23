@@ -1,10 +1,9 @@
 <template>
   <div>
     <div class="header">
-      <h1 class="light">NOTIFICATIONS</h1>
       <endeavor-button @click="sharedStore.eLearn.updateCacheAndNotify()"><fai icon="redo-alt" style="margin-right: 10px;"/>Refresh</endeavor-button>
     </div>
-    <div class="content">
+    <div class="content padded">
       <div class="cardlist">
         <div style="margin-bottom: 250px;">
           <div class="separator"><h2 class="light">JUST IN</h2></div>
@@ -42,13 +41,13 @@
               <p class="light nospacing">{{notif.text}}</p>
             </template>
             <template v-slot:buttons>
-              <endeavor-button v-if="notif.courseId && notif.sectionId && notif.moduleId" @click="$router.push(`/modules/${notif.courseId}/${notif.moduleId}`)">
+              <endeavor-button v-if="notif.courseId && notif.sectionId && notif.moduleId" @click="$router.push(`/courses/${notif.courseId}/${notif.sectionId}/${notif.moduleId}`)">
                 🔍 Open Module 
               </endeavor-button>
-              <endeavor-button v-else-if="notif.courseId && notif.sectionId" @click="$router.push(`/home/courses/${notif.courseId}/${notif.sectionId}`)">
+              <endeavor-button v-else-if="notif.courseId && notif.sectionId" @click="$router.push(`/courses/${notif.courseId}/${notif.sectionId}`)">
                 🔍 Open Section 
               </endeavor-button>
-              <endeavor-button v-else-if="notif.courseId" @click="$router.push(`/home/courses/${notif.courseId}`)">
+              <endeavor-button v-else-if="notif.courseId" @click="$router.push(`/courses/${notif.courseId}`)">
                 🔍 Open Course
               </endeavor-button>
             </template>
@@ -69,13 +68,13 @@
             <p class="light nospacing">{{notif.text}}</p>
           </template>
           <template v-slot:buttons>
-            <endeavor-button v-if="notif.courseId && notif.sectionId && notif.moduleId" @click="$router.push(`/modules/${notif.courseId}/${notif.moduleId}`)">
+            <endeavor-button v-if="notif.courseId && notif.sectionId && notif.moduleId" @click="$router.push(`/courses/${notif.courseId}/${notif.sectionId}/${notif.moduleId}`)">
               🔍 Open Module 
             </endeavor-button>
-            <endeavor-button v-else-if="notif.courseId && notif.sectionId" @click="$router.push(`/home/courses/${notif.courseId}/${notif.sectionId}`)">
+            <endeavor-button v-else-if="notif.courseId && notif.sectionId" @click="$router.push(`/courses/${notif.courseId}/${notif.sectionId}`)">
               🔍 Open Section 
             </endeavor-button>
-            <endeavor-button v-else-if="notif.courseId" @click="$router.push(`/home/courses/${notif.courseId}`)">
+            <endeavor-button v-else-if="notif.courseId" @click="$router.push(`/courses/${notif.courseId}`)">
               🔍 Open Course
             </endeavor-button>
           </template>
