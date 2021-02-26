@@ -1,6 +1,8 @@
 import {eLearnInterface, eLearnSession} from './interfaces/eLearn';
 import { PathData } from '@/elearn/path-resolution';
+
 import fuseSearch from './search';
+import { themes, Theme } from './theme';
 
 interface Store {
   eLearn: eLearnInterface|null;
@@ -12,6 +14,7 @@ interface Store {
     theme: string;
     loadHiddenCourseData: boolean;
     autoUpdateData: boolean;
+    zoomLevel: number;
   };
   searchFunction: Function;
   searchTimer: any;
@@ -22,6 +25,7 @@ interface Store {
   debugLog: string[];
   pathData: PathData[];
   session: eLearnSession;
+  themes: Theme[];
 }
 
 const store: Store = {
@@ -34,6 +38,7 @@ const store: Store = {
     theme: "light-theme",
     loadHiddenCourseData: false,
     autoUpdateData: true,
+    zoomLevel: 1,
   },
   searchFunction: fuseSearch,
   searchTimer: null,
@@ -44,6 +49,7 @@ const store: Store = {
   debugLog: [],
   pathData: [],
   session: {} as eLearnSession,
+  themes,
 };
 
 export default store;
