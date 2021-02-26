@@ -5,7 +5,7 @@
     <br>
     <div style="margin-left: 50%; margin-right: 50%; display: flex; flex-direction: column; align-items: center;">
       <video loop autoplay class="logo" style="width: 250px;">
-          <source src="@/assets/loadanim.webm"/>
+          <source :src="`${base}/loadanim.webm`"/>
       </video>
       <br><br>
       <h2 class="shimmer" style="width: 250px; text-align: center; font-weight: 300;" v-if="text">{{text}}</h2>
@@ -16,6 +16,12 @@
 <script>
 export default {
   name: "Loader",
+  data() {
+    return {
+      // eslint-disable-next-line no-undef
+      base: __static,
+    }
+  },
   props: {
     text: String,
   }
