@@ -137,10 +137,7 @@ export default {
     if (!(this.sharedStore.settings.version == remote.app.getVersion())) {
       console.log("!!!")
       this.navTo('/changelog');
-      this.sharedStore.settings.version = remote.app.getVersion();
-      fs.writeFileSync(path.join(data, "endeavor.json"), JSON.stringify({
-        settings: this.sharedStore.settings
-      }))
+      this.sharedStore.settings.version = remote.app.getVersion();  
     }
     
     this.sharedStore.session = await sharedStore.eLearn.getSession();

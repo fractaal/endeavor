@@ -1,5 +1,5 @@
 <template>
-  <div :class="sharedStore.settings.theme" class="app">
+  <div class="theme app">
     <transition name="modal">
       <Modal v-if="this.showModal" :show="this.showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
     </transition>
@@ -14,13 +14,12 @@
 <script>
 import path from 'path';
 import fs from 'fs';
-
 import sharedStore from './store';
-
 import {ELearn} from './elearn';
+import {initZoom} from './interface-scale';
+import {initFont} from './fonts';
 import keytar from 'keytar';
 import {remote, ipcRenderer} from 'electron';
-
 import Modal from './components/Modal.vue';
 
 const data = remote.app.getPath("userData");
@@ -39,6 +38,12 @@ export default {
     Modal,
   },
   async created () {
+    // Initialize zoom level to the saved setting
+    initZoom();
+
+    // Set font to the saved setting
+    initFont();
+
     // Show modal if ipcRenderer gets update-available event. 
     ipcRenderer.on("update-downloaded", (e, info) => {
       this.showModal = true;
@@ -46,10 +51,29 @@ export default {
       this.modalBody = `Hey hey! It looks like Endeavor has a new version: ${info.releaseName} - (${info.version})! It'll be installed once you exit Endeavor.`;
       this.sharedStore.updateAvailable = true;
     });
+
     // Creating new eLearn object in store...
     this.sharedStore.eLearn = new ELearn();
     this.sharedStore.fullPageLoadText = "Checking for existing config file..."
+
+    // Automatic login functionality
+    let credentials; let credential; let loginResult;
+    if (this.sharedStore.settings.saveLogin) {
+      credentials = await keytar.findCredentials("endeavor");
+      credential = credentials[0];
+
+      loginResult = await this.login(credential.account, credential.password);
+
+      if (loginResult) {
+        this.$router.push('/timeline');
+      } else {
+        this.$router.push('/login');
+      }
+    } else {
+      this.$router.push('/login');
+    }
     
+    /*
     // Checking if endeavor.json file exists
     if (fs.existsSync(path.join(data, "endeavor.json"))) {
       endeavor = JSON.parse(fs.readFileSync(path.join(data, "endeavor.json"), {encoding: "utf8"}));
@@ -98,6 +122,7 @@ export default {
       // If an existing preferences file doesn't exist, just push to login.
       this.$router.push('/login');
     }
+    */
 
     this.sharedStore.fullPageLoadText = ""
 
@@ -131,7 +156,7 @@ export default {
         this.sharedStore.fullPageLoadText = "WELCOME!"
         await keytar.setPassword("endeavor", username, password);
         console.log("Login success");
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 1500));
         return true;
       } else {
         this.sharedStore.fullPageLoadText = "❌ Login failed!"

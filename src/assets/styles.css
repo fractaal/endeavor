@@ -1,7 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Manrope:100,200,300,400,500,600,700,800,900');
+@import './select.css';
 
 :root {
   --nav-bar-size: 75px;
+}
+
+* {
+  color: var(--text-primary);
 }
 
 .floating {
@@ -33,7 +37,7 @@
   width: 500px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: var(--cardDarker);
+  background-color: var(--primary-dark);
   border-radius: 5px;
   box-shadow: 0 2px 50px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
@@ -54,7 +58,7 @@
 }
 
 .windowbuttons {
-  background-color: var(--background);
+  background-color: var(--primary-darkest);
   -webkit-app-region: drag;
   -webkit-user-select: none;
   display: flex;
@@ -75,13 +79,13 @@
 }
 
 .windowbutton:hover {
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--text-primary);
+  color: var(--primary-darkest);
   transform: scale(1.1);
 }
 
 .windowbutton:hover * {
-  color: var(--background);
+  color: var(--primary-darkest);
 }
 
 .nospacing {
@@ -98,13 +102,8 @@ body {
   overflow: hidden;
 }
 
-.dark-theme hr {
-  border: 1px solid rgba(255,255,255,0.02);
-}
 
-.light-theme hr {
-  border: 1px solid rgba(0,0,0,0.05);
-}
+
 
 .emptylistplaceholder {
   filter: opacity(0.6);
@@ -121,61 +120,8 @@ body {
   grid-template-columns: 1fr 1fr;
 }
 
-.warn {
-  --card: #c48256;
-  --cardDarker: #b37d37;
-}
-
-.alert {
-  --card: #9c263f;
-  --cardDarker: #6d1d35;
-}
-
-.danger {
-  --card: #181818;
-  --cardDarker: #222222;
-}
-
-.light-theme .danger, .light-theme .alert, .light-theme .warn {
-  --foreground: white !important;
-}
-
 .danger .cardUpper {
   animation: attention 2.5s cubic-bezier(0.075, 0.82, 0.165, 1) infinite;
-}
-
-.light-theme {
-  --foreground: black;
-  --background: #dcdcdc;
-  --sidebar: #e9e9e9;
-  --card: #ededed;
-  --cardDarker: #eeeeee;
-  --gradient1: #680054;
-  --gradient2: #F05661;
-  --highlight: #e7e7e7;
-  --highlight-lighter: #d6d6d6;
-  --topbar-color: linear-gradient(180deg, rgba(68, 0, 102, 0.75) 0%, rgba(92, 90, 191, 0.75) 100%);
-  --scratchpad-background: #fdfdfd;
-  --progress: #575757;
-}
-
-.dark-theme {
-  --foreground: white;
-  --background: #071829;
-  --sidebar: #102132;
-  --card: #04223C;
-  --cardDarker: #001B35;
-  --gradient1: #680054;
-  --gradient2: #F05661;
-  --highlight: #102336;
-  --highlight-lighter: #0e1d2e;
-  --topbar-color: linear-gradient(180deg, rgba(104, 0, 83, 0.75) 0%, rgba(240, 86, 96, 0.75) 100%);
-  --scratchpad-background: #1b3755;
-  --progress: #152d61;
-}
-
-.light-theme .navbar-button *, .light-theme .navbar-item * {
-  color: white;
 }
 
 .bar {
@@ -185,28 +131,19 @@ body {
 }
 
 .load {
-  background: var(--progress);
+  background: var(--secondary);
 	width: 0%;
 	height: 15px;
 }
 
-* {
-  font-family: Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color: var(--foreground);
-}
-
 .app {
-  background-color: var(--background);
+  background-color: var(--primary-darkest);
   height: 100vh;
   width: 100vw;
 }
 
 .background {
-  background-color: var(--background);
-}
-
-.sidebar {
-  background-color: var(--sidebar);
+  background-color: var(--primary-darkest);
 }
 
 .sidebar > h3 {
@@ -220,7 +157,7 @@ body {
   cursor: default;
   padding: 20px 20px 20px 40px;
   font-weight: 500;
-  background-color: var(--highlight-lighter);
+  background-color: var(--primary);
 }
 
 .sidebar > h1 {
@@ -246,7 +183,7 @@ body {
 }
 
 .searchbar>input {
-  background-color: var(--background);
+  background-color: var(--primary);
 }
 
 .searchbar>.searchicon {
@@ -254,13 +191,13 @@ body {
 }
 
 .cardUpper {
-  background-color: var(--card);
+  background-color: var(--primary);
   padding: 15px 20px 15px 20px;
   margin: 20px 0px; 
 }
 
 .cardLower {
-  background-color: var(--cardDarker);
+  background-color: var(--primary-dark);
   padding: 15px 20px 15px 20px;
   margin: 20px 0px; 
 }
@@ -268,7 +205,7 @@ body {
 .level {
   border-radius: 2px;
   padding: 10px 25px 10px 25px;
-  background-color: var(--highlight-lighter);
+  background-color: var(--primary);
   display: flex;
 }
 
@@ -284,10 +221,10 @@ body {
 
 .buttonwithlabel {
   transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  background-color: var(--card);
+  background-color: var(--primary);
   box-sizing: border-box;
   outline: none;
-  border: 0px solid var(--card);
+  border: 0px solid var(--primary);
   border-radius: 2px;
   font-size: 16px;
   padding: 15px;
@@ -299,29 +236,29 @@ body {
 }
 
 .buttonwithlabel.active {
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--secondary);
+  color: var(--text-secondary);
 }
 
 .buttonwithlabel:hover {
   transform: scale(1.1);
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--secondary);
+  color: var(--text-secondary);
 }
 
 .buttonwithlabel:hover * {
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--secondary);
+  color: var(--text-secondary);
 }
 
 .buttonwithlabel:active {
   transform:scale(0.9);
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--primary);
+  color: var(--text-primary);
 }
 
 .badge {
-  background-color: var(--cardDarker);
+  background-color: var(--primary-dark);
   padding: 15px; 
   margin-top: 10px; 
   margin-bottom: 10px; 
@@ -338,23 +275,23 @@ body {
 
 }
 
-.settingsHighlight>div:not(:first-child) {
+.settings-section {
+  padding-bottom: 25px;
+}
+
+.settings-section>div {
   transition: all 0.1s;
   border-radius: 10px;  
-  padding: 50px;
+  padding: 35px;
   margin: 10px 0px 10px 0px;
 }
 
-.settingsHighlight>div:nth-of-type(odd):not(:first-child) {
-  background-color: var(--highlight);
+.settings-section>div:nth-of-type(odd) {
+  background-color: var(--primary-dark);
 }
 
-.settingsHighlight>div:nth-of-type(even) {
-  background-color: var(--highlight-lighter);
-}
-
-.settingsHighlight>div:hover {
-  filter: brightness(1.05);
+.settings-section>div:nth-of-type(even) {
+  background-color: var(--primary);
 }
 
 .draggable {
@@ -370,8 +307,8 @@ body {
 .floating-editor {
   transition: filter 0.2s;
   z-index: 100;
-  background-color: var(--scratchpad-background);
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.15);
+  background-color: var(--primary);
+  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.35);
   padding: 20px;
   border-radius: 5px;
   position: absolute;
@@ -406,7 +343,7 @@ body {
 .roundButton {
   border: none;
   transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  background-color: var(--card);
+  background-color: var(--primary);
   box-sizing: border-box;
   outline: none;
   margin: 7px 0px 7px 0px;
@@ -422,23 +359,23 @@ body {
 
 .roundButton:hover {
   border: none;
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--text-primary);
+  color: var(--primary);
   transform: scale(1.1);
 }
 
 .roundButton:active {
   transform: scale(0.9);
-  color: var(--foreground);
-  background-color: var(--background);
+  color: var(--text-primary);
+  background-color: var(--primary);
 }
 
 .roundButton:active * {
-  color: var(--foreground);
+  color: var(--text-primary);
 }
 
 .roundButton:hover * {
-  color: var(--background);
+  color: var(--primary);
 }
 
 .footer {
@@ -446,7 +383,7 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  background-color: var(--cardDarker);
+  background-color: var(--primary-dark);
   color: white;
   text-align: center;
 }
@@ -454,20 +391,19 @@ body {
 input {
   transition: 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   font-size: 18px;
-  background-color: var(--card);
-  color: var(--foreground);
+  background-color: var(--primary-dark);
+  color: var(--text-primary);
   outline: none;
-  border: 0px solid var(--card);
+  border: 0px solid var(--primary);
   border-radius: none;
   margin: 7px 10px 7px 0px;
   padding: 12px;
   box-sizing: border-box;
   border-radius: 10px;
-  width: 400px; 
 }
 
 input:hover {
-  background-color: var(--highlight);
+  background-color: var(--primary);
 }
 
 input.transparent, button.transparent {
@@ -482,6 +418,10 @@ button.transparent:hover {
 
 input.transparent:hover {
   background-color: rgba(0,0,0,0.4); 
+}
+
+input[type="text"], input[type="password"] {
+  width: 400px;
 }
 
 input[type="text"].seamless {
@@ -620,13 +560,6 @@ input[type="text"].seamless {
   background-color: rgba(170, 170, 170, 0.25);
   box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
 }
-.light-theme ::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.5);
-}
-
-.dark-theme ::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.5);
-}
 
 ::-webkit-scrollbar-button {
   width: 0;
@@ -750,7 +683,7 @@ input[type="text"].seamless {
   top: 0;
   z-index: 10;
   position: fixed;
-  background: var(--topbar-color);
+  background: var(--navbar-color);
   width: var(--nav-bar-size);
   max-height: 100vh;
   height: 100vh;
@@ -829,8 +762,8 @@ input[type="text"].seamless {
 }
 
 .navbar-button:active, .navbar-button:active * {
-  background-color: var(--foreground);
-  color: var(--background);
+  background-color: var(--text-primary);
+  color: var(--primary-darkest);
   font-size: 0.8rem;
 }
 
@@ -851,7 +784,7 @@ input[type="text"].seamless {
   position: fixed;
   height: 75px;
   max-height: 75px;
-  background-color: var(--card);
+  background-color: var(--primary);
   margin-left: var(--nav-bar-size);
   min-width: calc(100vw - var(--nav-bar-size));
   max-width: calc(100vw - var(--nav-bar-size));
@@ -869,7 +802,7 @@ input[type="text"].seamless {
 }
 
 .topbar :last-child div {
-  background-color: var(--cardDarker);
+  background-color: var(--primary-dark);
 }
 
 .path-button {
@@ -895,7 +828,7 @@ input[type="text"].seamless {
   height: 60px;
   width: calc((100vw - var(--nav-bar-size) - 95px));
   left: calc(var(--nav-bar-size));
-  background-color: var(--background);
+  background-color: var(--primary-darkest);
   padding: 20px 40px 20px 40px;
 }
 
@@ -904,8 +837,21 @@ input[type="text"].seamless {
   left: 0;
 }
 
-.content.padded {
-  padding-top: 90px;
+.content.padded, .content-compact.padded {
+  padding-top: 100px;
+}
+
+.content-compact {
+  columns: 2;
+}
+
+.content-compact * {
+  break-inside: avoid;
+  break-after: avoid;
+  break-before: avoid;
+  page-break-inside: avoid;     
+  page-break-after: avoid;     
+  page-break-before: avoid;
 }
 
 .light {
@@ -915,10 +861,6 @@ input[type="text"].seamless {
 .logo {
   width: 300px;
   margin: -20px 0 -50px 0;
-}
-
-.light-theme .logo, .light-theme .splash-logo, .light-theme .settle {
-  filter: invert() opacity(1);
 }
 
 .centered {
@@ -931,13 +873,13 @@ input[type="text"].seamless {
   outline: 1px solid transparent;
   animation: bobbing 2s cubic-bezier(0.77, 0, 0.175, 1) alternate infinite;
   width: 500px;
-  margin: 5vw 0 -25px 0;
+  margin: 5vw 0 50px 0;
 }
 
 .settle {
   outline: 1px solid transparent;
   width: 500px;
-  margin: 5vw 0 -25px 0;
+  margin: 5vw 0 50px 0;
   animation: settle 2s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -1029,14 +971,6 @@ input[type="text"].seamless {
   flex: 1;
 }
 
-.dark-theme .separator::before, .dark-theme .separator::after {
-  border: 1px solid rgba(255,255,255,0.02);
-}
-
-.light-theme .separator::before, .light-theme .separator::after {
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
 .separator::before {
   margin-right: .25em;
 }
@@ -1067,13 +1001,11 @@ input[type="text"].seamless {
 @keyframes navbar-button-notify {
   0% {
     background-color: rgba(255,255,255,0.65);
-    color: var(--foreground);
   }
   50% {
     background-color: rgba(0,0,0,0);
   }
   100% {
     background-color: rgba(255,255,255,0.65);
-    color: var(--foreground);
   }
 }

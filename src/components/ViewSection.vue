@@ -9,18 +9,26 @@
         </div>
 
       </div>
-      <div class="content padded">
+      <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
         <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
-          <card v-for="module in section.modules" :key="module.id"
-            :title="module.name"
-            :subtitle="module.modnameformatted"
-            :rightTitle="module.duedate"
-            :rightSubtitle="module.duedateformatted"
-            :content="module.intro"
-            :internalLink="`/courses/${$route.params.id}/${$route.params.section}/${module.instance}`"
-            :externalLink="module.url"
-            :styling="module.styling"
-            />
+          <div v-for="module in section.modules" :key="module.id">
+            <card v-if="module.modnameformatted !== 'Label'"
+              :title="module.name"
+              :subtitle="module.modnameformatted"
+              :rightTitle="module.duedate"
+              :rightSubtitle="module.duedateformatted"
+              :content="sharedStore.settings.showActivityDescriptionsOnCards ? module.intro : ''"
+              :internalLink="`/courses/${$route.params.id}/${$route.params.section}/${module.instance}`"
+              :externalLink="module.url"
+              :styling="module.styling"
+              />
+            <h3 style="margin: 25px 0px 0px 10px;" v-else v-html="module.description">
+              
+            </h3>
+            <!--
+            <div v-else class="separator" style="margin: -50px 0px;"><h2 class="light" v-html="module.description"></h2></div>-->
+          </div>
+
         </transition-group>
       </div>
     </div>

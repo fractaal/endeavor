@@ -3,7 +3,7 @@
     <div class="header">
       <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
     </div>
-    <div class="content padded">
+    <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
       <transition-group name="transition">
         <card v-for="section in sections" :key="section.section"
           :title="section.name"

@@ -1,18 +1,15 @@
 import {eLearnInterface, eLearnSession} from './interfaces/eLearn';
 import { PathData } from '@/elearn/path-resolution';
+
 import fuseSearch from './search';
+import { themes, Theme } from './theme';
+import {settings} from './settings';
 
 interface Store {
   eLearn: eLearnInterface|null;
   search: string;
   searchResults: Record<string,any>;
-  settings: {
-    showDebugInfo: boolean;
-    saveLogin: boolean;
-    theme: string;
-    loadHiddenCourseData: boolean;
-    autoUpdateData: boolean;
-  };
+  settings: typeof settings;
   searchFunction: Function;
   searchTimer: any;
   userDoneTypingOnSearch: boolean;
@@ -22,19 +19,14 @@ interface Store {
   debugLog: string[];
   pathData: PathData[];
   session: eLearnSession;
+  themes: Theme[];
 }
 
 const store: Store = {
   eLearn: null,
   search: '',
   searchResults: {},
-  settings: {
-    showDebugInfo: false,
-    saveLogin: false,
-    theme: "light-theme",
-    loadHiddenCourseData: false,
-    autoUpdateData: true,
-  },
+  settings,
   searchFunction: fuseSearch,
   searchTimer: null,
   userDoneTypingOnSearch: true,
@@ -44,6 +36,7 @@ const store: Store = {
   debugLog: [],
   pathData: [],
   session: {} as eLearnSession,
+  themes,
 };
 
 export default store;
