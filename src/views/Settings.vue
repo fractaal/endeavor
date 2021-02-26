@@ -27,11 +27,12 @@
                     <p style="font-weight: 200;">{{theme.type.toUpperCase()}} THEME</p>
                     <p style="font-weight: 200;" v-if="sharedStore.settings.theme == theme.displayName">ACTIVE THEME</p>
                   </span>
-                  <p style="font-weight: 700; opacity: 0.5;">MAY BE INCOMPATIBLE ({{version}} ≠ {{theme.endeavorVersion}})</p>
+                  <p style="font-weight: 700; opacity: 0.5;" v-if="version != theme.endeavorVersion">MAY BE INCOMPATIBLE ({{version}} ≠ {{theme.endeavorVersion}})</p>
                 </div>
               </li>
             </ul>
           </div>
+          <a href="#" @click="openThemeFolder">Open theme folder</a>
         </div>
         <div>
           <div>
@@ -180,7 +181,7 @@
 
 <script>
 import keytar from 'keytar';
-import {remote} from 'electron';
+import {remote, shell} from 'electron';
 import path from 'path';
 import fs from 'fs';
 
@@ -224,6 +225,9 @@ export default {
     })
   },
   methods: {
+    openThemeFolder() {
+      shell.openItem(path.join(data, "/themes"));
+    },
     setToOneColumn() {
       setToOneColumn();
     },
