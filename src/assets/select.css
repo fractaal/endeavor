@@ -1,0 +1,43 @@
+.theme-select {
+  margin: 20px 0px 20px 0px;
+  background-color: var(--primary-darker);
+  box-shadow: inset 0px 0px 20px 20px var(--primary-darkest);
+  border-radius: 5px;
+
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.theme-select ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.theme-select ul li {
+  background-color: var(--primary-darker);
+  cursor: pointer;
+  padding: 20px;
+}
+
+.theme-select ul li:hover, .theme-select ul li.active {
+  transition: 0.1s;
+  background-color: var(--secondary);
+}
+
+.theme-select ul li:hover *, .theme-select ul li.active * {
+  color: var(--text-secondary);
+}
+
+.theme-select ul li * {
+  margin: 0;
+  padding: 0;
+}
+
+.theme-select span {
+  display: flex;
+}
+
+.theme-select span * {
+  padding: 0px 10px 0px 0px !important;
+}
