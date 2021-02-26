@@ -3,7 +3,7 @@
     <div class="header">
       <EndeavorButton @click="toggleHiddenCoursesView">{{hiddenCoursesView ? '👓 Back to normal' : '🕶 Show hidden'}}</EndeavorButton>
     </div>
-    <div class="content padded">
+    <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
       <transition-group name="transition">
         <card v-for="course in courses" :key="course.id"
             :title="course.displayname"
