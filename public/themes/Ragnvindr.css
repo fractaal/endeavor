@@ -1,26 +1,26 @@
 /*
-  displayName=Twilight Accent
-  author=Fractal
+  displayName=Ragnvindr
+  author=KuroshiROO
   type=Dark
   endeavorVersion=4.0.1
-  version=3
+  version=2
 */
 
 .theme {
   /* Primary colors. Dominant color on screen.*/
-  --primary: #04223C;
-  --primary-dark: #102336;
-  --primary-darker: #0e1d2e;
-  --primary-darkest: #071829;
+  --primary: #9d0208;
+  --primary-dark: #6a040f;
+  --primary-darker: #370617;
+  --primary-darkest: #110006;
 
   /*  Secondary colors to provide accents. By default, the gradient created
       by secondary and secondary-dark create the gradient on the navbar.
       This can be changed, of course.
   */
-  --secondary: #F05661;
-  --secondary-dark: #680054;
-  --secondary-darker: #32004b;
-  --secondary-darkest: #230035;
+  --secondary: #D00000;
+  --secondary-dark: #D00000;
+  --secondary-darker: #D00000;
+  --secondary-darkest: #D00000;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
   --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);

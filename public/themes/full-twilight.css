@@ -1,26 +1,26 @@
 /*
-  displayName=Synthwave
-  author=Markimoo
+  displayName=Full Twilight
+  author=Fractal
   type=Dark
-  endeavorVersion=4.0.0
-  version=1
+  endeavorVersion=4.0.1
+  version=3
 */
 
 .theme {
   /* Primary colors. Dominant color on screen.*/
-  --primary: #222222;
-  --primary-dark: #161616;
-  --primary-darker: #111111;
-  --primary-darkest: #000000;
+  --primary: #3f0131;
+  --primary-dark: #300026;
+  --primary-darker: #210031;
+  --primary-darkest: #13001d;
 
   /*  Secondary colors to provide accents. By default, the gradient created
       by secondary and secondary-dark create the gradient on the navbar.
       This can be changed, of course.
   */
-  --secondary: #d838b0;
-  --secondary-dark: #1b84fd;
-  --secondary-darker: #007e49;
-  --secondary-darkest: #004b22;
+  --secondary: #F05661;
+  --secondary-dark: #680054;
+  --secondary-darker: #32004b;
+  --secondary-darkest: #230035;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
   --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);

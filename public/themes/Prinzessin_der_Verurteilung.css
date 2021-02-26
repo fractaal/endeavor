@@ -1,26 +1,26 @@
 /*
-  displayName=Twilight Accent
-  author=Fractal
+  displayName=Prinzessin der Verurteilung
+  author=KuroshiROO
   type=Dark
   endeavorVersion=4.0.1
-  version=3
+  version=2
 */
 
 .theme {
   /* Primary colors. Dominant color on screen.*/
-  --primary: #04223C;
-  --primary-dark: #102336;
-  --primary-darker: #0e1d2e;
-  --primary-darkest: #071829;
+  --primary: #7b2cbf;
+  --primary-dark: #5a189a;
+  --primary-darker: #3c096c;
+  --primary-darkest: #240046;
 
   /*  Secondary colors to provide accents. By default, the gradient created
       by secondary and secondary-dark create the gradient on the navbar.
       This can be changed, of course.
   */
-  --secondary: #F05661;
-  --secondary-dark: #680054;
-  --secondary-darker: #32004b;
-  --secondary-darkest: #230035;
+  --secondary: #9d4edd;
+  --secondary-dark: #9d4edd;
+  --secondary-darker: #9d4edd;
+  --secondary-darkest: #9d4edd;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
   --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);

@@ -1,35 +1,35 @@
 /*
-  displayName=Twilight Accent
+  displayName=Shades of Purple
   author=Fractal
   type=Dark
   endeavorVersion=4.0.1
-  version=3
+  version=1
 */
 
 .theme {
   /* Primary colors. Dominant color on screen.*/
-  --primary: #04223C;
-  --primary-dark: #102336;
-  --primary-darker: #0e1d2e;
-  --primary-darkest: #071829;
+  --primary: #28284e;
+  --primary-dark: #232347;
+  --primary-darker: #222244;
+  --primary-darkest: #1e1e3f;
 
   /*  Secondary colors to provide accents. By default, the gradient created
       by secondary and secondary-dark create the gradient on the navbar.
       This can be changed, of course.
   */
-  --secondary: #F05661;
-  --secondary-dark: #680054;
-  --secondary-darker: #32004b;
-  --secondary-darkest: #230035;
+  --secondary: #fad000;
+  --secondary-dark: #bb2d51;
+  --secondary-darker: #ac255d;
+  --secondary-darkest: #33040e;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
-  --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+  --navbar-color: #2f2f68;
 
   /*  Controls color of text on primary or secondary colors.
       Make sure they're readable!
   */
   --text-primary: white;
-  --text-secondary: white;
+  --text-secondary: black;
 }
 
   /* Card/badge colors. */
