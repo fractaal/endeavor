@@ -1,5 +1,5 @@
 <template>
-  <div :class="sharedStore.settings.theme" class="app">
+  <div class="theme app">
     <transition name="modal">
       <Modal v-if="this.showModal" :show="this.showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
     </transition>
@@ -131,7 +131,7 @@ export default {
         this.sharedStore.fullPageLoadText = "WELCOME!"
         await keytar.setPassword("endeavor", username, password);
         console.log("Login success");
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 1500));
         return true;
       } else {
         this.sharedStore.fullPageLoadText = "❌ Login failed!"
