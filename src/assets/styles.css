@@ -190,10 +190,14 @@ body {
   margin-left: -40px;
 }
 
+.cardUpper:not(:first-child) {
+  margin: 20px 0px; 
+}
+
 .cardUpper {
   background-color: var(--primary);
   padding: 15px 20px 15px 20px;
-  margin: 20px 0px; 
+  margin: 0;
 }
 
 .cardLower {
