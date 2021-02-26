@@ -14,12 +14,17 @@
     <div style="display: flex; justify-content: center; align-items: center;">
       <div>
         <img src="../assets/icon.png" style="display: block; width: 300px; margin-left: auto; margin-right: auto;">
-        <h1>Endeavor</h1>
-        <h3 style="margin-top: -25px;">Log in with your eLearn information</h3>
+        <h1 class="light">ENDEAVOR</h1>
+        <h3 style="margin-top: -25px; font-weight: 300;">Log in with your eLearn information</h3>
         <form @submit.prevent="submit">
           <input v-model="username" type="text" placeholder="Username"/>
           <br>
           <input v-model="password" type="password" placeholder="Password"/>
+          <br>
+          <div style="display: flex; align-items: center;"> 
+            <checkbox v-model="sharedStore.settings.saveLogin"/>
+            <p>Remember me</p>
+          </div>
           <div style="display: flex; align-items: flex-end;">
             <button type="submit" style="margin-right: 0px; margin-left: auto;" class="roundButton">✔</button>
           </div>
@@ -39,6 +44,8 @@
 <script>
 import {remote} from 'electron';
 import sharedStore from '../store';
+
+import Checkbox from '../components/Checkbox.vue';
 import ChangeLogTicker from '../components/ChangeLogTicker.vue';
 
 const {BrowserWindow} = remote;
@@ -57,6 +64,7 @@ export default {
   name: 'Login',
   components: {
     ChangeLogTicker,
+    Checkbox,
   },
   methods: {
     async submit() {
