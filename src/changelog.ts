@@ -1,27 +1,27 @@
 export default [
   {
-    title: "🔥 Hotfix",
-    text: "Version 3.6.1's navigation overhaul broke a couple of things (See course button in section view leads to blank page & Books don't load), they should now be fixed!"
+    title: "💖 Welcome to Endeavor 4.",
+    text: "With Endeavor 4, we're putting your desires first!"
   },
   {
-    title: "🧭 Navigation Overhaul",
-    text: "Knowing where you are was a bit difficult to do in Endeavor compared to eLearn. Not anymore!"
+    title: "🎨 Themes",
+    text: "Lots and lots of themes! Custom themes as well! Go crazy!"
   },
   {
-    title: "📱 UI Change",
-    text: "The navigation overhaul merited a change in the user interface! The top bar is back, but it's sleek. You won't even know it's there!"
+    title: "📐 Interface Scaling",
+    text: "Find the UI too big? Too small? No problem! Set it to your preference!"
   },
   {
-    title: "🔧 Bug Fixes",
-    text: "Some backend bug fixes were made. I probably made them worse, though. Sorry in advance."
+    title: "🔠 Fonts",
+    text: "Custom fonts! Set it to whatever you want, even Wingdings."
   },
   {
-    title: "🔧 UI Fixes",
-    text: "Weird window button placement on the login screen is now fixed!",
+    title: "⚡ Show/Hide Activity Descriptions",
+    text: "Long activity descriptions would mean you'd have to scroll for a really long time. Turn them off, or on!",
   },
   {
-    title: "🔺 High CPU usage temporary fix",
-    text: "The overdue animation (pulsing white border) caused high CPU usage, and is disabled. I'm thinking of an alternative panic animation, but for now, it's gone."
+    title: "📏 Two-column view",
+    text: "Want more information at a glance? Endeavor 4 has got you covered! 💖"
   }
 ] as {
   title: string;
