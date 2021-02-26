@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="content">
+      <br>
       <transition name="transition">
         <div class="nospacing emptylistplaceholder" v-if="timeline.length == 0 && !isLoading">
           <fai size="10x" icon="check-circle" />
