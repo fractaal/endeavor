@@ -10,7 +10,7 @@
 
       </div>
       <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
-        <transition-group name="transition" style="margin-right: 25px; margin-left: 25px;">
+        <transition-group name="transition">
           <div v-for="module in section.modules" :key="module.id">
             <card v-if="module.modnameformatted !== 'Label'"
               :title="module.name"
