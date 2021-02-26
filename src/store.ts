@@ -3,19 +3,13 @@ import { PathData } from '@/elearn/path-resolution';
 
 import fuseSearch from './search';
 import { themes, Theme } from './theme';
+import {settings} from './settings';
 
 interface Store {
   eLearn: eLearnInterface|null;
   search: string;
   searchResults: Record<string,any>;
-  settings: {
-    showDebugInfo: boolean;
-    saveLogin: boolean;
-    theme: string;
-    loadHiddenCourseData: boolean;
-    autoUpdateData: boolean;
-    zoomLevel: number;
-  };
+  settings: typeof settings;
   searchFunction: Function;
   searchTimer: any;
   userDoneTypingOnSearch: boolean;
@@ -32,14 +26,7 @@ const store: Store = {
   eLearn: null,
   search: '',
   searchResults: {},
-  settings: {
-    showDebugInfo: false,
-    saveLogin: false,
-    theme: "light-theme",
-    loadHiddenCourseData: false,
-    autoUpdateData: true,
-    zoomLevel: 1,
-  },
+  settings,
   searchFunction: fuseSearch,
   searchTimer: null,
   userDoneTypingOnSearch: true,
