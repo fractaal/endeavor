@@ -4,6 +4,14 @@ export default [
     text: "With Endeavor 4, we're putting your desires first!"
   },
   {
+    title: "🩹 QOL Patch",
+    text: "When modifying themes, Endeavor will auto-reload the css file, making theme creation easier!"
+  },
+  {
+    title: "🐜 Bug Fixes",
+    text: "Modifying the themes folder while Endeavor is open will no longer spawn clones of themes.",
+  },
+  {
     title: "🎨 Themes",
     text: "Lots and lots of themes! Custom themes as well! Go crazy!"
   },
