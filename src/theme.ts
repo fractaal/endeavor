@@ -77,9 +77,19 @@ function addThemesFromFolder(folderPath: string, isInternal: boolean) {
 addThemesFromFolder("", true);
 addThemesFromFolder(path.join(data, "/themes"), false);
 
-fs.watch(path.join(data, "/themes"), () => {
-  console.log("Themes folder changed! Updating...");
-  addThemesFromFolder(path.join(data, "/themes"), false);
+fs.watch(path.join(data, "/themes"), (event, filename) => {
+  // make sure the changed file is a .css file
+  if (path.extname(filename) === ".css") {
+    console.log("Themes folder changed! Updating...");
+    themes.splice(0, themes.length);
+    addThemesFromFolder("", true);
+    addThemesFromFolder(path.join(data, "/themes"), false);
+
+    if (event == "change") {
+      const theme = themes.filter(t => t.filename == filename);
+      theme[0].setActive();
+    }
+  }
 })
 
 setTimeout(() => {
