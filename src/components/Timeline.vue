@@ -9,9 +9,9 @@
           <p>Time to sit back and relax.</p>
         </div>
       </transition>
-      <transition-group name="transition" mode="out-in">
+      <transition-group name="transition">
         <div v-for="event in timeline" :key="event.instance">
-          <card v-if="event.course"
+          <card
           :title="event.name" 
           :subtitle="event.course.fullnamedisplay" 
           :rightTitle="event.date" 
@@ -20,18 +20,28 @@
           :internalLink="`/courses/${event.course.id}/${event.section}/${event.instance}`"
           :externalLink="event.url"
           :styling="event.styling"
-          />
-          <card v-else
-          :title="event.name" 
-          :rightTitle="event.date" 
-          :rightSubtitle="event.formattedtime"
-          :content="event.description"
-          :externalLink="event.url"
-          :styling="event.styling"
-          />
+          >
+          <template v-slot:header>
+            <div style="display: flex; justify-content: space-between;">
+              <div class="flex-row">
+                <fai size="2x" icon="clock"/>
+                <div>
+                  <p style="font-weight: 800; margin: 0;">{{event.name}}</p>
+                  <p style="margin: 0;">{{event.course.fullnamedisplay}}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div style="display: flex; flex-direction: column; justify-content: flex-end;">
+                  <timeago :datetime="event.date" style="font-weight: 800; margin: 0;" :auto-update="60"/>
+                  <p style="margin: 0;">{{event.formattedtime}}</p>
+                </div>
+              </div>
+            </div>
+          </template>
+          </card>
         </div>
+        <Loader v-if="isLoading" key="loader"/>
       </transition-group>
-      <Loader v-if="isLoading"/>
     </div>
   </div>
 </template>
