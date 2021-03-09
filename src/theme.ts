@@ -15,7 +15,7 @@ export interface Theme {
   type: string;
   version: string;
   endeavorVersion: string;
-  default: string;
+  isDefault: string;
   setActive();
 }
 
@@ -29,7 +29,7 @@ function getThemeMetadata(data: string) {
     type: "none",
     version: "none",
     endeavorVersion: "none",
-    default: "none",
+    isDefault: "none",
   }
 
   for (const line of lines) {
