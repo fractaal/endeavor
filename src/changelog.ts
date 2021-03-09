@@ -4,32 +4,12 @@ export default [
     text: "With Endeavor 4, we're putting your desires first!"
   },
   {
-    title: "🩹 QOL Patch",
-    text: "When modifying themes, Endeavor will auto-reload the css file, making theme creation easier!"
+    title: "✨ Cards Update",
+    text: "Activity, course and module cards now have distinctive icons that tell you what type they are! They've also changed a lot behind the scenes, but you probably won't notice. 😂"
   },
   {
-    title: "🐜 Bug Fixes",
-    text: "Modifying the themes folder while Endeavor is open will no longer spawn clones of themes.",
-  },
-  {
-    title: "🎨 Themes",
-    text: "Lots and lots of themes! Custom themes as well! Go crazy!"
-  },
-  {
-    title: "📐 Interface Scaling",
-    text: "Find the UI too big? Too small? No problem! Set it to your preference!"
-  },
-  {
-    title: "🔠 Fonts",
-    text: "Custom fonts! Set it to whatever you want, even Wingdings."
-  },
-  {
-    title: "⚡ Show/Hide Activity Descriptions",
-    text: "Long activity descriptions would mean you'd have to scroll for a really long time. Turn them off, or on!",
-  },
-  {
-    title: "📏 Two-column view",
-    text: "Want more information at a glance? Endeavor 4 has got you covered! 💖"
+    title: "✅ Completion checkboxes",
+    text: "For activities that are completable, checkboxes now show in Endeavor to show completion status!",
   }
 ] as {
   title: string;
