@@ -27,7 +27,7 @@
                     <p style="font-weight: 200;">{{theme.type.toUpperCase()}} THEME</p>
                     <p style="font-weight: 200;" v-if="sharedStore.settings.theme == theme.displayName">ACTIVE THEME</p>
                   </span>
-                  <p style="font-weight: 700; opacity: 0.5;" v-if="version != theme.endeavorVersion">MAY BE INCOMPATIBLE ({{version}} ≠ {{theme.endeavorVersion}})</p>
+                  <p style="font-weight: 700; opacity: 0.5;" v-if="version != theme.endeavorVersion && (theme.isDefault !== 'yes')">MAY BE INCOMPATIBLE ({{version}} ≠ {{theme.endeavorVersion}})</p>
                 </div>
               </li>
             </ul>
