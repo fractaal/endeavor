@@ -4,6 +4,7 @@
   type=Dark
   endeavorVersion=4.0.1
   version=3
+  isDefault=yes
 */
 
 .theme {
@@ -18,12 +19,12 @@
       This can be changed, of course.
   */
   --secondary: #F05661;
-  --secondary-dark: #680054;
-  --secondary-darker: #32004b;
-  --secondary-darkest: #230035;
+  --secondary-dark: #972d34;
+  --secondary-darker: #70191f;
+  --secondary-darkest: #3d0c10;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
-  --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+  --navbar-color: linear-gradient(180deg, var(--secondary) 0%, #680054 100%);
 
   /*  Controls color of text on primary or secondary colors.
       Make sure they're readable!
@@ -60,11 +61,6 @@
 /* Logo color - original color is white. Inverting it makes it go black. */
 .theme .logo, .theme .splash-logo, .theme .settle {
   filter: opacity(1);
-}
-
-/* Scrollbar thumb colors */
-.theme ::-webkit-scrollbar-thumb {
-  background-color: rgba(255,255,255,0.5);
 }
 
 /* Navigation bar item colors */ 

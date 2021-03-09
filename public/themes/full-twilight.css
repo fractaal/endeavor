@@ -4,6 +4,7 @@
   type=Dark
   endeavorVersion=4.0.1
   version=3
+  isDefault=yes
 */
 
 .theme {
@@ -18,12 +19,12 @@
       This can be changed, of course.
   */
   --secondary: #F05661;
-  --secondary-dark: #680054;
-  --secondary-darker: #32004b;
-  --secondary-darkest: #230035;
+  --secondary-dark: #972d34;
+  --secondary-darker: #70191f;
+  --secondary-darkest: #3d0c10;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
-  --navbar-color: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+  --navbar-color: linear-gradient(180deg, var(--secondary) 0%, #680054 100%);
 
   /*  Controls color of text on primary or secondary colors.
       Make sure they're readable!
@@ -35,20 +36,20 @@
   /* Card/badge colors. */
 
 .theme .warn { 
-  --primary: #F0B65F;
-  --primary-dark: #DF8532;
+  --primary: #f0945f;
+  --primary-dark: #df7132;
   --text-primary: white;
 }
 
 .theme .alert {
-  --primary: #9C263F;
-  --primary-dark: #6D1D35;
+  --primary: #ce643a;
+  --primary-dark: #a34621;
   --text-primary: white;
 }
 
 .theme .danger {
-  --primary: #222222;
-  --primary-dark: #181818;
+  --primary: #940139;
+  --primary-dark: #4b0023;
   --text-primary: white;
 }
 

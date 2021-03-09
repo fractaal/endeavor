@@ -4,6 +4,7 @@
   type=Dark
   endeavorVersion=4.0.1
   version=1
+  isDefault=yes
 */
 
 .theme {
@@ -18,9 +19,9 @@
       This can be changed, of course.
   */
   --secondary: #fad000;
-  --secondary-dark: #bb2d51;
-  --secondary-darker: #ac255d;
-  --secondary-darkest: #33040e;
+  --secondary-dark: #967d00;
+  --secondary-darker: #4b3e00;
+  --secondary-darkest: #292200;
 
   /* Navigation bar color. Can be a gradient or just a solid color. Your choice! */
   --navbar-color: #2f2f68;
