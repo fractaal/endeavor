@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <div class="header">
@@ -14,10 +15,28 @@
             :buttons="[{name: hideButtonLabel, icon: hideButtonEmoji, event: 'hideToggle'}]"
             :internalLink="'/courses/'+course.id"
             :styling="course.styling"
-            />
+            >
+          <template v-slot:header>
+            <div style="display: flex; justify-content: space-between;">
+              <div class="flex-row">
+                <fai size="2x" icon="book"/>
+                <div>
+                  <p style="font-weight: 800; margin: 0;">{{course.displayname}}</p>
+                  <p style="margin: 0;">Last accessed {{course.lastaccessFormatted}}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div style="display: flex; align-items: center;" v-if="course.progress">
+                  <h2 style="margin-right: 5px;">{{course.progress}}%</h2>
+                  <p>complete</p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </card>
       </transition-group>
-      <Loader v-if="coursesLoading"/>
     </div>
+    <Loader style="padding-top: 120px;" v-if="coursesLoading"/>
   </div>
 </template>
 
@@ -69,6 +88,7 @@ export default {
   },
   methods: {
     async listCourses(usingCache) {
+      this.courses = [];
       this.coursesLoading = true;
       let data;
       if (usingCache) {
@@ -85,7 +105,8 @@ export default {
           if (typeof course.progress == "string") {
             course.progress = Number(course.progress)
           }
-          course.progress = course.progress.toFixed(0);
+          if (course.progress) course.progress = course.progress.toFixed(0);
+          
           courses.push(course);
         }
       }
