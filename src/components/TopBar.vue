@@ -22,6 +22,10 @@
       </div>
       <h2 style="margin: auto 5px auto 5px; font-weight: 400; opacity: 0.5;">></h2>
     </div>
+    <div v-if="sharedStore.settings.showDebugInfo" class="debug-info">
+      <p style="font-weight: 200;"><b>{{debugData.buildtime}}MS</b> : <b>{{debugData.loadedcourses}} </b>CRS | <b>{{debugData.loadedsections}} </b>SEC | <b>{{debugData.loadedmodules}} </b>MOD</p>
+      <p style="font-weight: 200;"><b>{{debugData.loadedmoduleswithdata}} </b>MOD DATA | <b>{{debugData.loadedmodules - debugData.loadedmoduleswithdata}} </b>MOD NO DATA</p>
+    </div>
   </div>
 </template>
 
@@ -32,7 +36,8 @@ export default {
   name: "TopBar",
   data() {
     return {
-      sharedStore: store
+      sharedStore: store,
+      debugData: store.eLearn.debugData(),
     }
   }
 }
