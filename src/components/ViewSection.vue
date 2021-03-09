@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Loader v-if="!section"/>
+    <Loader v-if="isLoading"/>
     <div v-else>
       <div class="header">
         <div>
@@ -11,24 +11,7 @@
       </div>
       <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
         <transition-group name="transition">
-          <div v-for="module in section.modules" :key="module.id">
-            <card v-if="module.modnameformatted !== 'Label'"
-              :title="module.name"
-              :subtitle="module.modnameformatted"
-              :rightTitle="module.duedate"
-              :rightSubtitle="module.duedateformatted"
-              :content="sharedStore.settings.showActivityDescriptionsOnCards ? module.intro : ''"
-              :internalLink="`/courses/${$route.params.id}/${$route.params.section}/${module.instance}`"
-              :externalLink="module.url"
-              :styling="module.styling"
-              />
-            <h3 style="margin: 25px 0px 0px 10px;" v-else v-html="module.description">
-              
-            </h3>
-            <!--
-            <div v-else class="separator" style="margin: -50px 0px;"><h2 class="light" v-html="module.description"></h2></div>-->
-          </div>
-
+          <module-card v-for="module in section.modules" :key="module.id" :module="module"/>
         </transition-group>
       </div>
     </div>
@@ -39,7 +22,7 @@
 import { shell } from 'electron';
 import sharedStore from '../store';
 
-import Card from './Card.vue';
+import ModuleCard from './ModuleCard.vue';
 import Loader from './Loader.vue';
 import EndeavorButton from './EndeavorButton.vue';
 
@@ -54,7 +37,7 @@ export default {
   },
   components: {
     Loader,
-    Card,
+    ModuleCard,
     EndeavorButton,
   },
   beforeRouteEnter(to, from, next) {
@@ -64,7 +47,10 @@ export default {
   },
   methods: {
     async getSection() {
+      this.section = {};
+      this.isLoading = true;
       this.section = await this.sharedStore.eLearn.getSection(this.$route.params.id, this.$route.params.section);
+      this.isLoading = false;
     },
     async openExternalLink() {
       shell.openExternal(this.section.url);
