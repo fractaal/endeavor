@@ -1,0 +1,11 @@
+.debug-info {
+  padding: 35px 10px;
+  margin-left: auto;
+}
+
+.debug-info * {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  text-align: end;
+}
