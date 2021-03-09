@@ -12,6 +12,15 @@
             <transition-group name="transition">
               <module-card v-for="module in sharedStore.searchResults.moduleResults" :module="module" :key="module.instance">
                 <template v-slot:extra>
+                  <div class="flex-row">
+                    <p style="margin-right: 10px;">In</p>
+                    <span style="display: flex; align-items: center; margin: 0; padding: 0;" v-for="(PathData) in resolve(`/courses/${module.courseid}/${module.section}/${module.instance}`, sharedStore.eLearn.cache)" :key="PathData.name">
+                      <router-link :to="PathData.path" style="padding: 0; margin: 0;">
+                        {{PathData.name}}
+                      </router-link>
+                      <p style="padding: 0; margin: 0 10px 0 10px; opacity: 0.5;">></p>
+                    </span>
+                  </div>
                 </template>
               </module-card>
             </transition-group>
@@ -21,7 +30,19 @@
                 :section="section"
                 :course="{id:section.courseid}"
                 :internalLink="`/courses/${section.courseid}/${section.section}`"
-                />
+              >
+                <template v-slot:extra>
+                  <div class="flex-row">
+                    <p style="margin-right: 10px;">In</p>
+                    <span style="display: flex; align-items: center; margin: 0; padding: 0;" v-for="(PathData) in resolve(`/courses/${section.courseid}/${section.section}`, sharedStore.eLearn.cache)" :key="PathData.name">
+                      <router-link :to="PathData.path" style="padding: 0; margin: 0;">
+                        {{PathData.name}}
+                      </router-link>
+                      <p style="padding: 0; margin: 0 10px 0 10px; opacity: 0.5;">></p>
+                    </span>
+                  </div>
+                </template>
+              </section-card>
             </transition-group>
           </div>
         </div>
@@ -33,6 +54,7 @@
 </template>
 
 <script>
+import { resolve } from '@/elearn/path-resolution';
 import sharedStore from '@/store';
 import SectionCard from '@/components/SectionCard.vue';
 import ModuleCard from '@/components/ModuleCard.vue';
@@ -48,7 +70,8 @@ export default {
   data() {
     return {
       sharedStore,
-      search: ""
+      search: "",
+      resolve,
     }
   },
   watch: {
