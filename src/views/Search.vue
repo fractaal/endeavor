@@ -10,21 +10,16 @@
         <div v-if="sharedStore.userDoneTypingOnSearch" :key="`content`" >
           <div class="cardlist">
             <transition-group name="transition">
-              <card v-for="module in sharedStore.searchResults.moduleResults" :key="module.id"
-                  :title="module.name"
-                  :subtitle="module.modnameformatted"
-                  :rightTitle="module.duedateformatted"
-                  :rightSubtitle="module.duedatedistanceformatted"
-                  :content="module.description"
-                  :styling="module.styling"
-                  :internalLink="`/courses/${module.courseid}/${module.section}/${module.id}`"
-                />
+              <module-card v-for="module in sharedStore.searchResults.moduleResults" :module="module" :key="module.instance">
+                <template v-slot:extra>
+                </template>
+              </module-card>
             </transition-group>
             <hr>
             <transition-group name="transition">
-              <card v-for="section in sharedStore.searchResults.sectionResults" :key="section.id"
-                :title="section.name"
-                :content="section.summary"
+              <section-card v-for="section in sharedStore.searchResults.sectionResults" :key="section.id"
+                :section="section"
+                :course="{id:section.courseid}"
                 :internalLink="`/courses/${section.courseid}/${section.section}`"
                 />
             </transition-group>
@@ -39,14 +34,16 @@
 
 <script>
 import sharedStore from '@/store';
-import Card from '@/components/Card.vue';
+import SectionCard from '@/components/SectionCard.vue';
+import ModuleCard from '@/components/ModuleCard.vue';
 import Loader from '@/components/Loader.vue';
 
 export default {
   name: "Search",
   components: {
-    Card,
-    Loader
+    SectionCard,
+    Loader,
+    ModuleCard,
   },
   data() {
     return {
