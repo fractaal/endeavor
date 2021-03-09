@@ -1,4 +1,5 @@
 @import './select.css';
+@import './debug-info.css';
 
 :root {
   --nav-bar-size: 75px;
@@ -9,7 +10,7 @@
 }
 
 .floating {
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.45);
+  box-shadow: 0 5px 7px 0 rgba(0, 0, 0, 0.45);
 }
 
 .changelog-view {
@@ -125,7 +126,7 @@ body {
 }
 
 .bar {
-	background: rgba(255,255,255,0.025);
+	background: var(--secondary-darker);
   margin: 0px 0px; 
   padding: 0;
 }
@@ -206,10 +207,14 @@ body {
   margin: 20px 0px; 
 }
 
+.container {
+  padding: 10px 25px 10px 25px;
+}
+
 .level {
   border-radius: 2px;
   padding: 10px 25px 10px 25px;
-  background-color: var(--primary);
+  background-color: var(--primary-darkest);
   display: flex;
 }
 
@@ -276,7 +281,7 @@ body {
 }
 
 .attention {
-
+  animation: attention 2.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
 }
 
 .settings-section {
@@ -350,35 +355,40 @@ body {
   background-color: var(--primary);
   box-sizing: border-box;
   outline: none;
-  margin: 7px 0px 7px 0px;
+  margin: 0px 10px;
   font-size: 18px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
+  border: 2px solid var(--text-primary);
+}
+
+.roundButton.disabled {
+  border: 2px dashed var(--text-primary);
 }
 
 .roundButton.danger {
   background-color: #F05661;
 }
 
-.roundButton:hover {
-  border: none;
+.roundButton:active {
+  transform: scale(0.75);
+  color: var(--text-primary);
+  background-color: var(--primary);
+}
+
+.roundButton:hover:not(.disabled) {
+  cursor: pointer;
   background-color: var(--text-primary);
   color: var(--primary);
   transform: scale(1.1);
-}
-
-.roundButton:active {
-  transform: scale(0.9);
-  color: var(--text-primary);
-  background-color: var(--primary);
 }
 
 .roundButton:active * {
   color: var(--text-primary);
 }
 
-.roundButton:hover * {
+.roundButton:hover:not(.disabled) * {
   color: var(--primary);
 }
 
@@ -457,19 +467,14 @@ input[type="text"].seamless {
 }
 
 @keyframes attention {
-  /** DISABLE FOR NOW, HIGH CPU USAGE
   0% {
-    box-shadow: inset 0 0 0px 5px rgba(255,255,255,0);
   }
 
   50% {
-    box-shadow: inset 0 0 0px 5px rgba(255,255,255,0.35);
   }
 
   100% {
-    box-shadow: inset 0 0 0px 5px rgba(255,255,255,0);
   }
-  */
 }
 
 @keyframes attention-text {
@@ -560,9 +565,8 @@ input[type="text"].seamless {
   height: 6px;
   border: 9px solid rgba(0, 0, 0, 0);
   background-clip: padding-box;
-  border-radius: 14px;
-  background-color: rgba(170, 170, 170, 0.25);
-  box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+  background-color: var(--primary-darker);
+  box-shadow: inset -1px -1px 0px var(--primary-dark), inset 1px 1px 0px var(--primary-dark);
 }
 
 ::-webkit-scrollbar-button {
@@ -574,7 +578,7 @@ input[type="text"].seamless {
   background-color: transparent;
 }
 ::-webkit-scrollbar-thumb:hover{
-  background-color: rgba(255, 255, 255, 0.089);
+  background-color: var(--secondary);
 }
 
 /* Toggle switches! */
