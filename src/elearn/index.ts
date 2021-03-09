@@ -152,7 +152,7 @@ export class ELearn implements eLearnInterface {
   private async _login(username: string, password: string, update: Function): Promise<boolean> {
     try {
       // To obtain a cookie
-      await client(`http://elearn.xu.edu.ph/lib/ajax/service.php?info=tool_mobile_get_public_config`);
+      await client(`${baseurl}/lib/ajax/service.php?info=tool_mobile_get_public_config`);
       const moodleSessionCookie = await cookieJar.getCookies(baseurl);
 
       remote.session.defaultSession.cookies.set({url: baseurl, name: moodleSessionCookie[0].key, value: moodleSessionCookie[0].value})
@@ -165,6 +165,8 @@ export class ELearn implements eLearnInterface {
           service: "moodle_mobile_app"
         }
       })
+
+      console.log(loginRequest.body);
 
       let token;
       try {
@@ -212,6 +214,15 @@ export class ELearn implements eLearnInterface {
   async wsFunction(name: string, args: {}, token?: string): Promise<any> {
     const useToken = token || session.token;
     try {
+      console.log({
+        ...args,
+        moodlewssettingfilter: true,
+        moodlewssettingfileurl: true,
+        moodlewsrestformat: "json",
+        wsfunction: name,
+        wstoken: useToken,
+      })
+
       const res = await client(`${baseurl}/webservice/rest/server.php`, {
         method: "POST",
         form: {
@@ -446,7 +457,14 @@ export class ELearn implements eLearnInterface {
             
             // Styling function definition
             const style = (key) => {
-              const styling = urgency(module[key] as Date);
+              let styling: string;
+              // If module.completiondata exists and is not complete
+              if (module.completiondata && module.completiondata.state === 0) {
+                styling = urgency(module[key] as Date);
+              } else {
+                styling = "safe";
+              }
+              
               module.styling = styling;
               module.duedateformatted = format(module[key], "hh:mma, MMMM dd, yyyy");
               /**
@@ -514,6 +532,23 @@ export class ELearn implements eLearnInterface {
     }
 
     return events;
+  }
+
+  async toggleModuleCompletion(module: Module): Promise<boolean> {
+    const targetValue = !(module.completiondata.state);
+    const response: any = await this.wsFunction("core_completion_update_activity_completion_status_manually", {cmid: module.id, completed: targetValue ? 1 : 0});
+    console.log(response)
+    try {
+      if (response.status == true) {
+        module.completiondata.state = targetValue ? 1 : 0;
+        return true;
+      } else {
+        return false;
+      }
+    } catch(err) {
+      console.warn(`[elearn-api toggleCompletion] FAIL for module ${module.name} - ${err}`);
+      return false;
+    }
   }
 
   async initialize(update: Function): Promise<void> {
@@ -613,8 +648,13 @@ export class ELearn implements eLearnInterface {
     return findInArray(this.cache.coursesMetadata, courseid);
   }
 
-  async getActualGrade(type: string, id: number) {
-    let grade: number;
+  async getFeedback(type: string, id: number): Promise<{
+    grade: number;
+    gradeForDisplay: string;
+    gradedDate: Date;
+    feedbackComments: string;
+  }> {
+    let grade: number; let gradeForDisplay: string; let feedbackComments: string; let gradedDate: Date;
     if (type == "quiz") {
       grade = (await this.wsFunction("mod_quiz_get_user_best_grade", {quizid: id})).grade;
     } else if (type == "assign") {
@@ -623,12 +663,39 @@ export class ELearn implements eLearnInterface {
        * Moodle weirdness means I have to do response.feedback.grade.grade. Don't ask me why.
        */
       try {
-        grade = response.feedback.grade.grade; // ???????????????????? 
+        grade = parseInt(response.feedback.grade.grade); // ???????????????????? 
       } catch(e) {
         grade = 0;
       }
+
+      try {
+        gradeForDisplay = response.feedback.gradefordisplay;
+      } catch(e) {
+        gradeForDisplay = "";
+      }
+
+      try {
+        gradedDate = response.feedback.gradedDate;
+      } catch(e) {
+        gradedDate = new Date(0);
+      }
+
+      try {
+        for (const plugin of response.feedback.plugins) {
+          if (plugin.type == "comments") {
+            feedbackComments = plugin.editorfields[0].text;
+          }
+        }
+      } catch(e) {
+        feedbackComments = "";
+      }
     }
-    return grade;
+    return {
+      grade,
+      gradeForDisplay,
+      gradedDate,
+      feedbackComments
+    };
   }
 
   debugData() {
