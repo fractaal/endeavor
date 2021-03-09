@@ -23,7 +23,10 @@ export default {
     }
   },
   props: {
-    text: String,
+    text: {
+      type: String,
+      required: false,
+    }
   }
 }
 </script>
