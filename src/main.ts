@@ -7,7 +7,7 @@ import sharedStore from './store';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import VueTimeago from 'vue-timeago';
-import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo, faStream, faGraduationCap, faCog, faScroll, faFlag, faBell, faPlus, faRedoAlt, faMinusCircle, faPlusCircle, faDotCircle, faMinus} from '@fortawesome/free-solid-svg-icons';
+import {faArrowLeft, faArrowRight, faWindowMinimize, faWindowRestore, faTimes, faSearch, faCheckCircle, faExclamationCircle, faPowerOff, faBroom, faTerminal, faBold, faItalic, faUnderline, faStrikethrough, faCode, faParagraph, faListOl, faListUl, faQuoteLeft, faRulerHorizontal, faUndo, faRedo, faStream, faGraduationCap, faCog, faScroll, faFlag, faBell, faPlus, faRedoAlt, faMinusCircle, faPlusCircle, faDotCircle, faMinus, faQuestionCircle, faBars, faBook, faClock, faComments, faFile, faPencilAlt, faChalkboard, faCheck} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 library.add(
@@ -47,6 +47,16 @@ library.add(
   faMinusCircle,
   faPlus,
   faMinus,
+  faQuestionCircle,
+  faBars,
+  faBook,
+  faClock,
+  faComments,
+  faFile,
+  faPencilAlt,
+  faScroll,
+  faChalkboard,
+  faCheck,
   );
 Vue.component('fai', FontAwesomeIcon);
 Vue.config.productionTip = false;
@@ -55,11 +65,11 @@ Vue.use(VueTimeago, {
   locale: 'en',
 });
 
-
 Vue.config.errorHandler = function(err, vm, info) {
   console.error(`[${new Date()}] - VUE ERROR | ERROR: ${err} | INFO: ${info}`);
   sharedStore.debugLog.push(`[${new Date()}] - VUE ERROR | ERROR: ${err} | INFO: ${info}`);
 }
+/*
 Vue.config.warnHandler = function(msg, vm, trace) {
   console.warn(`[${new Date()}] - VUE WARN | MSG: ${msg} | TRACE: ${trace}`)
   sharedStore.debugLog.push(`[${new Date()}] - VUE WARN | MSG: ${msg} | TRACE: ${trace}`);
@@ -68,6 +78,7 @@ window.onerror = function(msg, source, line, col, err) {
   console.error(`[${new Date()}] - MSG: ${msg} | SOURCE ${source} | LINE ${line} COLUMN ${col} | ERROR: ${err}`)
   sharedStore.debugLog.push(`[${new Date()}] - MSG: ${msg} | SOURCE ${source} | LINE ${line} COLUMN ${col} | ERROR: ${err}`);
 }
+*/
 
 export const Bus = new Vue();
 
