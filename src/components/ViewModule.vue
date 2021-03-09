@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loader v-if="!module" :text="`Loading module`"/>
+    <loader v-if="isLoading"/>
     <div v-else>
       <div class="header">
           <!--
@@ -21,15 +21,37 @@
           <div class="badge" v-if="module.timeopenformatted">{{module.timeopenformatted}}</div>
           <div class="badge" v-if="module.timecloseformatted">{{module.timecloseformatted}}</div>
         </div>
-        <grade v-if="module.grade" :grade="actualGrade" :maxGrade="module.grade" :id="module.instance" :modname="module.modname"/>
+        <grade v-if="module.grade" :isLoading="feedbackIsLoading" :grade="feedback.grade" :maxGrade="module.grade" :id="module.instance" :modname="module.modname"/>
       </div>
-      <hr>
     </div>
+    <hr>
     <div>
-      <div class="level" v-if="module.intro">
-        <p v-html="module.intro"/>
-        <br>
-      </div>
+      <!-- Display feedback if it exists. The user wants to see this first. -->
+      <card styling="warn" v-if="feedback.feedbackComments">
+        <template v-slot:header>
+          <div class="flex-row">
+            <fai size="3x" icon="exclamation-circle"/>
+            <h2 style="font-weight: 400;">FEEDBACK</h2>
+          </div>
+        </template>
+        <template v-slot:content>
+          <p v-html="feedback.feedbackComments"></p>
+        </template>
+      </card>
+      <hr v-if="feedback.feedbackComments">
+
+      <card v-if="module.intro">
+        <template v-slot:header>
+          <div class="flex-row">
+            <fai size="3x" icon="question-circle"/>
+            <h2 style="font-weight: 400;">DESCRIPTION</h2>
+          </div>
+        </template>
+        <template v-slot:content>
+          <p v-html="module.intro"/>
+        </template>
+      </card>
+      <hr v-if="module.intro">
       
       <!-- If the module is a lesson... -->
       <LessonView v-if="module.modname =='lesson'" :course="$route.params.course" :type="'LESSON'" :id="module.instance"/>
@@ -46,9 +68,11 @@
       </div>
 
       <!-- If the module is a forum... -->
+      <!-- Disable forum component for now 
       <div v-if="module.modname == 'forum'" style="margin: 20px;">
         <Discussions :discussions="discussions"/>
       </div>
+      -->
       
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
@@ -61,24 +85,30 @@
           </template>
         </card>
       </div>
-      
-      <div class="level" v-if="sharedStore.settings.showDebugInfo">
-        <div>
-          <h3>Debug Data</h3>
+
+      <card v-if="sharedStore.settings.showDebugInfo">
+        <template v-slot:header>
+          <div class="flex-row">
+            <fai size="3x" icon="question-circle"/>
+            <h2 style="font-weight: 400;">DEBUGGER</h2>
+          </div>
+        </template>
+        <template v-slot:content>
           <pre>
             {{JSON.stringify(module, null, 2)}}
           </pre>
-        </div>
-      </div>
+        </template>
+      </card>
 
     </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import sharedStore from '../store';
 
-import Discussions from './Discussions.vue';
+// import Discussions from './Discussions.vue';
 import ContentView from './ContentView.vue';
 import LessonView from './LessonView.vue';
 import Card from './Card.vue';
@@ -97,7 +127,7 @@ export default {
     Grade,
     Card,
     EndeavorButton,
-    Discussions,
+    // Discussions,
     ContentView,
     LessonView,
   },
@@ -106,7 +136,10 @@ export default {
       sharedStore,
       module: {},
       isLoading: false,
-      actualGrade: 0,
+      feedbackIsLoading: false,
+      feedback: {
+        grade: 0,
+      },
       discussions: [],
     }
   },
@@ -117,9 +150,16 @@ export default {
   },
   methods: {
     async getModule() {
+      // Waiting for module
       this.module = {};
+      this.isLoading = true;
       this.module = await this.sharedStore.eLearn.getModule(this.$route.params.id, this.$route.params.instance);
-      this.actualGrade = Number((await this.sharedStore.eLearn.getActualGrade(this.module.modname, this.module.id)));
+      this.isLoading = false;
+
+      // Grades
+      this.feedbackIsLoading = true;
+      this.feedback = Object.assign({}, this.feedback, await this.sharedStore.eLearn.getFeedback(this.module.modname, this.module.id));
+      this.feedbackIsLoading = false;
 
       // Get forum discussions if this specific module is of type forum.
       if (this.module.modname == "forum") {
