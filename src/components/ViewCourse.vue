@@ -5,14 +5,10 @@
     </div>
     <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
       <transition-group name="transition">
-        <card v-for="section in sections" :key="section.section"
-          :title="section.name"
-          :content="section.summary"
-          :internalLink="`/courses/${course.id}/${section.section}`"
-        />
+        <section-card v-for="section in sections" :key="section.section" :section="section" :course="course"/>
       </transition-group>
-      <Loader v-if="isLoading"/>
     </div>
+    <Loader v-if="isLoading"/>
   </div>
 </template>
 
@@ -20,7 +16,7 @@
 import sharedStore from '../store';
 
 import Loader from './Loader.vue';
-import Card from './Card.vue';
+import SectionCard from './SectionCard.vue';
 import EndeavorButton from './EndeavorButton.vue';
 
 import { shell } from 'electron';
@@ -29,7 +25,7 @@ export default {
   name: "ViewCourse",
   components: {
     Loader,
-    Card,
+    SectionCard,
     EndeavorButton,
   },
   beforeRouteEnter(to, from, next) {
@@ -47,10 +43,14 @@ export default {
   },
   methods: {
     async getCourse() {
+      this.course = {};
+      this.sections = [];
+      this.isLoading = true;
       const [course, sections] = await Promise.all([
         this.sharedStore.eLearn.getCourse(this.$route.params.id),
         this.sharedStore.eLearn.getCourseInfo(this.$route.params.id)
       ])
+      this.isLoading = false;
       this.course = course;
       this.sections = sections;
     },
