@@ -3,6 +3,7 @@
     <div class="cardUpper" style="border-radius: 2px 2px 0px 0px; margin-bottom: 0;">
       <slot name="header">
       </slot>
+      <!--
       <div style="display: flex; justify-content: space-between;">
         <div style="display: flex; justify-content: center; align-items: center;">
           <div v-if="pictureurl" style="margin-right: 10px;">
@@ -17,11 +18,11 @@
         <div style="display: flex; flex-direction: column; align-items: flex-end;">
           <div style="display: flex; flex-direction: column;">
             <timeago v-if="rightTitleProcessed" style="font-weight: 800;" :datetime="rightTitleProcessed" :auto-update="60"></timeago>
-            <!--<p style="font-weight: 800; margin: 0;">{{rightTitle}}</p>-->
             <p style="margin:0; font-weight: 400;">{{rightSubtitle}}</p>
           </div>
         </div>
       </div>
+      -->
       <div style="display: flex; justify-content: flex-end;">
         <div style="display: flex;">
           <div v-for="button in buttons" :key="button.name">
