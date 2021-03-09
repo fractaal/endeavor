@@ -8,6 +8,7 @@
         <fai size="2x" icon="bars"/>
         <p style="margin: 0;">{{section.name}}</p>
       </div>
+      <slot name="extra"/>
     </template>
   </card>
 </template>

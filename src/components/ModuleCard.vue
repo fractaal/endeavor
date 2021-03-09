@@ -25,9 +25,6 @@
           </div>
         </div>
         <div class="flex-row">
-          <slot name="extra"/>
-        </div>
-        <div class="flex-row">
           <div style="text-align: right;">
             <timeago v-if="module.duedate" :datetime="module.duedate" style="font-weight: 800; margin: 0;" :auto-update="60"/>
             <p style="margin: 0;">{{module.duedateformatted}}</p>
@@ -35,6 +32,7 @@
           <completion-checkbox :mod="module"/>
         </div>
       </div>
+      <slot name="extra"/>
     </template>
   </card>
 </template>
