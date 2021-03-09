@@ -34,7 +34,12 @@ export interface eLearnInterface {
   getTimeline(): Promise<Event[]>;
   buildCache(update: Function): Promise<ELearn['cache']>;
   debugData(): Record<string,any>;
-  getActualGrade(type: string, id: number): Promise<number>;
+  getFeedback(type: string, id: number): Promise<{
+    grade: number;
+    gradeForDisplay: string;
+    gradedDate: Date;
+    feedbackComments: string;
+  }>;
   getForumDiscussions(forumid: string): Promise<Discussion[]>;
   getLessonPages(lessonid: string): Promise<PagesData>;
   getBookPages(courseid: string, bookid: string): Promise<PagesData>;
