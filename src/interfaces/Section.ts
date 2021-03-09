@@ -38,7 +38,13 @@ export interface Module {
   courseid:            number;
   section:             number;
   hasextradata:        boolean;
-  [customprop: string]:any;
+
+  /**
+   * Complete / uncomplete the module.
+   */
+  toggleCompletion(): Promise<boolean>;
+
+  [customprop: string]: any;
 }
 
 export interface Completiondata {
