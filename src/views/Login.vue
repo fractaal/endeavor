@@ -20,13 +20,13 @@
           <input v-model="username" type="text" placeholder="Username"/>
           <br>
           <input v-model="password" type="password" placeholder="Password"/>
-          <br>
+          <br><br>
           <div style="display: flex; align-items: center;"> 
             <checkbox v-model="sharedStore.settings.saveLogin"/>
             <p>Remember me</p>
           </div>
           <div style="display: flex; align-items: flex-end;">
-            <button type="submit" style="margin-right: 0px; margin-left: auto;" class="roundButton">✔</button>
+            <button type="submit" style="margin-right: 0px; margin-left: auto;" class="roundButton"><fai size="lg" icon="check"/></button>
           </div>
         </form>
       </div>
