@@ -1,13 +1,18 @@
 import { CourseMetadata } from "@/interfaces/CourseMetadata";
 import { Module, Section } from "@/interfaces/Section";
+import store from '../store';
 import findInArray from "@/util/find-in-array";
 
 export interface PathData {
+  course?: CourseMetadata;
+  section?: Section;
+  module?: Module;
   name: string;
   path: string;
 }
 
-export function resolve(path: string, data: {coursesMetadata: CourseMetadata[]; buildTime: number}): PathData[] {
+export function resolve(path: string): PathData[] {
+  const data = store.eLearn.cache;
   const tokens = path.split("/");
   const result: PathData[] = [];
 
@@ -25,6 +30,7 @@ export function resolve(path: string, data: {coursesMetadata: CourseMetadata[]; 
     course = findInArray(data.coursesMetadata, parseInt(tokens[2]));
     if (course) {
       result.push({
+        course: course,
         name: course.shortname,
         path: `/COURSES/${tokens[2]}`
       })
@@ -35,6 +41,8 @@ export function resolve(path: string, data: {coursesMetadata: CourseMetadata[]; 
     section = course.sections[tokens[3]];
     if (section) {
       result.push({
+        course: course,
+        section: section,
         name: section.name,
         path: `/COURSES/${tokens[2]}/${tokens[3]}`
       })
@@ -47,6 +55,9 @@ export function resolve(path: string, data: {coursesMetadata: CourseMetadata[]; 
 
     if (module) {
       result.push({
+        course: course,
+        section: section,
+        module: module,
         name: module.name,
         path: `/COURSES/${tokens[2]}/${tokens[3]}/${tokens[4]}`
       })
