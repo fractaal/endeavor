@@ -76,10 +76,13 @@
       
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
-        <card v-for="content in module.introattachments" :key="content.filename" 
-        :title="content.filename"
-        :subtitle="content.type"
-        >
+        <card v-for="content in module.introattachments" :key="content.filename" >
+          <template v-slot:header>
+            <div>
+              <p style="font-weight: 800; margin: 10px 0 0 0;">{{content.filename}}</p>
+              <p style="margin: 0;">{{content.mimetype}}</p>
+            </div>
+          </template>
           <template v-slot:buttons>
             <endeavor-button @click="openLink(content.fileurl)">🔻 Download</endeavor-button>
           </template>
