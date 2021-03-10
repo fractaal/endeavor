@@ -14,6 +14,7 @@ import promiseTimeout from '../util/promise-timeout';
 import {getCourseVisibility} from '../course-presentation';
 import sharedStore from '../store';
 import { diff } from './diff';
+import { Bus } from '../main';
 
 // Interfaces
 import {eLearnInterface, eLearnSession} from '../interfaces/eLearn';
@@ -134,10 +135,12 @@ export class ELearn implements eLearnInterface {
       } catch(err) {
         if (err !== "TIMEOUT") {
           console.warn(`[elearn-api] Failed to login - ${err}`)
+          Bus.$emit('toast', `Login failed! ${err}`, {}, 'error');
           update(`❌ Login failed!`);
           return false;
         } else {
           console.warn(`[elearn-api] Login attempt ${i+1} failed - ${err} - retrying`);
+          Bus.$emit('toast', `Login request timed out! ${i+1}/${maxRetries} retries`, {}, 'warning');
           update(`⚠ Timed out, retrying (${i+1} of ${maxRetries} retries)`);
         }
       }
@@ -173,6 +176,7 @@ export class ELearn implements eLearnInterface {
         token = JSON.parse(loginRequest.body).token;
       } catch(err) {
         console.warn("[elearn-api] Login response parse failure: " + err);
+        Bus.$emit('toast', `Login failed. Incorrect password! ${err}`, {}, 'error');
         return false;
       }
       
@@ -191,6 +195,7 @@ export class ELearn implements eLearnInterface {
 
     } catch(err) {
       console.warn("[elearn-api] Login request failure: " + err); 
+      Bus.$emit('toast', `Login request failure! ${err}`, {}, 'error');
       return false;
     }
   }
@@ -511,11 +516,9 @@ export class ELearn implements eLearnInterface {
   async getTimeline(): Promise<Event[]> {
     const weekAgo = (Date.now()/1000) - (60*60*24*7)
     const res = await this.wsFunctionRaw({
-      timesortfrom: weekAgo.toFixed(0),
-      limitnum: 50,
       moodlewssettingfilter: 'true',
       moodlewssettingfileurl: 'true',
-      wsfunction: 'core_calendar_get_action_events_by_timesort',
+      wsfunction: 'core_calendar_get_calendar_upcoming_view',
     });
     const events: Event[] = res.events;
 
@@ -543,10 +546,12 @@ export class ELearn implements eLearnInterface {
         module.completiondata.state = targetValue ? 1 : 0;
         return true;
       } else {
+        Bus.$emit('toast', `Couldn't toggle completion for ${module.name} - ${response.message}`, {}, 'error');
         return false;
       }
     } catch(err) {
       console.warn(`[elearn-api toggleCompletion] FAIL for module ${module.name} - ${err}`);
+      Bus.$emit('toast', `Couldn't toggle completion for ${module.name} - ${err}`);
       return false;
     }
   }
@@ -568,6 +573,7 @@ export class ELearn implements eLearnInterface {
    * listing changes between the newest cache and the disk cache.
    */
   async updateCacheAndNotify() {
+    Bus.$emit('toast', 'Synchronizing with eLearn ⏳');
     let newCache: {
       coursesMetadata: CourseMetadata[];
       buildTime: number;
@@ -583,6 +589,7 @@ export class ELearn implements eLearnInterface {
       console.warn(`[elearn-api] Update failed - ${err}`);
       this.notificationsStatus.isLoading = false;
       this.notificationsStatus.isFailed = true;
+      Bus.$emit('toast', '❌ Synchronization failed: ' + err, {}, 'error');
       return;
     }
 
@@ -594,6 +601,8 @@ export class ELearn implements eLearnInterface {
 
     this.notificationsStatus.isFailed = false;
     this.notificationsStatus.isLoading = false;
+
+    Bus.$emit('toast', 'Synchronized with eLearn! 💖', {}, 'success');
 
     return;
   }

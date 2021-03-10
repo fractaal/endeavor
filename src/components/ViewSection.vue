@@ -4,8 +4,9 @@
     <div v-else>
       <div class="header">
         <div>
-          <EndeavorButton @click="openExternalLink">🔍 Open in eLearn</EndeavorButton>
-          <EndeavorButton @click="$router.push('/courses/'+section.courseid)">📚 See course</EndeavorButton>
+          <endeavor-button @click="openExternalLink">🔍 Open in eLearn</endeavor-button>
+          <endeavor-button @click="$router.push('/courses/'+section.courseid)">📚 See Course</endeavor-button>
+          <endeavor-button @click="$router.push(`/grades/${section.courseid}`)">🎓 Grade Overview</endeavor-button>
         </div>
 
       </div>

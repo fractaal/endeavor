@@ -59,7 +59,7 @@
 }
 
 /* Logo color - original color is white. Inverting it makes it go black. */
-.theme .logo, .theme .splash-logo, .theme .settle {
+.theme .logo, .theme .splash-logo, .theme .settle, .windowbutton-img {
   filter: invert();
 }
 

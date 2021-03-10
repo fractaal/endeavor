@@ -3,7 +3,7 @@
     <div class="centered">
       <br>
       <img src="@/assets/icon_bw.png" class="logo"/>
-      <h1 class="light">ENDEAVOR {{require('electron').remote.app.getVersion()}}</h1>
+      <h1 class="light">ENDEAVOR {{require('electron').remote.app.getVersion() == "4.2.0" ? '420 🌱' : require('electron').remote.app.getVersion()}}</h1>
       <h3 class="light" style="margin-top: -20px;">Made with 💖 from <a href="https://twitter.com/benjuuude">benjuuude</a> — Problems? Open an <a href="https://github.com/fractaal/endeavor/issues">issue on GitHub</a></h3>
     </div>
     <div class="content">

@@ -1,5 +1,6 @@
 @import './select.css';
 @import './debug-info.css';
+@import './grade-overview.css';
 
 :root {
   --nav-bar-size: 75px;
@@ -74,19 +75,17 @@
 
 .windowbutton {
   z-index: 70;
-  transition: 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
   -webkit-app-region: no-drag;
-  padding: 5px 17px 2px 17px;
 }
 
 .windowbutton:hover {
-  background-color: var(--text-primary);
-  color: var(--primary-darkest);
-  transform: scale(1.1);
+  background-color: var(--primary-darker);
 }
 
-.windowbutton:hover * {
-  color: var(--primary-darkest);
+.windowbutton-img {
+  object-fit: cover;
+  width: 60px;
+  height: 30px;
 }
 
 .nospacing {
@@ -102,9 +101,6 @@
 body {
   overflow: hidden;
 }
-
-
-
 
 .emptylistplaceholder {
   filter: opacity(0.6);

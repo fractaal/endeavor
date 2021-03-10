@@ -1,15 +1,6 @@
 <template>
   <div class="loginBackground">
-    <div class="windowbuttons">
-      <div style="display: flex;">
-
-      </div>
-      <div style="display: flex;">
-        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
-        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
-        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
-      </div>
-    </div>
+    <window-buttons/>
     <div style="height: 10vh;"></div> <!-- To knock the entire form downards. -->
     <div style="display: flex; justify-content: center; align-items: center;">
       <div>
@@ -42,13 +33,11 @@
 </template>
 
 <script>
-import {remote} from 'electron';
 import sharedStore from '../store';
 
-import Checkbox from '../components/Checkbox.vue';
-import ChangeLogTicker from '../components/ChangeLogTicker.vue';
-
-const {BrowserWindow} = remote;
+import Checkbox from '@/components/Checkbox.vue';
+import ChangeLogTicker from '@/components/ChangeLogTicker.vue';
+import WindowButtons from '@/components/WindowButtons.vue';
 
 export default {
   data() {
@@ -65,19 +54,11 @@ export default {
   components: {
     ChangeLogTicker,
     Checkbox,
+    WindowButtons,
   },
   methods: {
     async submit() {
       this.$parent.$emit("login", this.username, this.password);
-    },
-    minimizeWindow() {
-      BrowserWindow.getFocusedWindow().minimize();
-    },
-    maximizeWindow() {
-      BrowserWindow.getFocusedWindow().maximize();
-    },
-    closeWindow() {
-      BrowserWindow.getFocusedWindow().close();
     }
   }
 }

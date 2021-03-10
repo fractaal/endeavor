@@ -1,6 +1,6 @@
 {
   "name": "endeavor",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -33,8 +33,10 @@
     "tough-cookie": "^4.0.0",
     "v-movable": "^0.3.2",
     "vue": "^2.6.11",
+    "vue-keep-scroll-position": "^0.1.2",
     "vue-router": "^3.2.0",
-    "vue-timeago": "^5.1.3"
+    "vue-timeago": "^5.1.3",
+    "vue-toastification": "^1.7.11"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.22",

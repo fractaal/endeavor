@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import movable from "v-movable";
+import movable from 'v-movable';
+import VueKeepScrollPosition from 'vue-keep-scroll-position';
+import Toast from 'vue-toastification';
+import "vue-toastification/dist/index.css";
 
 import sharedStore from './store';
 
@@ -60,9 +63,16 @@ library.add(
   );
 Vue.component('fai', FontAwesomeIcon);
 Vue.config.productionTip = false;
+
 Vue.use(VueTimeago, {
   name: 'timeago',
   locale: 'en',
+});
+Vue.use(VueKeepScrollPosition);
+Vue.use(Toast, {
+  timeout: 4000,
+  transition: 'Vue-Toastification__fade',
+  position: 'bottom-right'
 });
 
 Vue.config.errorHandler = function(err, vm, info) {

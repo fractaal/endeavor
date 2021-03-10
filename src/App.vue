@@ -1,8 +1,11 @@
 <template>
   <div class="theme app">
+    <!--
     <transition name="modal">
       <Modal v-if="this.showModal" :show="this.showModal" :body="this.modalBody" :header="this.modalTitle" @close="showModal = false"/>
     </transition>
+    -->
+    <toast-provider/>
     <transition name="transition" mode="out-in">
       <keep-alive>
         <router-view name="default"></router-view>
@@ -12,22 +15,21 @@
 </template>
 
 <script>
-import path from 'path';
-import fs from 'fs';
 import sharedStore from './store';
 import {ELearn} from './elearn';
 import {initZoom} from './interface-scale';
 import {initFont} from './fonts';
 import keytar from 'keytar';
 import {remote, ipcRenderer} from 'electron';
-import Modal from './components/Modal.vue';
+
+import ToastProvider from './components/ToastProvider.vue';
 
 const data = remote.app.getPath("userData");
-let endeavor;
 
 console.log("Data path: " + data);
 
 export default {
+  name: "Endeavor",
   data() {
     return {
       sharedStore,
@@ -35,7 +37,7 @@ export default {
     };
   },
   components: {
-    Modal,
+    ToastProvider,
   },
   async created () {
     // Initialize zoom level to the saved setting
@@ -43,14 +45,14 @@ export default {
 
     // Set font to the saved setting
     initFont();
-
+    
     // Show modal if ipcRenderer gets update-available event. 
     ipcRenderer.on("update-downloaded", (e, info) => {
-      this.showModal = true;
-      this.modalTitle = "💖 Update downloaded!";
-      this.modalBody = `Hey hey! It looks like Endeavor has a new version: ${info.releaseName} - (${info.version})! It'll be installed once you exit Endeavor.`;
+      this.$toast.success(`New update downloaded! ${info.releaseName} 💖`, {timeout: 7500});
+      this.$toast(`Update will be installed once you exit Endeavor.`, {timeout: 7500});
       this.sharedStore.updateAvailable = true;
     });
+    
 
     // Creating new eLearn object in store...
     this.sharedStore.eLearn = new ELearn();

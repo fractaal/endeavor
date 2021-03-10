@@ -52,6 +52,16 @@ const routes: Array<RouteConfig> = [
         component: () => import('../components/ViewModule.vue'),
       },
       {
+        path: '/grades/:id/',
+        name: "Grades",
+        component: () => import('../views/GradeOverview.vue'),
+      },
+      {
+        path: '/grades/:id/:section',
+        name: "Grades",
+        component: () => import('../views/GradeOverview.vue'),
+      },
+      {
         path: '/settings',
         name: "Settings",
         component: () => import('../views/Settings.vue'),
@@ -96,21 +106,18 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   try {
-    sharedStore.pathData = resolve(to.fullPath, sharedStore.eLearn.cache);
+    sharedStore.pathData = resolve(to.fullPath);
   } catch(err) {
     console.warn("Pathdata failed - " + err);
   }
-  
 
-  /*
-  if (to.name == "Login" && await sharedStore.eLearn.getSession()) {
-    console.warn("Preventing unwanted navigation back to login screen");
-    next('/home');
-  } else {
-    sharedStore.search = "";
-    next();
+  // Prevent going back to loading screen
+  if (to.name == 'Loading' && !!(await sharedStore.eLearn.getSession())) {
+    console.log(`Preventing possibly unwanted navigation back to the loading route`);
+    next(false);
+    return;
   }
-  */
+
   next();
 })
 
