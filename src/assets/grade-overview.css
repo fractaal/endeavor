@@ -1,0 +1,42 @@
+.go-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.go-columns p, .go-columns h1, .go-columns h2, .go-columns h3, .go-columns h4, .go-columns h5 {
+  margin: 0;
+  padding: 0;
+}
+
+.go-columns .go-row {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.go-highlight {
+  border-radius: 5px;
+  background: var(--primary-dark);
+}
+
+.go-highlight-hover:hover {
+  cursor: pointer;
+  background: var(--secondary);
+  color: var(--text-secondary);
+}
+
+.go-highlight-hover:hover * {
+  color: var(--text-secondary);
+}
+
+
+.go-grade-item {
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+.go-module:nth-child(odd) {
+  border-radius: 5px;
+  background: rgba(255,255,255,0.025);
+}
