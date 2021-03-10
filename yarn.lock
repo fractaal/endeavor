@@ -11673,6 +11673,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-keep-scroll-position@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-keep-scroll-position/-/vue-keep-scroll-position-0.1.2.tgz#0ff8f4d2701c867556b0b0eff3cd0d06a453e14f"
+  integrity sha1-D/j00nAchnVWsLDv880NBqRT4U8=
+
 "vue-loader-v16@npm:vue-loader@^16.0.0-beta.7":
   version "16.1.2"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.1.2.tgz#5c03b6c50d2a5f983c7ceba15c50d78ca2b298f4"
@@ -11730,6 +11735,11 @@ vue-timeago@^5.1.3:
   integrity sha512-lHTRuOXhQzQXa6SC52IlO6UyWBZ5eIyD819QGIep++D61HeCV15h/WZ7M1iEsOWttjztMpg+3wYWHO3i2Ijdzw==
   dependencies:
     date-fns "^1.29.0"
+
+vue-toastification@^1.7.11:
+  version "1.7.11"
+  resolved "https://registry.yarnpkg.com/vue-toastification/-/vue-toastification-1.7.11.tgz#3e46157b7361f5005b1a60112bc91f5bd00c66d7"
+  integrity sha512-CT/DYttb/VtWDNdhJG0BskLVfveZq5rGOgO/u3qTX+RPQQzX0WSai8VVxxUuvR8UpxfSGPS+JQleR33bo3Vadg==
 
 vue@^2.6.11:
   version "2.6.12"
