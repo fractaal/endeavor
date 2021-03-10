@@ -1,17 +1,7 @@
 <template>
   <div>
     <scratchpads/>
-    <div class="windowbuttons">
-      <div style="display: flex;">
-        <!-- Nav buttons were supposed to be here. They look horrible. -->
-      </div>
-      <div style="display: flex;">
-        <div @click="minimizeWindow" class="windowbutton"><fai icon="window-minimize"/></div>
-        <div @click="maximizeWindow" class="windowbutton"><fai icon="window-restore"/></div>
-        <div @click="closeWindow" class="windowbutton"><fai size="lg" icon="times"/></div>
-      </div>
-    </div>
-
+    <window-buttons/>
     <nav class="navbar">
       <div class="navbar-picture" v-if="sharedStore.session">
         <img class="userpicture" :src="sharedStore.session.userpictureurl"/>
@@ -75,7 +65,7 @@
 
     <transition name="transition" mode="out-in">
       <keep-alive>
-        <router-view class="view"></router-view>
+        <router-view class="view" v-keep-scroll-position></router-view>
       </keep-alive>
     </transition>
 
@@ -83,12 +73,11 @@
 </template>
 
 <script>
-import { Bus } from '../main';
-import fs from 'fs';
-import path from 'path';
-import sharedStore from '../store';
-import Scratchpads from '../components/Scratchpads.vue';
-import TopBar from '../components/TopBar.vue';
+import { Bus } from '@/main';
+import sharedStore from '@/store';
+import Scratchpads from '@/components/Scratchpads.vue';
+import TopBar from '@/components/TopBar.vue';
+import WindowButtons from '@/components/WindowButtons.vue';
 
 import capitalize from '../util/capitalize';
 import { remote } from 'electron';
@@ -99,9 +88,6 @@ const findInPage = new FindInPage(remote.getCurrentWebContents(), {
   offsetTop: 100,
   offsetRight: 30,
 });
-
-const { BrowserWindow } = remote;
-const data = remote.app.getPath("userData");
 
 export default {
   name: 'Home',
@@ -118,7 +104,8 @@ export default {
   },
   components: {
     Scratchpads,
-    TopBar
+    TopBar,
+    WindowButtons,
   },
   async created() {
     // Get changes for notifications
@@ -163,15 +150,6 @@ export default {
       this.sharedStore.searchResults = {};
       this.sharedStore.searchResults = this.sharedStore.searchFunction(this.sharedStore.search);
       this.navTo("/search");
-    },
-    minimizeWindow() {
-      BrowserWindow.getFocusedWindow().minimize();
-    },
-    maximizeWindow() {
-      BrowserWindow.getFocusedWindow().maximize();
-    },
-    closeWindow() {
-      BrowserWindow.getFocusedWindow().close();
     },
     toggleGlobalScratchpad() {
       Bus.$emit("toggle-scratchpad", 0, "MAIN");
