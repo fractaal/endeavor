@@ -40,7 +40,7 @@ async function createWindow() {
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
     setTimeout(() => {
-      // win.webContents.send("update-downloaded", {version: "69.420.1"});
+      win.webContents.send("update-downloaded", {version: "69.420.1"});
     }, 2000);
   } else {
     createProtocol('app')
