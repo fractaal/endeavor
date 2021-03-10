@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="header">
-      <EndeavorButton @click="openExternalLink">🔍 Open in eLearn...</EndeavorButton>
+      <div>
+        <endeavor-button @click="openExternalLink">🔍 Open in eLearn...</endeavor-button>
+        <endeavor-button @click="$router.push(`/grades/${course.id}`)">🎓 Grade Overview</endeavor-button>
+      </div>
     </div>
     <div :class="sharedStore.settings.numColumnsInCourseView == 1 ? 'content' : 'content-compact'" class="padded">
       <transition-group name="transition">
