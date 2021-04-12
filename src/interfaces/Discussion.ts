@@ -1,34 +1,55 @@
 export interface Discussion {
-  id:                     number;
-  name:                   string;
-  groupid:                number;
-  timemodified:           number;
-  usermodified:           number;
-  timestart:              number;
-  timeend:                number;
-  discussion:             number;
-  parent:                 number;
-  userid:                 number;
-  created:                number;
-  modified:               number;
-  mailed:                 number;
-  subject:                string;
-  message:                string;
-  messageformat:          number;
-  messagetrust:           number;
-  attachment:             boolean;
-  totalscore:             number;
-  mailnow:                number;
-  userfullname:           string;
-  usermodifiedfullname:   string;
-  userpictureurl:         string;
-  usermodifiedpictureurl: string;
-  numreplies:             number;
-  numunread:              number;
-  pinned:                 boolean;
-  locked:                 boolean;
-  starred:                boolean;
-  canreply:               boolean;
-  canlock:                boolean;
-  canfavourite:           boolean;
+  id:             number;
+  subject:        string;
+  replysubject:   string;
+  message:        string;
+  messageformat:  number;
+  author:         Author;
+  discussionid:   number;
+  hasparent:      boolean;
+  children:       Discussion[];
+  parentid:       number | null;
+  timecreated:    number;
+  unread:         null;
+  isdeleted:      boolean;
+  isprivatereply: boolean;
+  haswordcount:   boolean;
+  wordcount:      null;
+  charcount:      null;
+  capabilities:   Capabilities;
+  urls:           { [key: string]: null | string };
+  attachments:    any[];
+  tags:           any[];
+  html:           HTML;
+}
+
+export interface Author {
+  id:        number;
+  fullname:  string;
+  isdeleted: boolean;
+  groups:    any[];
+  urls:      Urls;
+}
+
+export interface Urls {
+  profile:      string;
+  profileimage: string;
+}
+
+export interface Capabilities {
+  view:              boolean;
+  edit:              boolean;
+  delete:            boolean;
+  split:             boolean;
+  reply:             boolean;
+  selfenrol:         boolean;
+  export:            boolean;
+  controlreadstatus: boolean;
+  canreplyprivately: boolean;
+}
+
+export interface HTML {
+  rating:           null;
+  taglist:          null;
+  authorsubheading: string;
 }
