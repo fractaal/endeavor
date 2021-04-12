@@ -157,8 +157,8 @@ export class ELearn implements eLearnInterface {
       // To obtain a cookie
       await client(`${baseurl}/lib/ajax/service.php?info=tool_mobile_get_public_config`);
       const moodleSessionCookie = await cookieJar.getCookies(baseurl);
-
-      remote.session.defaultSession.cookies.set({url: baseurl, name: moodleSessionCookie[0].key, value: moodleSessionCookie[0].value})
+      // Fix key is undefined problem
+      // remote.session.defaultSession.cookies.set({url: baseurl, name: moodleSessionCookie[0].key, value: moodleSessionCookie[0].value})
 
       const loginRequest = await client(`${baseurl}/login/token.php`, {
         method: "POST",
@@ -181,7 +181,8 @@ export class ELearn implements eLearnInterface {
       }
       
       const siteInfoRequest: Record<string, any> = await this.wsFunction("core_webservice_get_site_info", {}, token);
-
+      
+      console.log(siteInfoRequest);
       session = siteInfoRequest as any;
 
       // Transform the userpictureurl present in the API response to an address that actually works 😬
@@ -665,7 +666,8 @@ export class ELearn implements eLearnInterface {
   }> {
     let grade: number; let gradeForDisplay: string; let feedbackComments: string; let gradedDate: Date;
     if (type == "quiz") {
-      grade = (await this.wsFunction("mod_quiz_get_user_best_grade", {quizid: id})).grade;
+      grade = parseInt((await this.wsFunction("mod_quiz_get_user_best_grade", {quizid: id})).grade);
+      if (isNaN(grade)) grade = 0;
     } else if (type == "assign") {
       const response = await this.wsFunction("mod_assign_get_submission_status", {assignid: id});
       /**
@@ -673,6 +675,7 @@ export class ELearn implements eLearnInterface {
        */
       try {
         grade = parseInt(response.feedback.grade.grade); // ???????????????????? 
+        if (isNaN(grade)) grade = 0;
       } catch(e) {
         grade = 0;
       }
@@ -728,19 +731,6 @@ export class ELearn implements eLearnInterface {
     }
 
     return returnData;
-  }
-
-  async getForumDiscussions(forumid: string) {
-    const res: Discussion[] = (await this.wsFunction("mod_forum_get_forum_discussions", {forumid})).discussions;
-    for (const discussion of res) {
-      discussion.userpictureurl = transformUrl(discussion.userpictureurl, session.token);
-    }
-
-    if (res) {
-      return res;
-    } else {
-      console.warn("[elearn-api] Forum discussion retrieval failed - res does not exist: " + res);
-    }
   }
 
   async getLessonPages(lessonid: string, updateFunction = (msg: string) => console.log(msg)): Promise<PagesData> {
