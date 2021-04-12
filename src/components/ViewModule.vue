@@ -67,12 +67,9 @@
         </div>
       </div>
 
-      <!-- If the module is a forum... -->
-      <!-- Disable forum component for now 
-      <div v-if="module.modname == 'forum'" style="margin: 20px;">
-        <Discussions :discussions="discussions"/>
+      <div v-if="module.modname == 'forum'">
+        <Discussions :module="module"/>
       </div>
-      -->
       
       <div v-if="module.introattachments && module.introattachments.length > 0">
         <h3>Attachments</h3>
@@ -111,7 +108,7 @@
 import Vue from 'vue';
 import sharedStore from '../store';
 
-// import Discussions from './Discussions.vue';
+import Discussions from './Discussions.vue';
 import ContentView from './ContentView.vue';
 import LessonView from './LessonView.vue';
 import Card from './Card.vue';
@@ -130,7 +127,7 @@ export default {
     Grade,
     Card,
     EndeavorButton,
-    // Discussions,
+    Discussions,
     ContentView,
     LessonView,
   },
@@ -163,11 +160,6 @@ export default {
       this.feedbackIsLoading = true;
       this.feedback = Object.assign({}, this.feedback, await this.sharedStore.eLearn.getFeedback(this.module.modname, this.module.id));
       this.feedbackIsLoading = false;
-
-      // Get forum discussions if this specific module is of type forum.
-      if (this.module.modname == "forum") {
-        this.discussions = await this.sharedStore.eLearn.getForumDiscussions(this.module.id);
-      }
 
       // Tell LessonView / BookView to get lesson/book data if this specific module is of type lesson/book. 
       if (this.module.modname == "book" || this.module.modname == "lesson") {
