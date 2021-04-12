@@ -40,7 +40,6 @@ export interface eLearnInterface {
     gradedDate: Date;
     feedbackComments: string;
   }>;
-  getForumDiscussions(forumid: string): Promise<Discussion[]>;
   getLessonPages(lessonid: string): Promise<PagesData>;
   getBookPages(courseid: string, bookid: string): Promise<PagesData>;
   cache: {
