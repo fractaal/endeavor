@@ -1,9 +1,9 @@
 declare const __static: string;
 
-import fs from 'fs';
-import path from 'path';
-import store from './store';
-import { remote } from 'electron';
+import fs from "fs";
+import path from "path";
+import store from "./store";
+import * as remote from "@electron/remote";
 
 const data = remote.app.getPath("userData");
 
@@ -30,10 +30,10 @@ function getThemeMetadata(data: string) {
     version: "none",
     endeavorVersion: "none",
     isDefault: "none",
-  }
+  };
 
   for (const line of lines) {
-    const tokens = line.split("=").map(line => line.trim());
+    const tokens = line.split("=").map((line) => line.trim());
     if (result[tokens[0]]) {
       result[tokens[0]] = tokens[1];
     }
@@ -45,10 +45,15 @@ function getThemeMetadata(data: string) {
 function addTheme(filename: string, filepath: string, data: string) {
   const metadata = getThemeMetadata(data);
 
-  const alreadyExists = themes.reduce((acc, curr) => curr.displayName == metadata.displayName, false);
+  const alreadyExists = themes.reduce(
+    (acc, curr) => curr.displayName == metadata.displayName,
+    false
+  );
 
   if (alreadyExists) {
-    console.log(`[themes] WARN: ${metadata.displayName} already exists! Aborting...`);
+    console.log(
+      `[themes] WARN: ${metadata.displayName} already exists! Aborting...`
+    );
     return;
   }
 
@@ -57,20 +62,29 @@ function addTheme(filename: string, filepath: string, data: string) {
     filename,
     filepath,
     setActive: () => {
-      document.getElementById("vars").setAttribute("href", filepath)
+      console.log("I was called");
+      document
+        .getElementById("vars")
+        .setAttribute("href", "file://" + filepath);
       store.settings.theme = metadata.displayName;
     },
-  })
+  });
 }
 
 function addThemesFromFolder(folderPath: string, isInternal: boolean) {
   const truePath = isInternal ? path.join(__static, "/themes") : folderPath;
   if (!fs.existsSync(truePath)) fs.mkdirSync(truePath);
 
-  const files = fs.readdirSync(truePath).filter(file => file.indexOf(".css") !== -1);
+  const files = fs
+    .readdirSync(truePath)
+    .filter((file) => file.indexOf(".css") !== -1);
 
   for (const file of files) {
-    addTheme(file, path.join(truePath, file), fs.readFileSync(path.join(truePath, file), {encoding: "utf-8"}));
+    addTheme(
+      file,
+      path.join(truePath, file),
+      fs.readFileSync(path.join(truePath, file), { encoding: "utf-8" })
+    );
   }
 }
 
@@ -86,11 +100,11 @@ fs.watch(path.join(data, "/themes"), (event, filename) => {
     addThemesFromFolder(path.join(data, "/themes"), false);
 
     if (event == "change") {
-      const theme = themes.filter(t => t.filename == filename);
+      const theme = themes.filter((t) => t.filename == filename);
       theme[0].setActive();
     }
   }
-})
+});
 
 setTimeout(() => {
   let themeSet = false;
@@ -101,6 +115,6 @@ setTimeout(() => {
       themeSet = true;
     }
   }
-  
+
   if (!themeSet) themes[0].setActive();
 }, 10);

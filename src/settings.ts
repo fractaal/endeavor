@@ -1,22 +1,23 @@
-import Store from 'electron-store';
-import { remote } from 'electron';
+import Store from "electron-store";
+import * as remote from "@electron/remote";
 
 const settingsStore = new Store({
-  name: 'endeavor',
+  name: "endeavor",
   defaults: {
-  showDebugInfo: false,
-  saveLogin: false,
-  theme: "",
-  font: "Manrope",
-  numColumnsInCourseView: 1,
-  showActivityDescriptionsOnCards: true,
-  version: remote.app.getVersion(),
-  loadHiddenCourseData: false,
-  autoUpdateData: true,
-  zoomLevel: 1,
-}})
+    showDebugInfo: false,
+    saveLogin: false,
+    theme: "",
+    font: "Manrope",
+    numColumnsInCourseView: 1,
+    showActivityDescriptionsOnCards: true,
+    version: remote.app.getVersion(),
+    loadHiddenCourseData: false,
+    autoUpdateData: true,
+    zoomLevel: 1,
+  },
+});
 
-export const {store: settings} = settingsStore;
+export const { store: settings } = settingsStore;
 
 export function save(settings: typeof settingsStore.store) {
   console.log("Saving settings: ");
